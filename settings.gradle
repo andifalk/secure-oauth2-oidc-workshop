@@ -1,0 +1,28 @@
+pluginManagement {
+    repositories {
+        maven { url 'https://repo.spring.io/snapshot' }
+        maven { url 'https://repo.spring.io/milestone' }
+        gradlePluginPortal()
+    }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'org.springframework.boot') {
+                useModule("org.springframework.boot:spring-boot-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+}
+rootProject.name = 'secure-oauth2-oidc-workshop'
+
+include 'intro-labs:auth-code-demo'
+include 'intro-labs:github-client'
+include 'lab1:library-server-initial'
+include 'lab1:library-server-complete-automatic'
+include 'lab1:library-server-complete-custom'
+include 'lab2:library-client-initial'
+include 'lab2:library-client-complete'
+include 'lab3:library-client-credentials-initial'
+include 'lab3:library-client-credentials-complete'
+include 'lab4:jwt-generator'
+include 'lab4:library-server-static-complete'
+

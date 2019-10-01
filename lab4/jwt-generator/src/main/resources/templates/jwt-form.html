@@ -1,0 +1,54 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library Server JWt Generator</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Library Server JWt Generator</h1>
+
+    <hr>
+
+    <form action="#" method="post" th:action="@{/generate}" th:object="${user}">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input class="form-control" id="username" name="username" placeholder="bwayne" th:value="*{username}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input class="form-control" id="firstName" name="firstName" placeholder="Bruce" th:value="*{firstName}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" id="lastName" name="lastName" placeholder="Wayne" th:value="*{lastName}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="email" >Email</label>
+            <input class="form-control" id="email" name="email" placeholder="bruce.wayne@example.com" th:value="*{email}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="role" >Role</label>
+            <input class="form-control" id="role" name="role" placeholder="library_user" th:value="*{role}"
+                   type="text"/>
+        </div>
+        <button class="btn btn-primary" id="generate" name="generate" type="submit">Generate JWT</button>
+    </form>
+
+    <hr>
+
+    <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+    <script src="../static/js/popper.min.js" th:src="@{/js/popper.min.js}"></script>
+    <script src="../static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
+
+</div>
+
+</body>
+</html>

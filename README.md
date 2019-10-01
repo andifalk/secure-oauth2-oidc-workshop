@@ -18,7 +18,7 @@ Client Credentials grant flow.
 
 ### API Gateway
 
-In this step we add an API Getway as a facade for the existing Microservices.
+In this step we add an API Gateway as a facade for the existing Microservices.
 The API Gateway does the authentication using bearer token.
 
 ## Frontend

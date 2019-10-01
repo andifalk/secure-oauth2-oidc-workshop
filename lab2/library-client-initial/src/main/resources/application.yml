@@ -1,0 +1,24 @@
+server:
+  servlet:
+    context-path: /library-client
+  port: 9090
+  error:
+    include-stacktrace: never
+
+spring:
+  thymeleaf:
+    cache: false
+  security:
+    user:
+      password: secret
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        web: info
+
+library:
+  server: http://localhost:9091/library-server
+

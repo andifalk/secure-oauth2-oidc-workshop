@@ -1,0 +1,35 @@
+server:
+  port: 9092
+  error:
+    include-stacktrace: never
+
+spring:
+  main:
+    web-application-type: none
+  security:
+    user:
+      password: secret
+    oauth2:
+      client:
+        registration:
+          library_client:
+            client-id: 'library-client'
+            client-secret: '9584640c-3804-4dcd-997b-93593cfb9ea7'
+            authorizationGrantType: client_credentials
+        provider:
+          library_client:
+            tokenUri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        web: info
+        batch: debug
+        security: debug
+
+library:
+  server: http://localhost:9091/library-server
+
+

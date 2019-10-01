@@ -1,0 +1,34 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library Server JWt Generator</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport"/>
+    <link href="../static/css/bootstrap.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Library Server JWt Generator</h1>
+
+    <hr>
+
+    <h2>JSON Web Token (JWT)</h2>
+
+    <p style="word-break: break-all" th:utext="${jwt}"></p>
+
+    <p>You may use this token now as bearer header</p>
+    <p style="word-break: break-all" th:utext="'Authorization: Bearer ' + ${jwt}"></p>
+
+    <hr>
+
+    <a class="btn btn-primary" href="#" role="button" th:href="@{/}">Home</a>
+
+    <script src="../static/js/jquery.min.js" th:href="@{/js/jquery.min.js}"></script>
+    <script src="../static/js/popper.min.js" th:href="@{/js/popper.min.js}"></script>
+    <script src="../static/js/bootstrap.js" th:href="@{/js/bootstrap.js}"></script>
+
+</div>
+
+</body>
+</html>
