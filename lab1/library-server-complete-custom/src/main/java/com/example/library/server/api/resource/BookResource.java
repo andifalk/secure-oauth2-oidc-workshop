@@ -2,7 +2,7 @@ package com.example.library.server.api.resource;
 
 import com.example.library.server.api.resource.assembler.UserResourceAssembler;
 import com.example.library.server.dataaccess.Book;
-import org.springframework.hateoas.ResourceSupport;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class BookResource extends ResourceSupport {
+public class BookResource extends RepresentationModel<BookResource> {
 
   private UUID identifier;
 
@@ -43,7 +43,7 @@ public class BookResource extends ResourceSupport {
         book.getAuthors(),
         book.isBorrowed(),
         book.getBorrowedBy() != null
-            ? new UserResourceAssembler().toResource(book.getBorrowedBy())
+            ? new UserResourceAssembler().toModel(book.getBorrowedBy())
             : null);
   }
 

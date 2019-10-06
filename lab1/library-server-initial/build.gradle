@@ -5,20 +5,27 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.1.8.RELEASE'
-    id 'org.asciidoctor.convert' version '1.5.6'
+    id 'org.springframework.boot' version '2.2.0.RC1'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.asciidoctor.convert' version '1.5.8'
     id 'com.adarshr.test-logger' version '1.6.0'
     id 'java'
 }
 
-apply plugin: 'io.spring.dependency-management'
-
 group = 'com.example'
 version = '1.0.0-SNAPSHOT'
-sourceCompatibility = 8
+sourceCompatibility = '1.8'
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
 
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
 test {
@@ -49,13 +56,11 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.boot:spring-boot-starter-security')
     implementation('org.springframework.boot:spring-boot-starter-hateoas')
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
     runtimeOnly('com.h2database:h2')
-    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     testImplementation('org.springframework.restdocs:spring-restdocs-mockmvc')
     testImplementation('org.springframework.security:spring-security-test')
-    testImplementation('org.mockito:mockito-junit-jupiter')
-    testImplementation('org.junit.jupiter:junit-jupiter-api')
-    testImplementation('org.junit.jupiter:junit-jupiter-params')
-    testRuntime('org.junit.jupiter:junit-jupiter-engine')
 }

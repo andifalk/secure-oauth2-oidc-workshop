@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export KEYCLOAK_HOME=/home/afa/development/keycloak-6.0.1
+export KEYCLOAK_HOME=/home/afa/development/keycloak-7.0.0
 export PATH=$PATH:$KEYCLOAK_HOME/bin
 
 #-- login

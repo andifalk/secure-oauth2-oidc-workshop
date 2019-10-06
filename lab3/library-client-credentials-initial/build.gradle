@@ -1,22 +1,38 @@
 plugins {
-    id 'org.springframework.boot' version '2.1.8.RELEASE'
+    id 'org.springframework.boot' version '2.2.0.RC1'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'com.adarshr.test-logger' version '1.6.0'
     id 'java'
 }
-
-apply plugin: 'io.spring.dependency-management'
 
 group = 'com.example'
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+}
+
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation('org.springframework.security:spring-security-oauth2-client')
+    implementation('org.springframework.boot:spring-boot-starter-batch')
+    implementation('org.springframework:spring-webflux')
+    implementation('io.projectreactor.netty:reactor-netty')
+    runtimeOnly('com.h2database:h2')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
