@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 		<title>Securing Microservices with OpenID Connect and Spring Security 5.1</title>
-        <meta name="description" content="Securing Microservices with OpenID Connect and Spring Security 5.1">
+        <meta name="description" content="Securing Microservices with OpenID Connect and Spring Security 5">
         <meta name="author" content="Andreas Falk">
 
 		<link rel="stylesheet" href="css/reset.css">
@@ -20,9 +20,7 @@
 
         <link rel="stylesheet" href="css/reset.css">
         <link rel="stylesheet" href="css/reveal.css">
-        <!--link rel="stylesheet" href="css/theme/novatec.css" id="theme"-->
-        <link href="css/theme/spring_io.css" id="theme" rel="stylesheet">
-
+        <link rel="stylesheet" href="css/theme/novatec.css" id="theme">
         <!-- Theme used for syntax highlighting of code -->
         <link rel="stylesheet" href="lib/css/zenburn.css">
 
@@ -41,14 +39,13 @@
 
                 <!-- Title, Speaker and Workshop Introduction -->
                 <section>
-                    <section data-background="images/title_image.png">
-                        <h2 style="color: white">Securing Microservices with OpenID Connect and Spring Security 5.1 [Workshop]</h2>
-                        <p style="color: white">Andreas Falk</p>
-                        <p style="color: white">@andifalk</p>
+                    <section data-background="images/novatec_title_back.png">
+                        <h3 style="color: white">Securing Microservices with OpenID Connect and Spring Security 5 [Workshop]</h3>
+                        <p style="color: white">Andreas Falk / @andifalk</p>
                         <p style="color: white">
                             <small>
-                            Slides: <a href="https://andifalk.github.io/oidc-workshop-spring-io-2019">https://andifalk.github.io/oidc-workshop-spring-io-2019</a><br>
-                            Source-Code: <a href="https://github.com/andifalk/oidc-workshop-spring-io-2019.git">https://github.com/andifalk/oidc-workshop-spring-io-2019.git</a>
+                            Slides: <a href="https://andifalk.github.io/secure-oauth2-oidc-workshop">https://andifalk.github.io/secure-oauth2-oidc-workshop</a><br>
+                            Source-Code: <a href="https://github.com/andifalk/secure-oauth2-oidc-workshop.git">https://github.com/andifalk/secure-oauth2-oidc-workshop.git</a>
                             </small>
                         </p>
                     </section>
@@ -62,38 +59,50 @@
                         </small></p>
                         <p><img class="plain" src="images/novatec_logo_big.png" width="40%"></p>
                     </section>
-                    <section>
-                        <h3>Novatec Offices</h3>
-                        <p>
-                            <img class="plain" src="images/novatec_offices.png">
-                        </p>
+                    <section data-background="images/novatec_at_a_glance_full.png" data-background-size="80%">
+                    </section>
+                    <section data-background="images/secure_scrum.png" data-background-size="68%">
+                    </section>
+                    <section data-background-color="white">
+                        <img class="plain" src="images/sec4dev_training.png" width="60%">
+                        <p><small>
+                            <a href="https://www.novatec-gmbh.de/schulung/security-training-for-developers/">https://www.novatec-gmbh.de/schulung/security-training-for-developers</a>
+                        </small></p>
+                    </section>
+                    <section data-background="images/novatec_title_back.png">
+                        <div style="color: white">
+                        <h1 style="color: white">Agenda</h1>
+                            <ol>
+                                <li>Intro to OAuth 2.0</li>
+                                <li>Intro to OpenID Connect 1.0</li>
+                                <li>Hands-On Part with Spring Security 5</li>
+                                <li>What's new in Spring Security 5.2 and 5.3</li>
+                            </ol>
+                        </div>
                     </section>
                     <section>
-                        <p>
-                            <img class="plain" src="images/kubernetes_session.png">
-                        </p>
-                        <p style="color: #0000bf">Session tomorrow at 18:00</p>
+                        <h2>In the meantime...</h2>
                     </section>
                     <section>
-                        <h1>Agenda</h1>
-                        <p>Intro to OAuth 2.0</p>
-                        <p>Intro to OpenID Connect 1.0</p>
-                        <p>Hands-On Part with Spring Security 5.1</p>
-                        <p>What's new in Spring Security 5.2 and 5.3</p>
+                        <h2>...get the source code</h2>
+                        <p>Clone the GitHub repository (https://tinyurl.com/y2ynhe66):</p>
+                        <pre><code class="hljs bash" data-trim>
+                        git clone https://tinyurl.com/y2ynhe66 oidc_workshop
+                        </code></pre>
+                        <p>and import into your Java IDE as <span style="font-weight: bold; color: red">gradle project</span></p>
                     </section>
-                    <section data-background="images/title_image.png">
-                        <h2 style="color: white">In the meantime...</h2>
-                        <p style="color: white">git clone https://tinyurl.com/yylensdd oidc_workshop</p>
-                        <p style="color: white">import as gradle project into your Java IDE</p>
-                        <p style="color: white">AND</p>
-                        <p style="color: white">copy/extract keycloak.zip from provided USB sticks</p>
-                        <p style="color: white">OR follow setup instructions at https://tinyurl.com/y3rgohqo</p>
+                    <section>
+                        <h2>...Get and configure Keycloak</h2>
+                        <ol>
+                            <li>Download 'keycloak_workshop.zip' from <a href="https://tinyurl.com/y3wjzwch">https://tinyurl.com/y3wjzwch</a> <br>(Password: 'Workshop')</li>
+                            <li>Follow setup instructions at <a href="https://tinyurl.com/y67cqr6h">https://tinyurl.com/y67cqr6h</a></li>
+                        </ol>
                     </section>
                 </section>
 
                 <!-- Introduction into OAuth 2.0 and OpenID Connect 1.0 -->
                 <section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h1 style="color: white">OAuth 2.0</h1>
                         <h2 style="color: white">101</h2>
                         <p>
@@ -260,7 +269,7 @@
 
                 <!-- OpenID Connect 1.0 -->
                 <section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h2 style="color: white">OpenID Connect 1.0</h2>
                         <h2 style="color: white">101</h2>
                         <small>
@@ -440,7 +449,7 @@
                 <!-- OIDC Workshop -->
 
                 <section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h2 style="color: white">Hands-On Part</h2>
                         <h3 style="color: white">OAuth 2.0 & OpenID Connect 1.0</h3>
                         <h3 style="color: white">With Spring Security 5</h3>
@@ -462,21 +471,17 @@
                 </section>
 
                 <section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h2 style="color: white">Let's Code!!</h2>
-                        <p style="color: white">git clone https://tinyurl.com/yylensdd oidc_workshop</p>
+                        <p style="color: white"><q>git clone https://tinyurl.com/y2ynhe66 oidc_workshop</q></p>
                         <p style="color: white">import as gradle project into your Java IDE</p>
-                        <p style="color: white">AND</p>
-                        <p style="color: white">copy/extract keycloak.zip from provided USB sticks</p>
                     </section>
                     <section>
                         <h3>Setup Keycloak</h3>
-                        <p>Follow setup instructions at: https://tinyurl.com/y3rgohqo</p>
+                        <p>Follow setup instructions at: <a href="https://tinyurl.com/y67cqr6h">https://tinyurl.com/y67cqr6h</a></p>
                         <ol>
-                            <li>Download the binary distribution: https://tinyurl.com/y2dcuu2o</li>
-                            <li>Extract the downloaded <strong>keycloak-6.0.1.zip</strong> file</li>
-                            <li>Download the prepared keycloak configuration: https://tinyurl.com/y3gpuwkj</li>
-                            <li>Extract the downloaded file <strong>keycloak_data.zip</strong> into the sub directory <em>standalone</em> of extracted keycloak</li>
+                            <li>Download 'keycloak_workshop.zip' from <a href="https://tinyurl.com/y3wjzwch">https://tinyurl.com/y3wjzwch</a> <br>(Password: 'Workshop')</li>
+                            <li>Extract the downloaded <strong>keycloak_workshop.zip</strong> file</li>
                         </ol>
                     </section>
                     <section>
@@ -491,12 +496,6 @@
                             [keycloak_install_dir]\bin\standalone.bat
                         </code></pre>
                         </p>
-                    </section>
-                    <section>
-                        <p>
-                            <img class="plain" src="images/keycloak_session.png">
-                        </p>
-                        <p style="color: #0000bf">Session tomorrow at 12:30</p>
                     </section>
                     <section>
                         <h2>Intro-Lab</h2>
@@ -532,13 +531,13 @@
                 <!-- What is new in Spring Security -->
 
                 <section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h2 style="color: white">What's new in</h2>
                         <h2 style="color: white">Spring Security</h2>
                         <h2 style="color: white">5.2 & 5.3</h2>
                     </section>
                     <section>
-                        <h2>Spring Security 5.2 (08/2019)</h2>
+                        <h2>Spring Security 5.2</h2>
                         <ul>
                             <li><a href="https://github.com/spring-projects/spring-security/issues/6446">Client Support for PKCE</a></li>
                             <li><a href="https://github.com/spring-projects/spring-security/issues/5350">OpenID Connect RP-Initiated Logout</a></li>
@@ -552,6 +551,7 @@
                                 <a href="https://github.com/spring-projects/spring-security/milestone/132">Spring Security 5.2.0 M2 GitHub Issues</a><br>
                                 <a href="https://github.com/spring-projects/spring-security/milestone/141">Spring Security 5.2.0 M3 GitHub Issues</a><br>
                                 <a href="https://github.com/spring-projects/spring-security/milestone/142">Spring Security 5.2.0 RC1 GitHub Issues</a><br>
+                                <a href="https://github.com/spring-projects/spring-security/milestone/125">Spring Security 5.2.0 GitHub Issues</a>
                             </small>
                         </p>
                     </section>
@@ -674,7 +674,7 @@
                         <img src="images/oauth2_in_action.jpg" class="plain" width="24%">
                         <img src="images/agile-security-book.jpg" class="plain" width="24%">
                     </section>
-                    <section data-background="images/title_image.png">
+                    <section data-background="images/novatec_title_back.png">
                         <h1 style="color: white">Q&A</h1>
                         <a href="https://www.novatec-gmbh.de/">https://www.novatec-gmbh.de</a></br>
                         <a href="https://blog.novatec-gmbh.de/">https://blog.novatec-gmbh.de</a><br>

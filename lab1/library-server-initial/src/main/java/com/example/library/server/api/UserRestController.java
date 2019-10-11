@@ -32,11 +32,13 @@ import java.util.stream.Collectors;
 public class UserRestController {
 
   private final UserService userService;
+  private final UserResourceAssembler userResourceAssembler;
   private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserRestController(UserService userService, PasswordEncoder passwordEncoder) {
+  public UserRestController(UserService userService, UserResourceAssembler userResourceAssembler, PasswordEncoder passwordEncoder) {
     this.userService = userService;
+    this.userResourceAssembler = userResourceAssembler;
     this.passwordEncoder = passwordEncoder;
   }
 
@@ -44,7 +46,7 @@ public class UserRestController {
   @GetMapping
   public List<UserResource> getAllUsers() {
     return userService.findAll().stream()
-        .map(u -> new UserResourceAssembler().toResource(u))
+        .map(u -> new UserResourceAssembler().toModel(u))
         .collect(Collectors.toList());
   }
 
@@ -52,7 +54,7 @@ public class UserRestController {
   public ResponseEntity<UserResource> getUser(@PathVariable("userId") UUID userId) {
     return userService
         .findByIdentifier(userId)
-        .map(u -> ResponseEntity.ok(new UserResourceAssembler().toResource(u)))
+        .map(u -> ResponseEntity.ok(userResourceAssembler.toModel(u)))
         .orElse(ResponseEntity.notFound().build());
   }
 
@@ -84,7 +86,7 @@ public class UserRestController {
                       .path("/users/{userId}")
                       .buildAndExpand(u.getIdentifier())
                       .toUri();
-              UserResource userResource = new UserResourceAssembler().toResource(u);
+              UserResource userResource = userResourceAssembler.toModel(u);
               return ResponseEntity.created(location).body(userResource);
             })
         .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
@@ -107,7 +109,7 @@ public class UserRestController {
                       .map(Enum::name)
                       .collect(Collectors.toList()));
               return ResponseEntity.ok(
-                  new UserResourceAssembler().toResource(userService.update(u)));
+                      userResourceAssembler.toModel(userService.update(u)));
             })
         .orElse(ResponseEntity.notFound().build());
   }

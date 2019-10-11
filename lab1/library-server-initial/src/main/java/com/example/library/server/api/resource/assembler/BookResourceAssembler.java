@@ -5,19 +5,23 @@ import com.example.library.server.api.resource.BookResource;
 import com.example.library.server.dataaccess.Book;
 import com.example.library.server.dataaccess.User;
 import com.example.library.server.security.LibraryUser;
-import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
+import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class BookResourceAssembler extends ResourceAssemblerSupport<Book, BookResource> {
+@Component
+public class BookResourceAssembler extends RepresentationModelAssemblerSupport<Book, BookResource> {
 
   public BookResourceAssembler() {
     super(BookRestController.class, BookResource.class);
   }
 
   @Override
-  public BookResource toResource(Book book) {
+  public BookResource toModel(Book book) {
+
     BookResource bookResource = new BookResource(book);
     bookResource.add(
         linkTo(methodOn(BookRestController.class).getBookById(book.getIdentifier())).withSelfRel());
@@ -38,4 +42,15 @@ public class BookResourceAssembler extends ResourceAssemblerSupport<Book, BookRe
             .withRel("return"));
     return bookResource;
   }
+
+  @Override
+  public CollectionModel<BookResource> toCollectionModel(Iterable<? extends Book> entities) {
+    CollectionModel<BookResource> bookResources = super.toCollectionModel(entities);
+    bookResources.add(
+            linkTo(methodOn(BookRestController.class).getAllBooks()).withSelfRel(),
+            linkTo(methodOn(BookRestController.class).createBook(new BookResource()))
+                    .withRel("create"));
+    return bookResources;
+  }
+
 }

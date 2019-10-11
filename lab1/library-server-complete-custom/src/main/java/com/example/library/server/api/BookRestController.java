@@ -40,7 +40,6 @@ public class BookRestController {
     this.bookResourceAssembler = bookResourceAssembler;
   }
 
-  @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public ResponseEntity<CollectionModel<BookResource>> getAllBooks() {
     return ResponseEntity.ok(bookResourceAssembler.toCollectionModel(bookService.findAll()));
