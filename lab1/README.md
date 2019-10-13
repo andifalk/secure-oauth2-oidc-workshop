@@ -1,6 +1,6 @@
 # Lab 1: Creating an OAuth 2.0/OIDC compliant Resource Server
 
-In the first lab we want to build an OAuth2/OIDC resource server.
+In this first part we extend an existing Microservice to an OAuth 2.0 and OpenID Connect 1.0 compliant Resource Server.
 
 See [Spring Security 5 Resource Server reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2resourceserver) 
 for all details on how to build and configure a resource server. 
@@ -10,7 +10,7 @@ for all details on how to build and configure a resource server.
 * [The workshop application](#the-workshop-application)
   * [Architecture](#architecture)
   * [REST API](#rest-api)
-  * [User roles](#user-roles)
+  * [User roles](#users-and-roles)
 * [The Lab 1 tutorial](#lab-1-tutorial)
   * [Lab 1 contents](#lab-contents)
   * [Part 1: Implement a resource server with custom user/authorities mapping](#lab-1---part-1)
@@ -29,7 +29,7 @@ In this first workshop lab you will be provided a complete spring mvc web server
 with a corresponding spring mvc thymeleaf web client app (which will come into play in [lab 2](../lab2/README.md)).  
 The server application is already secured by basic authentication and also includes authorization using static roles. 
 
-![Spring IO Workshop 2019](../docs/images/demo-architecture.png)
+![Workshop Architecture](../docs/images/demo-architecture.png)
 
 The server application provides a RESTful service for administering books and users 
 (a very _lightweight_ books library).
@@ -47,7 +47,7 @@ Use cases of this application are:
 The RESTful service for books and users is build using the Spring MVC annotation model and Spring HATEOAS.
 
 The application also contains a complete documentation for the RESTful API that is automatically 
-generated with spring rest docs. You can find this in the directory build/asciidoc/html5 after performing a full 
+generated with spring rest docs. You can find this in the directory _'build/asciidoc/html5'_ after performing a full 
 gradle build.
 
 The domain model of this application is quite simple and just consists of _Book_ and _User_ models.   
@@ -112,7 +112,7 @@ In the lab 1 folder you find 3 applications:
 Now, let's start with part 1 of this lab. Here we will implement the required additions to get an 
 OAuth2/OIDC compliant resource server with customized mapping of token claims to Spring Security authorities.
 
-![Spring IO Workshop 2019](../docs/images/manual_role_mapping.png)
+![Manual Role Mapping](../docs/images/manual_role_mapping.png)
 
 #### Explore the initial application
 
@@ -235,7 +235,7 @@ With this configuration in place we have already a working resource server
 that can handle JWt access tokens transmitted via http bearer token header. 
 Spring Security also validates by default:
 
-* the JWT signature against the queried public key(s) from jwks_url
+* the JWT signature against the queried public key(s) from _jwks_url_
 * the JWT _iss_ claim against the configured issuer uri
 * that the JWT is not expired
 
@@ -371,7 +371,7 @@ JWT token to the corresponding authorities.
 Navigate your web browser to [jwt.io](https://jwt.io) and paste your access token into the
 _Encoded_ text field. 
 
-![Spring IO Workshop 2019](../docs/images/jwt_io.png)
+![JWT IO](../docs/images/jwt_io.png)
 
 If you scroll down a bit on the right hand side then you will see the following block:
 
@@ -393,7 +393,7 @@ As you can see our user has the scopes _library_admin_, _email_ and _profile_.
 These scopes are now mapped to the Spring Security authorities 
 _SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.  
 
-![Spring IO Workshop 2019](../docs/images/jwt_io_decoded.png)
+![JWT IO Decoded](../docs/images/jwt_io_decoded.png)
 
 If you have a look inside the _com.example.library.server.business.UserService_ class
 you will notice that the corresponding method has the following authorization check:
@@ -772,7 +772,7 @@ __Due to time restrictions we don't implement this variant of resource server as
 This serves as a reference for you to see what has to be changed when using the automatic mapping of scopes
 to authorities. 
  
-![Spring IO Workshop 2019](../docs/images/automatic_role_mapping.png)
+![Automatic Role Mapping](../docs/images/automatic_role_mapping.png)
 
 To have a look open the project __lab1/library-server-complete-automatic__. 
 

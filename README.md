@@ -3,31 +3,61 @@
 
 # OAuth 2.0 / OpenID Connect 1.0 Workshop
 
-Authentication and authorization for Microservices with OAuth 2.0 and OpenID Connect 1.0 (OIDC)
+Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and OpenID Connect 1.0 (OIDC).
 
-# Workshop Contents
+[Presentation Slides (HTML5)](https://andifalk.github.io/secure-oauth2-oidc-workshop/)
 
-## Backend
+# Hands-On Workshop
 
-### Resource Server Microservice
+For the hands-on workshop you will extend a provided sample application:
 
-In this part we extend an existing Microservice to an OAuth 2.0 and OpenID Connect 1.0 compliant
-Resource Server.
+An Online Book Library with following use cases:
 
-### Microservice to Microservice Calls
+* Administer Library Users
+* Administer Books
+* List available Books
+* Borrow a Book
+* Return a previously borrowed Book
 
-Here we authenticate the calls from one Microservice to another Microservice using the OAuth2/OIDC 
-Client Credentials grant flow.
+The components you will use and build look like this:
 
-## Frontend
+[![License](docs/images/demo-architecture.png)]
 
-### Server Side Web Client
+All the code currently is build and tested against [Spring Boot 2.2.0 Release Candidate 1](https://spring.io/blog/2019/10/03/spring-boot-2-2-0-rc1-has-been-released) 
+and [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
 
-Here we extend the existing server-side web client (based on Spring MVC and Thymeleaf) to be an OAuth 2.0 and OpenID Connect 1.0 compliant client. We will use the OAuth2/OIDC authorization code grant flow for this.
+## Preparation and Setup
 
-### Testing OAuth2 and OIDC
+### Get the source code
+                       
+Clone this GitHub repository (https://tinyurl.com/y2ynhe66):
 
-In this step we will look on how to test an OAuth2/OIDC resource server.
+```
+git clone https://tinyurl.com/y2ynhe66 oidc_workshop
+```
+
+and import whole directory into your Java IDE as __gradle project__.
+
+### Setup Keycloak
+                  
+1. Download 'keycloak_workshop.zip' from https://tinyurl.com/y3wjzwch (Use password: 'Workshop')
+2. Extract the downloaded __keycloak_workshop.zip__ file into a new local directory of your choice 
+   (this directory will be referenced as _<KEYCLOAK_INSTALL_DIR>_ in next steps)
+3. To startup [Keycloak](https://keycloak.org):
+    1. Open a terminal and change directory to sub directory _<KEYCLOAK_INSTALL_DIR>/bin_ and start Keycloak using 
+the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
+    2. Wait until keycloak has been started completely - you should see something like this `...(WildFly Core ...) started in 6902ms - Started 580 of 842 services`
+    3. Now direct your browser to [localhost:8080/auth/admin](http://localhost:8080/auth/admin/)
+    4. Login into the admin console using __admin/admin__ as credentials   
+
+Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop
+
+## Labs
+
+* [Lab 1: OAuth2/OIDC Resource Server](lab1/README.md)
+* [Lab 2: OAuth2/OIDC Client (Auth Code Flow)](lab2/README.md)
+* [Lab 3: OAuth2/OIDC Client (Client-Credentials Flow)](lab3/README.md)
+* [Lab 4: OAuth2/OIDC Testing Environment](lab4/README.md)
 
 ## License
 

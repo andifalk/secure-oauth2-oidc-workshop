@@ -40,7 +40,7 @@ for all details on how to build and configure an OAuth 2.0 client.
 In this second workshop lab you will be provided a complete spring mvc web client application that works
 together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
 
-![Spring IO Workshop 2019](../docs/images/demo-architecture.png)
+![Demo Architecture](../docs/images/demo-architecture.png)
 
 ### The client application
 
@@ -54,7 +54,7 @@ The client is able to fulfill most of the provided uses cases by the server appl
 All action buttons are visible depending on user authorizations, e.g. only users with _LIBRARY_USER_ role can see
 the _Borrow_ and _Return_ buttons. The _Return_
 
-![Spring IO Workshop 2019](../docs/images/library_client.png)
+![Library Client](../docs/images/library_client.png)
 
 ### Users and Roles
 
@@ -88,7 +88,7 @@ users:
   Here you'll see all user sessions (active/offline ones). By clicking on button _Logout all_ you can revocate 
   all active sessions.
 
-![Spring IO Workshop 2019](../docs/images/keycloak_sessions.png)
+![Keycloak Sessions](../docs/images/keycloak_sessions.png)
 
 
 * After you have revocated sessions in keycloak you have to delete the current JSESSION cookie 
@@ -96,7 +96,7 @@ users:
   Navigate to the cookies entry on the left and select the url of the library client, then delete the cookie 
   on the right hand side 
   
-![Spring IO Workshop 2019](../docs/images/devtools_cookies.png)
+![DevTools Cookies](../docs/images/devtools_cookies.png)
 
 Now when you refresh the library client in the browser you should be redirected again to the login page of keycloak.
 

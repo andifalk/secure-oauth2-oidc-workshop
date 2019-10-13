@@ -7,11 +7,11 @@ and create an application to generate your own JWT tokens using the correspondin
 This is quite helpful in testing environments, e.g. doing load/performance testing and preventing
 from load testing the identity server as well.
 
-In this lab we will not really implement anything but try how to use such static resource server
+In this lab you will not really implement anything yourself but you will see how to use such static resource server
 with custom generated JWt tokens.
 
 <u>Note:</u>  
-The contents of this lab are build upon the preview of [Spring Security 5.2.0 Milestone 2](https://spring.io/blog/2019/04/16/spring-security-5-2-0-m2-released).
+The contents of this lab are build against the brand new [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga).
 
 ## Lab Contents
 
@@ -187,7 +187,7 @@ After starting navigate your browser to [localhost:9093](http://localhost:9093).
 
 Then you should see a screen like the following one.
 
-![Spring IO Workshop 2019](../docs/images/jwt_generator.png)
+![JWT Generator](../docs/images/jwt_generator.png)
 
 To generate an JWT access token with the correct user identity and role information
 please fill the shown form with one of the following users and roles:
@@ -202,7 +202,7 @@ please fill the shown form with one of the following users and roles:
 After filling the form click on the button _Generate JWT_ then you should get another web page
 with the generate access token. This should look like this one.
 
-![Spring IO Workshop 2019](../docs/images/jwt_generator_result.png)
+![JWT Generator Result](../docs/images/jwt_generator_result.png)
 
 To continue with this lab copy the contents of the JWT and use this JWT as access token to 
 make a request to the resource server in the next step.
@@ -239,7 +239,7 @@ JWt generator application.
 Navigate your web browser to [jwt.io](https://jwt.io) and paste your access token into the
 _Encoded_ text field. 
 
-![Spring IO Workshop 2019](../docs/images/jwt_io.png)
+![JWT IO](../docs/images/jwt_io.png)
 
 If you scroll down a bit on the right hand side then you will see the following block 
 (depending on which user you have specified when generating a JWT):
@@ -262,7 +262,7 @@ As you can see our user has the scopes _library_admin_, _email_ and _profile_.
 These scopes are now mapped to the Spring Security authorities 
 _SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.  
 
-![Spring IO Workshop 2019](../docs/images/jwt_io_decoded.png)
+![JWT IO Decoded](../docs/images/jwt_io_decoded.png)
 
 This request should succeed with an '200' OK status and return a list of users.
 

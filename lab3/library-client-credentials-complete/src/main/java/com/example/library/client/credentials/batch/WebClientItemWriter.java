@@ -1,11 +1,13 @@
 package com.example.library.client.credentials.batch;
 
+import com.example.library.client.credentials.web.BookResource;
 import org.springframework.batch.item.support.AbstractItemStreamItemWriter;
-import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Objects;
 
 public class WebClientItemWriter<T> extends AbstractItemStreamItemWriter<T> {
 
@@ -19,7 +21,17 @@ public class WebClientItemWriter<T> extends AbstractItemStreamItemWriter<T> {
 
   @Override
   public void write(List<? extends T> items) throws Exception {
-    ClientResponse clientResponse = webClient.post().uri(targetUrl + "/books").syncBody(items.get(0)).exchange().log().block();
-    System.out.println(Objects.requireNonNull(clientResponse).statusCode());
+    webClient.post().uri(targetUrl + "/books").bodyValue(items.get(0))
+            .retrieve()
+            .onStatus(
+                    s -> s.equals(HttpStatus.UNAUTHORIZED),
+                    cr -> Mono.just(new BadCredentialsException("Not authenticated")))
+            .onStatus(
+                    HttpStatus::is4xxClientError,
+                    cr -> Mono.just(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+            .onStatus(
+                    HttpStatus::is5xxServerError,
+                    cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
+            .bodyToMono(BookResource.class).log().subscribe();
   }
 }

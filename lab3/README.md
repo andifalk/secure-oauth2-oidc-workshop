@@ -34,7 +34,7 @@ for all details on how to build and configure a reactive OAuth 2.0 client.
 In this second workshop lab you will be provided a complete spring mvc web client application that works
 together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
 
-![Spring IO Workshop 2019](../docs/images/demo-architecture.png)
+![Demo Architecture](../docs/images/demo-architecture.png)
 
 ### The client application
 
@@ -57,7 +57,7 @@ users:
   Here you'll see all user sessions (active/offline ones). By clicking on button _Logout all_ you can revocate 
   all active sessions.
 
-![Spring IO Workshop 2019](../docs/images/keycloak_sessions.png)
+![Keycloak Sessions](../docs/images/keycloak_sessions.png)
 
 Please note that this time we don't really log out a specific user identity. Instead there
 is a configured service account at keycloak that is used for clients requesting the
@@ -72,7 +72,7 @@ that _Service Accounts Enabled_ is set to "ON".
   Navigate to the cookies entry on the left and select the url of the library client, then delete the cookie 
   on the right hand side 
   
-![Spring IO Workshop 2019](../docs/images/devtools_cookies.png)
+![DevTools Cookies](../docs/images/devtools_cookies.png)
 
 ## Lab 3 Tutorial
 
@@ -214,7 +214,7 @@ in the _Authorization_ header.
 To achieve this open the class _com.example.library.client.credentials.web.BooksController_ 
 and change parts of it as follows:
 
-```java
+```
 package com.example.library.client.config;
 ...
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;

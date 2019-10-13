@@ -2,6 +2,7 @@ package com.example.library.client.credentials.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
@@ -11,6 +12,7 @@ import org.springframework.security.oauth2.client.web.server.UnAuthenticatedServ
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Profile("!testing")
 @Configuration
 public class WebClientConfiguration {
 
