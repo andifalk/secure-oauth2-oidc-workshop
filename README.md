@@ -21,22 +21,24 @@ An Online Book Library with following use cases:
 
 The components you will use and build look like this:
 
-[![License](docs/images/demo-architecture.png)]
+![Architecture](docs/images/demo-architecture.png)
 
-All the code currently is build and tested against [Spring Boot 2.2.0 Release Candidate 1](https://spring.io/blog/2019/10/03/spring-boot-2-2-0-rc1-has-been-released) 
-and [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
+All the code currently is build and tested against:
+* Java 8, Java 9 and Java 11
+* [Spring Boot 2.2.0 Release Candidate 1](https://spring.io/blog/2019/10/03/spring-boot-2-2-0-rc1-has-been-released) 
+* [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
 
 ## Preparation and Setup
 
 ### Get the source code
                        
-Clone this GitHub repository (https://tinyurl.com/y2ynhe66):
+Clone this GitHub repository (https://github.com/andifalk/secure-oauth2-oidc-workshop):
 
 ```
-git clone https://tinyurl.com/y2ynhe66 oidc_workshop
+git clone https://github.com/andifalk/secure-oauth2-oidc-workshop.git oidc_workshop
 ```
 
-and import whole directory into your Java IDE as __gradle project__.
+and import whole directory into your Java IDE as __gradle project__ (look into your IDE docs on how to do this).
 
 ### Setup Keycloak
                   
@@ -62,8 +64,6 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 ## License
 
 Apache 2.0 licensed
-
 Copyright (c) by 2019 Andreas Falk
 
 [1]:http://www.apache.org/licenses/LICENSE-2.0.txt
-
