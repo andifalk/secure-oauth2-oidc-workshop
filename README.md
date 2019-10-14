@@ -30,6 +30,13 @@ All the code currently is build and tested against:
 
 ## Preparation and Setup
 
+### Requirements and useful tools
+
+* [Java SDK](https://openjdk.java.net/install/) Version 8, 9 or 11
+* A Java IDE ([Eclipse](https://www.eclipse.org/downloads/), [IntelliJ](https://www.jetbrains.com/idea/download), [VS Code](https://code.visualstudio.com/), ...)
+* [Git](https://git-scm.com/)
+* [Postman](https://www.getpostman.com/downloads/), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
+
 ### Get the source code
                        
 Clone this GitHub repository (https://github.com/andifalk/secure-oauth2-oidc-workshop):
