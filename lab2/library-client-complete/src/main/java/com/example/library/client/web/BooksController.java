@@ -52,7 +52,8 @@ public class BooksController {
             cr -> Mono.just(new Exception(cr.statusCode().getReasonPhrase())))
         .bodyToMono(BookListResource.class)
         .log()
-        .map(BookListResource::getBooks)
+        .map(BookListResource::get_embedded)
+        .map(EmbeddedBookListResource::getBookResourceList)
         .map(
             c -> {
               model.addAttribute("books", c);

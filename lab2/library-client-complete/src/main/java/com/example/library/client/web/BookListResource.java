@@ -4,19 +4,19 @@ import java.util.Collection;
 
 public class BookListResource {
 
-  private Collection<BookResource> books;
+  private EmbeddedBookListResource _embedded;
 
   public BookListResource() {}
 
-  public BookListResource(Collection<BookResource> books) {
-    this.books = books;
+  public BookListResource(EmbeddedBookListResource embeddedBookListResource) {
+    this._embedded = embeddedBookListResource;
   }
 
-  public Collection<BookResource> getBooks() {
-    return books;
+  public EmbeddedBookListResource get_embedded() {
+    return _embedded;
   }
 
-  public void setBooks(Collection<BookResource> books) {
-    this.books = books;
+  public void set_embedded(EmbeddedBookListResource _embedded) {
+    this._embedded = _embedded;
   }
 }
