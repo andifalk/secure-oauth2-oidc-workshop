@@ -4,8 +4,8 @@ server:
     include-stacktrace: never
 
 spring:
-  thymeleaf:
-    cache: false
+  main:
+    web-application-type: none
   security:
     user:
       password: secret
@@ -16,6 +16,10 @@ logging:
     org:
       springframework:
         web: info
+        batch: debug
+        security: debug
 
 library:
   server: http://localhost:9091/library-server
+
+

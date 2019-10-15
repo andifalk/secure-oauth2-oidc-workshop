@@ -28,7 +28,6 @@ test {
 dependencies {
     implementation('org.springframework.security:spring-security-oauth2-client')
     implementation('org.springframework.boot:spring-boot-starter-batch')
-    implementation('org.springframework.integration:spring-integration-webflux')
     implementation('org.springframework:spring-webflux')
     implementation('io.projectreactor.netty:reactor-netty')
     runtimeOnly('com.h2database:h2')

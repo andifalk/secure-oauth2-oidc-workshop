@@ -108,7 +108,7 @@ class UserApiIntegrationTests {
     this.mockMvc
         .perform(
             RestDocumentationRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifyingUserResource)))
         .andExpect(status().isCreated())
         .andDo(document("create-user"));
@@ -130,7 +130,7 @@ class UserApiIntegrationTests {
     this.mockMvc
         .perform(
             RestDocumentationRequestBuilders.put("/users/{userId}", CURATOR_IDENTIFIER)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifyingUserResource)))
         .andExpect(status().isOk())
         .andDo(document("update-user"));
