@@ -1,6 +1,7 @@
 package com.example.library.server.api.resource;
 
 import com.example.library.server.dataaccess.User;
+import org.springframework.hateoas.RepresentationModel;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -8,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
 
-public class UserResource {
+public class UserResource extends RepresentationModel<UserResource> {
 
   private UUID identifier;
 

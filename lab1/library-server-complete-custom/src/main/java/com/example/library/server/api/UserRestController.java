@@ -43,7 +43,7 @@ public class UserRestController {
   @GetMapping
   public List<UserResource> getAllUsers() {
     return userService.findAll().stream()
-        .map(u -> new UserResourceAssembler().toModel(u))
+        .map(userResourceAssembler::toModel)
         .collect(Collectors.toList());
   }
 

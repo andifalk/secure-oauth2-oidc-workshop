@@ -31,17 +31,19 @@ import java.util.stream.Collectors;
 public class UserRestController {
 
   private final UserService userService;
+  private final UserResourceAssembler userResourceAssembler;
 
   @Autowired
-  public UserRestController(UserService userService) {
+  public UserRestController(UserService userService, UserResourceAssembler userResourceAssembler) {
     this.userService = userService;
+	this.userResourceAssembler = userResourceAssembler;
   }
 
   @ResponseStatus(HttpStatus.OK)
   @GetMapping
   public List<UserResource> getAllUsers() {
     return userService.findAll().stream()
-        .map(u -> new UserResourceAssembler().toModel(u))
+        .map(userResourceAssembler::toModel)
         .collect(Collectors.toList());
   }
 
@@ -49,7 +51,7 @@ public class UserRestController {
   public ResponseEntity<UserResource> getUser(@PathVariable("userId") UUID userId) {
     return userService
         .findByIdentifier(userId)
-        .map(u -> ResponseEntity.ok(new UserResourceAssembler().toModel(u)))
+        .map(u -> ResponseEntity.ok(userResourceAssembler.toModel(u)))
         .orElse(ResponseEntity.notFound().build());
   }
 
@@ -80,7 +82,7 @@ public class UserRestController {
                       .path("/users/{userId}")
                       .buildAndExpand(u.getIdentifier())
                       .toUri();
-              UserResource userResource = new UserResourceAssembler().toModel(u);
+              UserResource userResource = userResourceAssembler.toModel(u);
               return ResponseEntity.created(location).body(userResource);
             })
         .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
@@ -102,7 +104,7 @@ public class UserRestController {
                       .map(Enum::name)
                       .collect(Collectors.toList()));
               return ResponseEntity.ok(
-                  new UserResourceAssembler().toModel(userService.update(u)));
+                      userResourceAssembler.toModel(userService.update(u)));
             })
         .orElse(ResponseEntity.notFound().build());
   }

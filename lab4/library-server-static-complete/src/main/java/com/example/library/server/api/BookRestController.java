@@ -1,11 +1,12 @@
 package com.example.library.server.api;
 
-import com.example.library.server.api.resource.BookListResource;
 import com.example.library.server.api.resource.BookResource;
+import com.example.library.server.api.resource.assembler.BookResourceAssembler;
 import com.example.library.server.business.BookService;
 import com.example.library.server.dataaccess.Book;
 import com.example.library.server.security.LibraryUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +24,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /** REST api for books. */
 @RestController
@@ -32,23 +32,24 @@ import java.util.stream.Collectors;
 public class BookRestController {
 
   private final BookService bookService;
+  private final BookResourceAssembler bookResourceAssembler;
 
   @Autowired
-  public BookRestController(BookService bookService) {
+  public BookRestController(BookService bookService, BookResourceAssembler bookResourceAssembler) {
     this.bookService = bookService;
+    this.bookResourceAssembler = bookResourceAssembler;
   }
 
-  @ResponseStatus(HttpStatus.OK)
   @GetMapping
-  public BookListResource getAllBooks() {
-    return new BookListResource(bookService.findAll().stream().map(BookResource::new).collect(Collectors.toList()));
+  public ResponseEntity<CollectionModel<BookResource>> getAllBooks() {
+    return ResponseEntity.ok(bookResourceAssembler.toCollectionModel(bookService.findAll()));
   }
 
   @GetMapping("/{bookId}")
   public ResponseEntity<BookResource> getBookById(@PathVariable("bookId") UUID bookIdentifier) {
     return bookService
         .findWithDetailsByIdentifier(bookIdentifier)
-        .map(BookResource::new)
+        .map(bookResourceAssembler::toModel)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
@@ -63,7 +64,7 @@ public class BookRestController {
               bookService.borrowById(bookId, libraryUser.getIdentifier());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
-                  .map(bb -> ResponseEntity.ok(new BookResource(bb)))
+                  .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());
@@ -79,7 +80,7 @@ public class BookRestController {
               bookService.returnById(bookId, libraryUser.getIdentifier());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
-                  .map(bb -> ResponseEntity.ok(new BookResource(bb)))
+                  .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());
@@ -102,7 +103,7 @@ public class BookRestController {
 
     return bookService
         .findWithDetailsByIdentifier(identifier)
-        .map(b -> new BookResource(b))
+        .map(bookResourceAssembler::toModel)
         .map(
             b -> {
               URI location =
@@ -130,7 +131,7 @@ public class BookRestController {
               UUID identifier = bookService.update(b);
               return bookService
                   .findWithDetailsByIdentifier(identifier)
-                  .map(ub -> ResponseEntity.ok(new BookResource(ub)))
+                  .map(ub -> ResponseEntity.ok(bookResourceAssembler.toModel(ub)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());

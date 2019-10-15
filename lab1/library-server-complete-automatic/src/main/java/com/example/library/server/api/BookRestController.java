@@ -54,7 +54,7 @@ public class BookRestController {
   public ResponseEntity<BookResource> getBookById(@PathVariable("bookId") UUID bookIdentifier) {
     return bookService
         .findWithDetailsByIdentifier(bookIdentifier)
-        .map(b -> new BookResourceAssembler().toModel(b))
+        .map(bookResourceAssembler::toModel)
         .map(ResponseEntity::ok)
         .orElse(ResponseEntity.notFound().build());
   }
@@ -76,7 +76,7 @@ public class BookRestController {
               bookService.borrowById(bookId, libraryUser.getIdentifier());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
-                  .map(bb -> ResponseEntity.ok(new BookResourceAssembler().toModel(bb)))
+                  .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());
@@ -99,7 +99,7 @@ public class BookRestController {
               bookService.returnById(bookId, libraryUser.getIdentifier());
               return bookService
                   .findWithDetailsByIdentifier(b.getIdentifier())
-                  .map(bb -> ResponseEntity.ok(new BookResourceAssembler().toModel(bb)))
+                  .map(bb -> ResponseEntity.ok(bookResourceAssembler.toModel(bb)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());
@@ -122,7 +122,7 @@ public class BookRestController {
 
     return bookService
         .findWithDetailsByIdentifier(identifier)
-        .map(b -> new BookResourceAssembler().toModel(b))
+        .map(bookResourceAssembler::toModel)
         .map(
             b -> {
               URI location =
@@ -150,7 +150,7 @@ public class BookRestController {
               UUID identifier = bookService.update(b);
               return bookService
                   .findWithDetailsByIdentifier(identifier)
-                  .map(ub -> ResponseEntity.ok(new BookResourceAssembler().toModel(ub)))
+                  .map(ub -> ResponseEntity.ok(bookResourceAssembler.toModel(ub)))
                   .orElse(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
             })
         .orElse(ResponseEntity.notFound().build());
