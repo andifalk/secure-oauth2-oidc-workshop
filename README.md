@@ -23,6 +23,9 @@ The components you will use and build look like this:
 
 ![Architecture](docs/images/demo-architecture.png)
 
+To use the sample library server application please consult the 
+[REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
+
 All the code currently is build and tested against:
 * Java 8, Java 9 and Java 11
 * [Spring Boot 2.2.0 RC1](https://spring.io/blog/2019/10/03/spring-boot-2-2-0-rc1-has-been-released) 

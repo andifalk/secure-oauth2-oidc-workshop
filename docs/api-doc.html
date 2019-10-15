@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta content="Asciidoctor 1.5.6.1" name="generator">
+<meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="Andreas Falk">
 <title>Library Server API Documentation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -784,7 +784,7 @@ This will create a new book in the library&#8217;s collection.</p>
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost:8080/books' -i -u 'user:secret' -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -d '{
-  &quot;identifier&quot; : &quot;17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;,
+  &quot;identifier&quot; : &quot;b1e30875-9397-4e01-933e-588079517387&quot;,
   &quot;isbn&quot; : &quot;1234566&quot;,
   &quot;title&quot; : &quot;title&quot;,
   &quot;description&quot; : &quot;description&quot;,
@@ -801,13 +801,13 @@ This will create a new book in the library&#8217;s collection.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /books HTTP/1.1
-Authorization: Basic dXNlcjpzZWNyZXQ=
-Content-Length: 225
 Content-Type: application/json;charset=UTF-8
+Authorization: Basic dXNlcjpzZWNyZXQ=
 Host: localhost:8080
+Content-Length: 225
 
 {
-  &quot;identifier&quot; : &quot;17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;,
+  &quot;identifier&quot; : &quot;b1e30875-9397-4e01-933e-588079517387&quot;,
   &quot;isbn&quot; : &quot;1234566&quot;,
   &quot;title&quot; : &quot;title&quot;,
   &quot;description&quot; : &quot;description&quot;,
@@ -824,7 +824,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ echo '{
-  &quot;identifier&quot; : &quot;17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;,
+  &quot;identifier&quot; : &quot;b1e30875-9397-4e01-933e-588079517387&quot;,
   &quot;isbn&quot; : &quot;1234566&quot;,
   &quot;title&quot; : &quot;title&quot;,
   &quot;description&quot; : &quot;description&quot;,
@@ -842,12 +842,18 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Location: http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209
-Content-Type: application/hal+json;charset=UTF-8
+Location: http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 640
 
 {
-  &quot;identifier&quot; : &quot;17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;,
+  &quot;identifier&quot; : &quot;b1e30875-9397-4e01-933e-588079517387&quot;,
   &quot;isbn&quot; : &quot;1234566&quot;,
   &quot;title&quot; : &quot;title&quot;,
   &quot;description&quot; : &quot;description&quot;,
@@ -855,16 +861,16 @@ Content-Length: 640
   &quot;borrowed&quot; : false,
   &quot;_links&quot; : {
     &quot;self&quot; : {
-      &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;
+      &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387&quot;
     },
     &quot;update&quot; : {
-      &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;
+      &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387&quot;
     },
     &quot;borrow&quot; : {
-      &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209/borrow&quot;
+      &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387/borrow&quot;
     },
     &quot;return&quot; : {
-      &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209/return&quot;
+      &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387/return&quot;
     }
   }
 }</code></pre>
@@ -903,10 +909,10 @@ This will update an existing book in the library&#8217;s collection.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /books/081314cb-4abf-43e5-9b38-7d7261edb10d HTTP/1.1
-Content-Length: 718
-Authorization: Basic dXNlcjpzZWNyZXQ=
 Content-Type: application/json;charset=UTF-8
+Authorization: Basic dXNlcjpzZWNyZXQ=
 Host: localhost:8080
+Content-Length: 718
 
 {
   &quot;identifier&quot; : &quot;081314cb-4abf-43e5-9b38-7d7261edb10d&quot;,
@@ -944,8 +950,14 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 1133
-Content-Type: application/hal+json;charset=UTF-8
 
 {
   &quot;identifier&quot; : &quot;081314cb-4abf-43e5-9b38-7d7261edb10d&quot;,
@@ -1010,117 +1022,125 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
-Content-Length: 5108
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 5355
 
 {
-  &quot;books&quot; : [ {
-    &quot;identifier&quot; : &quot;f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;,
-    &quot;isbn&quot; : &quot;9780132350884&quot;,
-    &quot;title&quot; : &quot;Clean Code&quot;,
-    &quot;description&quot; : &quot;Even bad code can function. But if code isn’t clean, it can bring a development organization to its knees. Every year, countless hours and significant resources are lost because of poorly written code. But it doesn’t have to be that way. Noted software expert Robert C. Martin presents a revolutionary paradigm with Clean Code: A Handbook of Agile Software Craftsmanship . Martin has teamed up with his colleagues from Object Mentor to distill their best agile practice of cleaning code “on the fly” into a book that will instill within you the values of a software craftsman and make you a better programmer—but only if you work at it.&quot;,
-    &quot;authors&quot; : [ &quot;Bob C. Martin&quot; ],
-    &quot;borrowed&quot; : true,
-    &quot;borrowedBy&quot; : {
-      &quot;identifier&quot; : &quot;c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;,
-      &quot;email&quot; : &quot;bruce.wayne@example.com&quot;,
-      &quot;firstName&quot; : &quot;Bruce&quot;,
-      &quot;lastName&quot; : &quot;Wayne&quot;,
+  &quot;_embedded&quot; : {
+    &quot;bookResourceList&quot; : [ {
+      &quot;identifier&quot; : &quot;f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;,
+      &quot;isbn&quot; : &quot;9780132350884&quot;,
+      &quot;title&quot; : &quot;Clean Code&quot;,
+      &quot;description&quot; : &quot;Even bad code can function. But if code isn’t clean, it can bring a development organization to its knees. Every year, countless hours and significant resources are lost because of poorly written code. But it doesn’t have to be that way. Noted software expert Robert C. Martin presents a revolutionary paradigm with Clean Code: A Handbook of Agile Software Craftsmanship . Martin has teamed up with his colleagues from Object Mentor to distill their best agile practice of cleaning code “on the fly” into a book that will instill within you the values of a software craftsman and make you a better programmer—but only if you work at it.&quot;,
+      &quot;authors&quot; : [ &quot;Bob C. Martin&quot; ],
+      &quot;borrowed&quot; : true,
+      &quot;borrowedBy&quot; : {
+        &quot;identifier&quot; : &quot;c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;,
+        &quot;email&quot; : &quot;bruce.wayne@example.com&quot;,
+        &quot;firstName&quot; : &quot;Bruce&quot;,
+        &quot;lastName&quot; : &quot;Wayne&quot;,
+        &quot;_links&quot; : {
+          &quot;self&quot; : {
+            &quot;href&quot; : &quot;http://localhost:8080/users/c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;
+          }
+        }
+      },
       &quot;_links&quot; : {
         &quot;self&quot; : {
-          &quot;href&quot; : &quot;http://localhost:8080/users/c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;
+          &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;
+        },
+        &quot;update&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;
+        },
+        &quot;borrow&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f/borrow&quot;
+        },
+        &quot;return&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f/return&quot;
         }
       }
-    },
-    &quot;_links&quot; : {
-      &quot;self&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;
+    }, {
+      &quot;identifier&quot; : &quot;3038627d-627e-448d-8422-0a5705c9e8f1&quot;,
+      &quot;isbn&quot; : &quot;9781449374648&quot;,
+      &quot;title&quot; : &quot;Cloud Native Java&quot;,
+      &quot;description&quot; : &quot;What separates the traditional enterprise from the likes of Amazon, Netflix, and Etsy? Those companies have refined the art of cloud native development to maintain their competitive edge and stay well ahead of the competition. This practical guide shows Java/JVM developers how to build better software, faster, using Spring Boot, Spring Cloud, and Cloud Foundry.&quot;,
+      &quot;authors&quot; : [ &quot;Josh Long&quot;, &quot;Kenny Bastiani&quot; ],
+      &quot;borrowed&quot; : true,
+      &quot;borrowedBy&quot; : {
+        &quot;identifier&quot; : &quot;69c10574-9064-40e4-85bd-5c68547f3f48&quot;,
+        &quot;email&quot; : &quot;bruce.banner@example.com&quot;,
+        &quot;firstName&quot; : &quot;Bruce&quot;,
+        &quot;lastName&quot; : &quot;Banner&quot;,
+        &quot;_links&quot; : {
+          &quot;self&quot; : {
+            &quot;href&quot; : &quot;http://localhost:8080/users/69c10574-9064-40e4-85bd-5c68547f3f48&quot;
+          }
+        }
       },
-      &quot;update&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;
-      },
-      &quot;borrow&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f/borrow&quot;
-      },
-      &quot;return&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f/return&quot;
-      }
-    }
-  }, {
-    &quot;identifier&quot; : &quot;3038627d-627e-448d-8422-0a5705c9e8f1&quot;,
-    &quot;isbn&quot; : &quot;9781449374648&quot;,
-    &quot;title&quot; : &quot;Cloud Native Java&quot;,
-    &quot;description&quot; : &quot;What separates the traditional enterprise from the likes of Amazon, Netflix, and Etsy? Those companies have refined the art of cloud native development to maintain their competitive edge and stay well ahead of the competition. This practical guide shows Java/JVM developers how to build better software, faster, using Spring Boot, Spring Cloud, and Cloud Foundry.&quot;,
-    &quot;authors&quot; : [ &quot;Josh Long&quot;, &quot;Kenny Bastiani&quot; ],
-    &quot;borrowed&quot; : true,
-    &quot;borrowedBy&quot; : {
-      &quot;identifier&quot; : &quot;69c10574-9064-40e4-85bd-5c68547f3f48&quot;,
-      &quot;email&quot; : &quot;bruce.banner@example.com&quot;,
-      &quot;firstName&quot; : &quot;Bruce&quot;,
-      &quot;lastName&quot; : &quot;Banner&quot;,
       &quot;_links&quot; : {
         &quot;self&quot; : {
-          &quot;href&quot; : &quot;http://localhost:8080/users/69c10574-9064-40e4-85bd-5c68547f3f48&quot;
+          &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1&quot;
+        },
+        &quot;update&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1&quot;
+        },
+        &quot;borrow&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1/borrow&quot;
+        },
+        &quot;return&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1/return&quot;
         }
       }
-    },
-    &quot;_links&quot; : {
-      &quot;self&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1&quot;
-      },
-      &quot;update&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1&quot;
-      },
-      &quot;borrow&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1/borrow&quot;
-      },
-      &quot;return&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/3038627d-627e-448d-8422-0a5705c9e8f1/return&quot;
+    }, {
+      &quot;identifier&quot; : &quot;081314cb-4abf-43e5-9b38-7d7261edb10d&quot;,
+      &quot;isbn&quot; : &quot;9781617291203&quot;,
+      &quot;title&quot; : &quot;Spring in Action: Covers Spring 5&quot;,
+      &quot;description&quot; : &quot;Spring in Action, Fifth Edition is a hands-on guide to the Spring Framework, updated for version 4. It covers the latest features, tools, and practices including Spring MVC, REST, Security, Web Flow, and more. You'll move between short snippets and an ongoing example as you learn to build simple and efficient J2EE applications. Author Craig Walls has a special knack for crisp and entertaining examples that zoom in on the features and techniques you really need.&quot;,
+      &quot;authors&quot; : [ &quot;Craig Walls&quot; ],
+      &quot;borrowed&quot; : false,
+      &quot;_links&quot; : {
+        &quot;self&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d&quot;
+        },
+        &quot;update&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d&quot;
+        },
+        &quot;borrow&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d/borrow&quot;
+        },
+        &quot;return&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d/return&quot;
+        }
       }
-    }
-  }, {
-    &quot;identifier&quot; : &quot;081314cb-4abf-43e5-9b38-7d7261edb10d&quot;,
-    &quot;isbn&quot; : &quot;9781617291203&quot;,
-    &quot;title&quot; : &quot;Spring in Action: Covers Spring 5&quot;,
-    &quot;description&quot; : &quot;Spring in Action, Fifth Edition is a hands-on guide to the Spring Framework, updated for version 4. It covers the latest features, tools, and practices including Spring MVC, REST, Security, Web Flow, and more. You'll move between short snippets and an ongoing example as you learn to build simple and efficient J2EE applications. Author Craig Walls has a special knack for crisp and entertaining examples that zoom in on the features and techniques you really need.&quot;,
-    &quot;authors&quot; : [ &quot;Craig Walls&quot; ],
-    &quot;borrowed&quot; : false,
-    &quot;_links&quot; : {
-      &quot;self&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d&quot;
-      },
-      &quot;update&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d&quot;
-      },
-      &quot;borrow&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d/borrow&quot;
-      },
-      &quot;return&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/081314cb-4abf-43e5-9b38-7d7261edb10d/return&quot;
+    }, {
+      &quot;identifier&quot; : &quot;b1e30875-9397-4e01-933e-588079517387&quot;,
+      &quot;isbn&quot; : &quot;1234566&quot;,
+      &quot;title&quot; : &quot;title&quot;,
+      &quot;description&quot; : &quot;description&quot;,
+      &quot;authors&quot; : [ &quot;Author&quot; ],
+      &quot;borrowed&quot; : false,
+      &quot;_links&quot; : {
+        &quot;self&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387&quot;
+        },
+        &quot;update&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387&quot;
+        },
+        &quot;borrow&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387/borrow&quot;
+        },
+        &quot;return&quot; : {
+          &quot;href&quot; : &quot;http://localhost:8080/books/b1e30875-9397-4e01-933e-588079517387/return&quot;
+        }
       }
-    }
-  }, {
-    &quot;identifier&quot; : &quot;17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;,
-    &quot;isbn&quot; : &quot;1234566&quot;,
-    &quot;title&quot; : &quot;title&quot;,
-    &quot;description&quot; : &quot;description&quot;,
-    &quot;authors&quot; : [ &quot;Author&quot; ],
-    &quot;borrowed&quot; : false,
-    &quot;_links&quot; : {
-      &quot;self&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;
-      },
-      &quot;update&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209&quot;
-      },
-      &quot;borrow&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209/borrow&quot;
-      },
-      &quot;return&quot; : {
-        &quot;href&quot; : &quot;http://localhost:8080/books/17fb1a97-5e6b-412a-83e8-07fbcfca2209/return&quot;
-      }
-    }
-  } ],
+    } ]
+  },
   &quot;_links&quot; : {
     &quot;self&quot; : {
       &quot;href&quot; : &quot;http://localhost:8080/books&quot;
@@ -1171,7 +1191,13 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 1601
 
 {
@@ -1253,7 +1279,13 @@ this:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/hal+json;charset=UTF-8
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 1601
 
 {
@@ -1335,8 +1367,14 @@ this:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 1293
-Content-Type: application/hal+json;charset=UTF-8
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 1601
 
 {
   &quot;identifier&quot; : &quot;f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;,
@@ -1344,7 +1382,18 @@ Content-Type: application/hal+json;charset=UTF-8
   &quot;title&quot; : &quot;Clean Code&quot;,
   &quot;description&quot; : &quot;Even bad code can function. But if code isn’t clean, it can bring a development organization to its knees. Every year, countless hours and significant resources are lost because of poorly written code. But it doesn’t have to be that way. Noted software expert Robert C. Martin presents a revolutionary paradigm with Clean Code: A Handbook of Agile Software Craftsmanship . Martin has teamed up with his colleagues from Object Mentor to distill their best agile practice of cleaning code “on the fly” into a book that will instill within you the values of a software craftsman and make you a better programmer—but only if you work at it.&quot;,
   &quot;authors&quot; : [ &quot;Bob C. Martin&quot; ],
-  &quot;borrowed&quot; : false,
+  &quot;borrowed&quot; : true,
+  &quot;borrowedBy&quot; : {
+    &quot;identifier&quot; : &quot;c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;,
+    &quot;email&quot; : &quot;bruce.wayne@example.com&quot;,
+    &quot;firstName&quot; : &quot;Bruce&quot;,
+    &quot;lastName&quot; : &quot;Wayne&quot;,
+    &quot;_links&quot; : {
+      &quot;self&quot; : {
+        &quot;href&quot; : &quot;http://localhost:8080/users/c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;
+      }
+    }
+  },
   &quot;_links&quot; : {
     &quot;self&quot; : {
       &quot;href&quot; : &quot;http://localhost:8080/books/f9bf70d6-e56d-4cab-be6b-294cd05f599f&quot;
@@ -1403,7 +1452,13 @@ Host: localhost:8080</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 204 No Content
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 </div>
@@ -1425,7 +1480,7 @@ This will create a new user in the user&#8217;s collection.</p>
 <pre class="CodeRay highlight"><code data-lang="bash">$ curl 'http://localhost:8080/users' -i -X POST \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -d '{
-  &quot;identifier&quot; : &quot;98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;,
+  &quot;identifier&quot; : &quot;f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;,
   &quot;email&quot; : &quot;test@example.com&quot;,
   &quot;firstName&quot; : &quot;test&quot;,
   &quot;lastName&quot; : &quot;first&quot;,
@@ -1441,7 +1496,7 @@ This will create a new user in the user&#8217;s collection.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ echo '{
-  &quot;identifier&quot; : &quot;98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;,
+  &quot;identifier&quot; : &quot;f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;,
   &quot;email&quot; : &quot;test@example.com&quot;,
   &quot;firstName&quot; : &quot;test&quot;,
   &quot;lastName&quot; : &quot;first&quot;,
@@ -1458,12 +1513,12 @@ This will create a new user in the user&#8217;s collection.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /users HTTP/1.1
-Content-Length: 227
 Content-Type: application/json;charset=UTF-8
 Host: localhost:8080
+Content-Length: 227
 
 {
-  &quot;identifier&quot; : &quot;98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;,
+  &quot;identifier&quot; : &quot;f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;,
   &quot;email&quot; : &quot;test@example.com&quot;,
   &quot;firstName&quot; : &quot;test&quot;,
   &quot;lastName&quot; : &quot;first&quot;,
@@ -1482,18 +1537,24 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 201 Created
-Location: http://localhost:8080/users/98e917b0-1c4d-44e5-8ebc-7aae0f9d6447
+Location: http://localhost:8080/users/f3e90b58-15aa-431f-ac63-f4500455c1e2
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 262
-Content-Type: application/hal+json;charset=UTF-8
 
 {
-  &quot;identifier&quot; : &quot;98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;,
+  &quot;identifier&quot; : &quot;f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;,
   &quot;email&quot; : &quot;test@example.com&quot;,
   &quot;firstName&quot; : &quot;test&quot;,
   &quot;lastName&quot; : &quot;first&quot;,
   &quot;_links&quot; : {
     &quot;self&quot; : {
-      &quot;href&quot; : &quot;http://localhost:8080/users/98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;
+      &quot;href&quot; : &quot;http://localhost:8080/users/f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;
     }
   }
 }</code></pre>
@@ -1549,8 +1610,8 @@ This will update the existing user in the user&#8217;s collection.</p>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /users/40c5ad0d-41f7-494b-8157-33fad16012aa HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 254
 Host: localhost:8080
+Content-Length: 254
 
 {
   &quot;identifier&quot; : &quot;40c5ad0d-41f7-494b-8157-33fad16012aa&quot;,
@@ -1572,8 +1633,14 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 270
-Content-Type: application/hal+json;charset=UTF-8
 
 {
   &quot;identifier&quot; : &quot;40c5ad0d-41f7-494b-8157-33fad16012aa&quot;,
@@ -1630,10 +1697,25 @@ this:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Length: 1082
-Content-Type: application/json;charset=UTF-8
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 1373
 
 [ {
+  &quot;identifier&quot; : &quot;2cdd02c8-4fc0-4dc0-8e6a-00eeb2fa7c94&quot;,
+  &quot;email&quot; : &quot;service-account-library-client@placeholder.org&quot;,
+  &quot;firstName&quot; : &quot;n/a&quot;,
+  &quot;lastName&quot; : &quot;n/a&quot;,
+  &quot;links&quot; : [ {
+    &quot;rel&quot; : &quot;self&quot;,
+    &quot;href&quot; : &quot;http://localhost:8080/users/2cdd02c8-4fc0-4dc0-8e6a-00eeb2fa7c94&quot;
+  } ]
+}, {
   &quot;identifier&quot; : &quot;c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;,
   &quot;email&quot; : &quot;bruce.wayne@example.com&quot;,
   &quot;firstName&quot; : &quot;Bruce&quot;,
@@ -1661,13 +1743,13 @@ Content-Type: application/json;charset=UTF-8
     &quot;href&quot; : &quot;http://localhost:8080/users/0d2c04f1-e25f-41b5-b4cd-3566a081200f&quot;
   } ]
 }, {
-  &quot;identifier&quot; : &quot;98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;,
+  &quot;identifier&quot; : &quot;f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;,
   &quot;email&quot; : &quot;test@example.com&quot;,
   &quot;firstName&quot; : &quot;test&quot;,
   &quot;lastName&quot; : &quot;first&quot;,
   &quot;links&quot; : [ {
     &quot;rel&quot; : &quot;self&quot;,
-    &quot;href&quot; : &quot;http://localhost:8080/users/98e917b0-1c4d-44e5-8ebc-7aae0f9d6447&quot;
+    &quot;href&quot; : &quot;http://localhost:8080/users/f3e90b58-15aa-431f-ac63-f4500455c1e2&quot;
   } ]
 } ]</code></pre>
 </div>
@@ -1713,8 +1795,14 @@ Host: localhost:8080</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/hal+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
 Content-Length: 270
-Content-Type: application/hal+json;charset=UTF-8
 
 {
   &quot;identifier&quot; : &quot;c47641ee-e63c-4c13-8cd2-1c2490aee0b3&quot;,
@@ -1769,7 +1857,13 @@ Host: localhost:8080</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 204 No Content</code></pre>
+<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 204 No Content
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY</code></pre>
 </div>
 </div>
 </div>
