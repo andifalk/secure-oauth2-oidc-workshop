@@ -31,7 +31,7 @@ this collection (Version 2.1 format) into Postman.
 
 All the code currently is build and tested against:
 * Java 8, Java 9 and Java 11
-* [Spring Boot 2.2.0 RC1](https://spring.io/blog/2019/10/03/spring-boot-2-2-0-rc1-has-been-released) 
+* [Spring Boot 2.2.0 Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
 * [Spring Framework 5.2.0 Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
 * [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
 * [Spring Batch 4.2.0 Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
@@ -93,13 +93,19 @@ the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
 
 Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop
 
-## Labs
+## Intro Labs
 
 * [Intro Lab: Authorization Code Grant Flow in Detail](intro-labs/auth-code-demo/README.md)
 * [Intro Lab: A pre-defined OAuth2 client for GitHub](intro-labs/github-client/README.md)
+
+## Hands-On Labs
+
 * [Lab 1: OAuth2/OIDC Resource Server](lab1/README.md)
 * [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2/README.md)
 * [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3/README.md)
+
+## Bonus Labs
+
 * [Lab 4: OAuth2/OIDC Testing Environment](lab4/README.md)
 
 ## License
