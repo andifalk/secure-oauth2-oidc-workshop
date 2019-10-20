@@ -45,6 +45,25 @@ All the code currently is build and tested against:
 * [Git](https://git-scm.com/)
 * [Postman](https://www.getpostman.com/downloads/), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
 
+#### Eclipse IDE specific requirements
+
+Please make sure you have installed the _Buildship Gradle Integration_ from the eclipse marketplace.
+
+![Marketplace Gradle](images/marketplace_gradle.png)
+
+To start spring boot applications from within Eclipse please install _"Spring Tools 4 - for Spring Boot"_ extension 
+from marketplace (under 'popular' tab) or just use the eclipsed based [Spring Toolsuite 4](https://spring.io/tools) directly.
+
+![Marketplace Spring](images/marketplace_spring.png)
+
+#### VS Code specific requirements
+
+To be able to work properly in VS Code with this Spring Boot Java Gradle project you need at least these extensions:
+
+* Java Extension Pack
+* vscode-gradle-language
+* VS Code Spring Boot Application Development Extension Pack
+
 ### Get the source code
                        
 Clone this GitHub repository (https://github.com/andifalk/secure-oauth2-oidc-workshop):
@@ -53,7 +72,12 @@ Clone this GitHub repository (https://github.com/andifalk/secure-oauth2-oidc-wor
 git clone https://github.com/andifalk/secure-oauth2-oidc-workshop.git oidc_workshop
 ```
 
-and import whole directory into your Java IDE as __gradle project__ (look into your IDE docs on how to do this).
+After that you can import the whole workshop project directory into your IDE as a __gradle project__:
+
+* [IntelliJ](https://www.jetbrains.com/idea): "New project from existing sources..." and then select 'Gradle' when prompted
+* [Eclipse](https://www.eclipse.org/) or [Spring ToolSuite](https://spring.io/tools): "Import/Gradle/Existing gradle project"
+* [Visual Studio Code](https://code.visualstudio.com/): Just open the root directory and wait until VS Code configured the project
+
 
 ### Setup Keycloak
                   
