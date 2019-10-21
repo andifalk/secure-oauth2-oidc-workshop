@@ -103,10 +103,11 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 * [Lab 1: OAuth2/OIDC Resource Server](lab1/README.md)
 * [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2/README.md)
 * [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3/README.md)
+* [Lab 4: OAuth2/OIDC Testing Environment](lab4/README.md)
 
 ## Bonus Labs
 
-* [Lab 4: OAuth2/OIDC Testing Environment](lab4/README.md)
+* [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app/README.md)
 
 ## License
 

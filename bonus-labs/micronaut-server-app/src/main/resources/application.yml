@@ -1,0 +1,21 @@
+micronaut:
+  application:
+    name: micronaut-server-app
+  server:
+    port: 9096
+  security:
+    enabled: true
+    token:
+      roles-name: 'groups'
+      jwt:
+        enabled: true
+        signatures:
+          jwks:
+            keycloak:
+              url: 'http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs'
+
+endpoints:
+  health:
+    details-visible: ANONYMOUS
+
+
