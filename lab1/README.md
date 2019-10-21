@@ -208,11 +208,14 @@ Then you should see the public discovery information that keycloak provides
 }  
 ```
 
-For configuring a resource server the important entries are _issuer_ and _jwks_uri_.  
-Spring Security 5 automatically configures a resource server by just specifying the _issuer_ uri value 
-as part of the predefined spring property _spring.security.oauth2.resourceserver.jwt.issuer-uri_ 
+For configuring a resource server the important entries are _issuer_ and _jwk-set_uri_.
+As resource server only the JWT token validation is important, so it only needs to know where to load
+the public key from for validating the token signature.
+  
+Spring Security 5 automatically configures a resource server by specifying the _jwk-set_ uri value 
+as part of the predefined spring property _spring.security.oauth2.resourceserver.jwt.set-uri_ 
 
-To perform this step, open _application.yml__ and add the issuer uri property. 
+To perform this step, open _application.yml__ and add the jwk set uri property. 
 After adding this it should look like this:
 
 ```yaml
@@ -226,17 +229,16 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/auth/realms/workshop
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
 ```
 An error you get very often with files in yaml format is that the indents are not correct. 
 This can lead to unexpected errors later when you try to run all this stuff.
 
 With this configuration in place we have already a working resource server
-that can handle JWt access tokens transmitted via http bearer token header. 
+that can handle JWT access tokens transmitted via http bearer token header. 
 Spring Security also validates by default:
 
 * the JWT signature against the queried public key(s) from _jwks_url_
-* the JWT _iss_ claim against the configured issuer uri
 * that the JWT is not expired
 
 Usually this configuration would be sufficient but as we also want to make sure that 
@@ -695,6 +697,24 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   }  
 }
 ```  
+
+As the _JWTDecoder_ depends on the full issuer uri pointing to the OpendID Connect configuration of Keycloak
+we need to replace the _jwk-set-uri_ with the _issuer-uri_. So basically this now should look like this in the
+_application.yaml_ file:
+
+```yaml
+spring:
+  jpa:
+    open-in-view: false
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: non_null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/workshop
+```
 
 Now we can re-start the application and test again the same request we had retrieved an '403' error before.
 

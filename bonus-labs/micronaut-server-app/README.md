@@ -100,7 +100,6 @@ that can handle JWt access tokens transmitted via http bearer token header.
 Micronaut also validates by default:
 
 * the JWT signature against the queried public key(s) from _jwks_url_
-* the JWT _iss_ claim against the configured issuer uri
 * that the JWT is not expired
 
 In addition Micronaut automatically maps all _'groups'_ claim entries to corresponding roles that may be checked via _@Secured_ annotations.
