@@ -99,19 +99,19 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 
 ## Intro Labs
 
-* [Intro Lab: Authorization Code Grant Flow in Detail](intro-labs/auth-code-demo/README.md)
-* [Intro Lab: A pre-defined OAuth2 client for GitHub](intro-labs/github-client/README.md)
+* [Intro Lab: Authorization Code Grant Flow in Detail](intro-labs/auth-code-demo)
+* [Intro Lab: A pre-defined OAuth2 client for GitHub](intro-labs/github-client)
 
 ## Hands-On Labs
 
-* [Lab 1: OAuth2/OIDC Resource Server](lab1/README.md)
-* [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2/README.md)
-* [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3/README.md)
-* [Lab 4: OAuth2/OIDC Testing Environment](lab4/README.md)
+* [Lab 1: OAuth2/OIDC Resource Server](lab1)
+* [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2)
+* [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3)
+* [Lab 4: OAuth2/OIDC Testing Environment](lab4)
 
 ## Bonus Labs
 
-* [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app/README.md)
+* [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
 
 ## License
 
