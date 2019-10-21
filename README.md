@@ -45,6 +45,10 @@ All the code currently is build and tested against:
 * [Git](https://git-scm.com/)
 * [Postman](https://www.getpostman.com/downloads/), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
 
+#### IntelliJ specific requirements
+
+IntelliJ does not require any specific additional plugins or configuration.
+
 #### Eclipse IDE specific requirements
 
 Please make sure you have installed the _Buildship Gradle Integration_ from the eclipse marketplace.
