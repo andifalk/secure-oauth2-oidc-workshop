@@ -188,6 +188,10 @@ and add this dependency instead:
 implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-server')
 ```
 
+Note: If you still get compilation errors after replacing dependencies please trigger a gradle update 
+(check how this is done in your IDE, e.g. in Eclipse there is an option in project context menu, in IntelliJ 
+click the refresh toolbar button in the gradle tool window).
+
 Spring security 5 uses the 
 [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
 to completely configure the resource server to use our keycloak instance.
