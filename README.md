@@ -5,7 +5,7 @@
 
 Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and OpenID Connect 1.0 (OIDC).
 
-[Presentation Slides (HTML5)](https://andifalk.github.io/secure-oauth2-oidc-workshop/)
+[Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop_2019.pdf)
 
 # Hands-On Workshop
 
