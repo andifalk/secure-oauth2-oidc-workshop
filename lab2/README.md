@@ -121,7 +121,7 @@ then use and start the completed reference application
 in project [lab1/library-server-complete-custom](../lab1/library-server-complete-custom)
 
 Then navigate your Java IDE to the lab2/library-client-initial project and at first explore this project a bit.  
-Then start the application by running the class _com.example.library.client.LibraryClientInitialApplication_.
+Then start the application by running the class _com.example.library.client.Lab2LibraryClientInitialApplication_.
 
 To test if the application works as expected open a web browser and 
 navigate to [localhost:9090/library-client](http://localhost:9090/library-client), when 

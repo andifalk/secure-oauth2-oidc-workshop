@@ -29,6 +29,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,8 +54,8 @@ class BookApiIntegrationTests {
             .apply(
                 documentationConfiguration(restDocumentationContextProvider)
                     .operationPreprocessors()
-                    .withRequestDefaults(prettyPrint())
-                    .withResponseDefaults(prettyPrint()))
+                    .withRequestDefaults(prettyPrint(), modifyUris().port(9091))
+                    .withResponseDefaults(prettyPrint(), modifyUris().port(9091)))
             .build();
   }
 
@@ -64,7 +65,8 @@ class BookApiIntegrationTests {
   void verifyAndDocumentGetBooks() throws Exception {
 
     this.mockMvc
-        .perform(get("/books").header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+        .perform(get("/library-server/books").header("Authorization", "Basic dXNlcjpzZWNyZXQ=")
+                .contextPath("/library-server"))
         .andExpect(status().isOk())
         .andDo(document("get-books"));
   }
@@ -76,7 +78,8 @@ class BookApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            get("/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+            get("/library-server/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+                .contextPath("/library-server")
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isOk())
         .andDo(document("get-book"));
@@ -88,7 +91,8 @@ class BookApiIntegrationTests {
   void verifyAndDocumentDeleteBook() throws Exception {
     this.mockMvc
         .perform(
-            delete("/books/{bookId}", DataInitializer.BOOK_DEVOPS_IDENTIFIER)
+            delete("/library-server/books/{bookId}", DataInitializer.BOOK_DEVOPS_IDENTIFIER)
+                .contextPath("/library-server")
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isNoContent())
         .andDo(document("delete-book"));
@@ -101,7 +105,8 @@ class BookApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            post("/books/{bookId}/borrow", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+            post("/library-server/books/{bookId}/borrow", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+                .contextPath("/library-server")
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isOk())
         .andDo(document("borrow-book"));
@@ -114,7 +119,8 @@ class BookApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            post("/books/{bookId}/return", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+            post("/library-server/books/{bookId}/return", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+                .contextPath("/library-server")
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isOk())
         .andDo(document("return-book"));
@@ -137,8 +143,9 @@ class BookApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            post("/books")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+            post("/library-server/books")
+                .contextPath("/library-server")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookResource))
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isCreated())
@@ -167,8 +174,9 @@ class BookApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            put("/books/{bookId}", DataInitializer.BOOK_SPRING_ACTION_IDENTIFIER)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+            put("/library-server/books/{bookId}", DataInitializer.BOOK_SPRING_ACTION_IDENTIFIER)
+                .contextPath("/library-server")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookResource))
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isOk())

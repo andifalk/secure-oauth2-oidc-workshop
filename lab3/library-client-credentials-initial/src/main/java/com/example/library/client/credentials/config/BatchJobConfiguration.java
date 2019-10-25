@@ -37,7 +37,7 @@ public class BatchJobConfiguration {
 
   @Bean
   public Job importBooksJob(PlatformTransactionManager transactionManager) {
-    return this.jobBuilderFactory.get("importBooksJob")
+    return this.jobBuilderFactory.get("importBooksJob").preventRestart()
                   .start(importStep(transactionManager))
                   .build();
   }
@@ -49,6 +49,7 @@ public class BatchJobConfiguration {
             .<BookResource, BookResource>chunk(10)
             .reader(itemReader())
             .writer(itemWriter())
+            .startLimit(1)
             .build();
   }
 

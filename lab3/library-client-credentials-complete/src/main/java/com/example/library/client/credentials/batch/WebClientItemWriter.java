@@ -22,18 +22,18 @@ public class WebClientItemWriter<T> extends AbstractItemStreamItemWriter<T> {
   @Override
   public void write(List<? extends T> items) {
     items.forEach(
-      item -> webClient.post().uri(targetUrl + "/books").bodyValue(item)
-              .retrieve()
-              .onStatus(
-                      s -> s.equals(HttpStatus.UNAUTHORIZED),
-                      cr -> Mono.error(new BadCredentialsException("Not authenticated")))
-              .onStatus(
-                      HttpStatus::is4xxClientError,
-                      cr -> Mono.error(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
-              .onStatus(
-                      HttpStatus::is5xxServerError,
-                      cr -> Mono.error(new RuntimeException(cr.statusCode().getReasonPhrase())))
-              .bodyToMono(BookResource.class).log().block()
+            item -> webClient.post().uri(targetUrl + "/books").bodyValue(item)
+                    .retrieve()
+                    .onStatus(
+                            s -> s.value() == HttpStatus.UNAUTHORIZED.value(),
+                            cr -> Mono.error(new BadCredentialsException("Not authenticated")))
+                    .onStatus(
+                            s -> s.value() == HttpStatus.BAD_REQUEST.value(),
+                            cr -> Mono.error(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
+                    .onStatus(
+                            HttpStatus::is5xxServerError,
+                            cr -> Mono.error(new RuntimeException(cr.statusCode().getReasonPhrase())))
+                    .bodyToMono(BookResource.class).log().block()
     );
   }
 }

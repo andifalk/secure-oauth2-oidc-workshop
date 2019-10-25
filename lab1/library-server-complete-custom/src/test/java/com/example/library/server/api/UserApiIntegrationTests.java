@@ -30,6 +30,7 @@ import static com.example.library.server.DataInitializer.CURATOR_IDENTIFIER;
 import static com.example.library.server.DataInitializer.WAYNE_USER_IDENTIFIER;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyUris;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -59,8 +60,8 @@ class UserApiIntegrationTests {
             .apply(
                 documentationConfiguration(restDocumentationContextProvider)
                     .operationPreprocessors()
-                    .withRequestDefaults(prettyPrint())
-                    .withResponseDefaults(prettyPrint()))
+                    .withRequestDefaults(prettyPrint(), modifyUris().port(9091))
+                    .withResponseDefaults(prettyPrint(), modifyUris().port(9091)))
             .build();
   }
 
@@ -69,7 +70,7 @@ class UserApiIntegrationTests {
   void verifyAndDocumentGetUsers() throws Exception {
 
     this.mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/users"))
+        .perform(RestDocumentationRequestBuilders.get("/library-server/users").contextPath("/library-server"))
         .andExpect(status().isOk())
         .andDo(document("get-users"));
   }
@@ -79,7 +80,9 @@ class UserApiIntegrationTests {
   void verifyAndDocumentGetUser() throws Exception {
 
     this.mockMvc
-        .perform(RestDocumentationRequestBuilders.get("/users/{userId}", WAYNE_USER_IDENTIFIER))
+        .perform(
+            RestDocumentationRequestBuilders.get("/library-server/users/{userId}", WAYNE_USER_IDENTIFIER)
+                .contextPath("/library-server"))
         .andExpect(status().isOk())
         .andDo(document("get-user"));
   }
@@ -89,7 +92,9 @@ class UserApiIntegrationTests {
   void verifyAndDocumentDeleteUser() throws Exception {
 
     this.mockMvc
-        .perform(RestDocumentationRequestBuilders.delete("/users/{userId}", CURATOR_IDENTIFIER))
+        .perform(
+            RestDocumentationRequestBuilders.delete("/library-server/users/{userId}", CURATOR_IDENTIFIER)
+                .contextPath("/library-server"))
         .andExpect(status().isNoContent())
         .andDo(document("delete-user"));
   }
@@ -109,8 +114,9 @@ class UserApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            RestDocumentationRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+            RestDocumentationRequestBuilders.post("/library-server/users")
+                .contextPath("/library-server")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifyingUserResource)))
         .andExpect(status().isCreated())
         .andDo(document("create-user"));
@@ -131,8 +137,9 @@ class UserApiIntegrationTests {
 
     this.mockMvc
         .perform(
-            RestDocumentationRequestBuilders.put("/users/{userId}", CURATOR_IDENTIFIER)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+            RestDocumentationRequestBuilders.put("/library-server/users/{userId}", CURATOR_IDENTIFIER)
+                .contextPath("/library-server")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifyingUserResource)))
         .andExpect(status().isOk())
         .andDo(document("update-user"));

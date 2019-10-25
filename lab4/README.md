@@ -181,7 +181,7 @@ Spring Security also validates by default:
 ### Step 2: Run JWT generator web application 
 
 Please navigate your Java IDE to the __lab4/jwt-generator__ project.  
-Then start the application by running the class _com.example.jwt.generator.JwtGeneratorApplication_.
+Then start the application by running the class _com.example.jwt.generator.Lab4JwtGeneratorApplication_.
 
 After starting navigate your browser to [localhost:9093](http://localhost:9093).
 
@@ -210,7 +210,7 @@ make a request to the resource server in the next step.
 ### Step 3: Run and test static resource server 
 
 Please navigate your Java IDE to the __lab4/library-server-static-complete__ project and at first explore this project a bit.  
-Then start the application by running the class _com.example.library.server.CompleteStaticLibraryServerApplication_.
+Then start the application by running the class _com.example.library.server.Lab4CompleteStaticLibraryServerApplication_.
 
 Same as in [Lab 1](../lab1/README.md) we require bearer tokens in JWT format to authenticate at our resource server.
 

@@ -25,10 +25,10 @@ public class WebClientItemWriter<T> extends AbstractItemStreamItemWriter<T> {
       item -> webClient.post().uri(targetUrl + "/books").bodyValue(item)
               .retrieve()
               .onStatus(
-                      s -> s.equals(HttpStatus.UNAUTHORIZED),
+                      s -> s.value() == HttpStatus.UNAUTHORIZED.value(),
                       cr -> Mono.error(new BadCredentialsException("Not authenticated")))
               .onStatus(
-                      HttpStatus::is4xxClientError,
+                      s -> s.value() == HttpStatus.BAD_REQUEST.value(),
                       cr -> Mono.error(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
               .onStatus(
                       HttpStatus::is5xxServerError,

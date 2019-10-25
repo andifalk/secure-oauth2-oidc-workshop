@@ -69,7 +69,7 @@ then use and start the completed reference application
 in project [lab1/library-server-complete-custom](../lab1/library-server-complete-custom)
 
 Then navigate your Java IDE to the __lab3/library-client-credentials-initial__ project and at first explore this project a bit.  
-Then start the application by running the class _com.example.library.client.LibraryClientCredentialsInitialApplication_.
+Then start the application by running the class _com.example.library.client.Lab3LibraryClientCredentialsInitialApplication_.
 
 You will notice that the batch job does complete with a failure status.
 This is because the batch job is not authenticated to import books into the library.

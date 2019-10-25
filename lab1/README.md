@@ -673,10 +673,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Bean
   JwtDecoder jwtDecoder() {
-    NimbusJwtDecoderJwkSupport jwtDecoder =
-        (NimbusJwtDecoderJwkSupport)
-            JwtDecoders.fromOidcIssuerLocation(
-                oAuth2ResourceServerProperties.getJwt().getIssuerUri());
+    NimbusJwtDecoder jwtDecoder =
+            NimbusJwtDecoder.withJwkSetUri(oAuth2ResourceServerProperties.getJwt().getJwkSetUri())
+                .build();
 
     OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
     OAuth2TokenValidator<Jwt> withIssuer =
@@ -702,8 +701,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```  
 
-As the _JWTDecoder_ depends on the full issuer uri pointing to the OpendID Connect configuration of Keycloak
-we need to replace the _jwk-set-uri_ with the _issuer-uri_. So basically this now should look like this in the
+As the _JwtValidators_ creator depends on the full issuer uri pointing to the OpendID Connect configuration of Keycloak
+we need to add the _issuer-uri_ in addition to _jwk-set-uri_ . So basically this now should look like this in the
 _application.yaml_ file:
 
 ```yaml
@@ -717,6 +716,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
           issuer-uri: http://localhost:8080/auth/realms/workshop
 ```
 
