@@ -1,5 +1,5 @@
 language: java
-dist: trusty
+dist: xenial
 install: skip
 sudo: required
 services:
@@ -13,7 +13,7 @@ jobs:
       script:
         - ./gradlew build -x buildNative -x testNative
     - stage: build
-      jdk: oraclejdk9
+      jdk: openjdk10
       script:
         - ./gradlew build -x buildNative -x testNative
     - stage: build
