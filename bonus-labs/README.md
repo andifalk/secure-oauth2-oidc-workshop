@@ -1,6 +1,9 @@
-# Intro Labs: Delegated Authorization using OAuth 2.0
+# Bonus Labs: OIDC in other Micro-Frameworks
 
-The intro labs are containing the following demos:
+These bonus labs contain the following demos:
 
-* [Demo: Building a resource server with Micronaut](micronaut-server-app)  
-  This one shows all steps to build a resource server using the new Microframework [Micronaut](https://micronait.io).
+* [micronaut-server-app](micronaut-server-app)  
+  This one shows all steps to build a resource server using the micro framework [Micronaut](https://micronaut.io).
+
+* [quarkus-server-app](quarkus-server-app)  
+  This one shows all steps to build a resource server using the micro framework [Quarkus](https://quarkus.io).

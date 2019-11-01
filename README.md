@@ -112,6 +112,7 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 ## Bonus Labs
 
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
+* [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
 ## License
 

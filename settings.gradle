@@ -26,4 +26,5 @@ include 'lab3:library-client-credentials-complete'
 include 'lab4:jwt-generator'
 include 'lab4:library-server-static-complete'
 include 'bonus-labs:micronaut-server-app'
+include 'bonus-labs:quarkus-server-app'
 

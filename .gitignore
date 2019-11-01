@@ -24,3 +24,9 @@ hs_err_pid*
 
 .idea/
 .gradle/
+.settings/
+
+.project
+
+out/
+bin/
