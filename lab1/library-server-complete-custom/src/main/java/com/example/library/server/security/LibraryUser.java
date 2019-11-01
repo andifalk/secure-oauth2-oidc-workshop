@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+@SuppressWarnings("serial")
 public class LibraryUser extends User implements UserDetails {
 
   public LibraryUser(User user) {

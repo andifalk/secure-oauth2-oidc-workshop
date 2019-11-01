@@ -146,7 +146,7 @@ class BookApiIntegrationTests {
     this.mockMvc
         .perform(
             post("/books")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookResource))
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isCreated())
@@ -176,7 +176,7 @@ class BookApiIntegrationTests {
     this.mockMvc
         .perform(
             put("/books/{bookId}", DataInitializer.BOOK_SPRING_ACTION_IDENTIFIER)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(bookResource))
                 .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
         .andExpect(status().isOk())

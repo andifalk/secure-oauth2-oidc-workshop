@@ -1,7 +1,5 @@
 package com.example.library.client.web;
 
-import java.util.Collection;
-
 public class BookListResource {
 
   private EmbeddedBookListResource _embedded;

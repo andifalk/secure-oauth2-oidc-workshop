@@ -10,8 +10,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import static reactor.core.publisher.Mono.when;
-
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("testing")
 @TestPropertySource(properties = "library.server=http://localhost:8080")

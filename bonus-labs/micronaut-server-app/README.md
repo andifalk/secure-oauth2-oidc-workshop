@@ -108,7 +108,7 @@ In addition Micronaut automatically maps all _'groups'_ claim entries to corresp
 
 #### Step 4: Secure the endpoint
 
-Look into the class _micronaut.server.app_ to see how the only REST endpoint is secured and the details of the JWT based
+Look into the class _micronaut.server.app.HelloController_ to see how the only REST endpoint is secured and the details of the JWT based
 principal are read and returned:
 
 ```java
@@ -179,7 +179,7 @@ Content-Type: application/json
 }
 ```
 
-To make the same request for a list of books (like in the beginning of this lab) we have to
+To make the same request again to the _hello' endpoint (like in the beginning of this lab) we have to
 specify the access token as part of a _Authorization_ header of type _Bearer_ like this:
 
 httpie:

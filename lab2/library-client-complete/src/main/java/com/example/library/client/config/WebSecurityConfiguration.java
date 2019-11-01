@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 
@@ -40,7 +39,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             if (authority instanceof OidcUserAuthority) {
               OidcUserAuthority oidcUserAuthority = (OidcUserAuthority) authority;
 
-              OidcIdToken idToken = oidcUserAuthority.getIdToken();
               OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
 
               List<SimpleGrantedAuthority> groupAuthorities =
