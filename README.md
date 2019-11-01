@@ -26,11 +26,8 @@ The components you will use and build look like this:
 To use the sample library server application please consult the 
 [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
 
-You may use the provided [Postman Collection](oidc_workshop.postman_collection.json). Just import
-this collection (Version 2.1 format) into Postman.
-
 All the code currently is build and tested against:
-* Java 8, Java 9 and Java 11
+* Java 8, Java 10 and Java 11
 * [Spring Boot 2.2.0 Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
 * [Spring Framework 5.2.0 Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
 * [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
@@ -40,10 +37,18 @@ All the code currently is build and tested against:
 
 ### Requirements and useful tools
 
-* [Java SDK](https://openjdk.java.net/install/) Version 8, 9 or 11
-* A Java IDE ([Eclipse](https://www.eclipse.org/downloads/), [IntelliJ](https://www.jetbrains.com/idea/download), [VS Code](https://code.visualstudio.com/), ...)
-* [Git](https://git-scm.com/)
-* [Postman](https://www.getpostman.com/downloads/), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
+* [Java SDK](https://openjdk.java.net/install) Version 8, 10 or 11
+* A Java IDE like
+  * [Eclipse](https://www.eclipse.org/downloads)
+  * [Spring Toolsuite](https://spring.io/tools)
+  * [IntelliJ](https://www.jetbrains.com/idea/download)
+  * [Visual Studio Code](https://code.visualstudio.com)
+  * ...
+* [Git](https://git-scm.com)
+* [Postman](https://www.getpostman.com/downloads), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
+
+In case you select [Postman](https://www.getpostman.com/downloads), then the provided [Postman Collection](oidc_workshop.postman_collection.json) might be helpful.
+Just import this [Postman Collection (Version 2.1 format)](oidc_workshop.postman_collection.json) into Postman.
 
 #### IntelliJ specific requirements
 
@@ -51,18 +56,18 @@ IntelliJ does not require any specific additional plugins or configuration.
 
 #### Eclipse IDE specific requirements
 
-Please make sure you have installed the _Buildship Gradle Integration_ from the eclipse marketplace.
+If you are an Eclipse user, then the usage of the Eclipse-based [Spring Toolsuite](https://spring.io/tools) is strongly recommended.
+This eclipse variant already has all the required gradle and spring boot support pre-installed.
 
-![Marketplace Gradle](images/marketplace_gradle.png)
+In case you want to stick to your plain Eclipse installation then you have to add the following features via the
+eclipse marketplace: 
 
-To start spring boot applications from within Eclipse please install _"Spring Tools 4 - for Spring Boot"_ extension 
-from marketplace (under 'popular' tab) or just use the eclipsed based [Spring Toolsuite 4](https://spring.io/tools) directly.
+* Buildship Gradle Integration (Version 3.x)
+* Spring Tools 4 - for Spring Boot
 
-![Marketplace Spring](images/marketplace_spring.png)
+#### Visual Studio Code specific requirements
 
-#### VS Code specific requirements
-
-To be able to work properly in VS Code with this Spring Boot Java Gradle project you need at least these extensions:
+To be able to work properly in Visual Studio Code with this Spring Boot Java Gradle project you need at least these extensions:
 
 * Java Extension Pack
 * vscode-gradle-language
