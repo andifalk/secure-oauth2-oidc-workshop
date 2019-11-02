@@ -5,11 +5,33 @@
 
 Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and OpenID Connect 1.0 (OIDC).
 
+__Table of Contents__
+
+* [Presentation Slides](#presentation-slides)
+* [Hands-On Workshop](#hands-on-workshop)
+  * [Preparation and Setup](#preparation-and-setup)
+    * [System Requirements](#requirements-and-useful-tools)
+    * [Get the Source Code](#get-the-source-code)
+    * [Setup Keycloak](#setup-keycloak)
+  * [Intro Labs](#intro-labs)
+    * [Demo: Auth Code Flow in Action](intro-labs/auth-code-demo)
+    * [Demo: GitHub Client](intro-labs/github-client)
+  * [Hands-On Labs](#hands-on-labs)
+    * [Lab 1: Resource Server](lab1)
+    * [Lab 2: Client (Auth Code)](lab2)
+    * [Lab 3: Client (Client-Credentials)](lab3)
+    * [Lab 4: Testing](lab4)
+  * [Bonus Labs](#bonus-labs)  
+    * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
+    * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
+
+## Presentation Slides 
+
 [Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop_2019.pdf)
 
-# Hands-On Workshop
+## Hands-On Workshop
 
-For the hands-on workshop you will extend a provided sample application:
+For the hands-on workshop you will extend the following provided sample application:
 
 An Online Book Library with following use cases:
 
@@ -19,23 +41,24 @@ An Online Book Library with following use cases:
 * Borrow a Book
 * Return a previously borrowed Book
 
-The components you will use and build look like this:
+The components you will build (and use) look like this:
 
 ![Architecture](docs/images/demo-architecture.png)
 
-To use the sample library server application please consult the 
+To use the RESTful API of the sample library server application please consult the 
 [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
 
-All the code currently is build and tested against:
-* Java 8, Java 10 and Java 11
+All the code currently is build using:
 * [Spring Boot 2.2.0 Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
 * [Spring Framework 5.2.0 Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
 * [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
 * [Spring Batch 4.2.0 Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
 
-## Preparation and Setup
+and is verified against Java versions 8, 10 and 11.
 
-### Requirements and useful tools
+### Preparation and Setup
+
+#### Requirements and useful tools
 
 * [Java SDK](https://openjdk.java.net/install) Version 8, 10 or 11
 * A Java IDE like
@@ -50,11 +73,11 @@ All the code currently is build and tested against:
 In case you select [Postman](https://www.getpostman.com/downloads), then the provided [Postman Collection](oidc_workshop.postman_collection.json) might be helpful.
 Just import this [Postman Collection (Version 2.1 format)](oidc_workshop.postman_collection.json) into Postman.
 
-#### IntelliJ specific requirements
+##### IntelliJ specific requirements
 
 IntelliJ does not require any specific additional plugins or configuration.
 
-#### Eclipse IDE specific requirements
+##### Eclipse IDE specific requirements
 
 If you are an Eclipse user, then the usage of the Eclipse-based [Spring Toolsuite](https://spring.io/tools) is strongly recommended.
 This eclipse variant already has all the required gradle and spring boot support pre-installed.
@@ -65,7 +88,7 @@ eclipse marketplace:
 * Buildship Gradle Integration (Version 3.x)
 * Spring Tools 4 - for Spring Boot
 
-#### Visual Studio Code specific requirements
+##### Visual Studio Code specific requirements
 
 To be able to work properly in Visual Studio Code with this Spring Boot Java Gradle project you need at least these extensions:
 
@@ -73,7 +96,7 @@ To be able to work properly in Visual Studio Code with this Spring Boot Java Gra
 * vscode-gradle-language
 * VS Code Spring Boot Application Development Extension Pack
 
-### Get the source code
+#### Get the source code
                        
 Clone this GitHub repository (https://github.com/andifalk/secure-oauth2-oidc-workshop):
 
@@ -88,7 +111,7 @@ After that you can import the whole workshop project directory into your IDE as 
 * [Visual Studio Code](https://code.visualstudio.com/): Just open the root directory and wait until VS Code configured the project
 
 
-### Setup Keycloak
+#### Setup Keycloak
                   
 1. Download 'keycloak_workshop.zip' from https://tinyurl.com/y3wjzwch (Use password: 'Workshop')
 2. Extract the downloaded __keycloak_workshop.zip__ file into a new local directory of your choice 
@@ -102,19 +125,19 @@ the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
 
 Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop
 
-## Intro Labs
+### Intro Labs
 
-* [Intro Lab: Authorization Code Grant Flow in Detail](intro-labs/auth-code-demo)
-* [Intro Lab: A pre-defined OAuth2 client for GitHub](intro-labs/github-client)
+* [Demo: Authorization Code Grant Flow in Action](intro-labs/auth-code-demo)
+* [Demo: A pre-defined OAuth2 client for GitHub](intro-labs/github-client)
 
-## Hands-On Labs
+### Hands-On Labs
 
 * [Lab 1: OAuth2/OIDC Resource Server](lab1)
 * [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2)
 * [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3)
 * [Lab 4: OAuth2/OIDC Testing Environment](lab4)
 
-## Bonus Labs
+### Bonus Labs
 
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
 * [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
