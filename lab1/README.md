@@ -11,8 +11,8 @@ for all details on how to build and configure a resource server.
   * [Architecture](#architecture)
   * [REST API](#rest-api)
   * [User roles](#users-and-roles)
-* [The Lab 1 tutorial](#lab-1-tutorial)
-  * [Lab 1 contents](#lab-contents)
+* [The Lab 1 tutorial & learning targets](#lab-1-tutorial-learning-targets)
+  * [Lab 1 folder contents](#contents-of-lab-1-folder)
   * [Part 1: Implement a resource server with custom user/authorities mapping](#lab-1---part-1)
     * [Explore the initial server application](#explore-the-initial-application)    
     * [Step 1: Configure as resource server](#step-1-configure-as-resource-server)
@@ -48,22 +48,26 @@ The RESTful service for books and users is build using the Spring MVC annotation
 
 The application also contains a complete documentation for the RESTful API that is automatically 
 generated with spring rest docs. You can find this in the directory _'build/asciidoc/html5'_ after performing a full 
-gradle build.
+gradle build or online here: [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
 
 The domain model of this application is quite simple and just consists of _Book_ and _User_ models.   
-The packages of the application are organized as follows:
+The packages of the application are organized according to the different application layers:
 
-* api: Contains the complete RESTful service
-* business: The service classes (quite simple for workshop, usually these contain the business logic)
-* common: Classes that are reused in multiple other packages
-* dataaccess: All domain models and repositories
-* config: All spring configuration classes
-* security: All security relevant classes, e.g. a _UserDetailsService_ implementation
+* __api__: Contains the complete RESTful service
+* __business__: The service classes (quite simple for workshop, usually these contain the business logic)
+* __dataaccess__: All domain models and repositories
+
+In addition there more packages with supporting functions:
+
+* __common__: Classes that are reused in multiple other packages
+* __config__: All spring configuration classes
+* __security__: All security relevant classes, e.g. a _UserDetailsService_ implementation
 
 ### REST API
 
 To call the provided REST API you can use curl or httpie. 
-For details on how to call the REST API please consult the [REST API documentation](../docs/api-doc.html) which also provides sample requests for curl and httpie.
+For details on how to call the REST API please consult the [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html) 
+which also provides sample requests for curl and httpie.
 
 ### Users and roles
 
@@ -89,7 +93,7 @@ We will use [Keycloak](https://keycloak.org) as identity provider.
 Please again make sure you have setup
 keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 
-## Lab 1 Tutorial
+## Lab 1 Tutorial Learning Targets
 
 Lab-1 is actually split into two parts:
 
@@ -99,7 +103,7 @@ Lab-1 is actually split into two parts:
    provided by Spring Security 5 (i.e. automatically maps scopes inside JWT tokens 
    to corresponding authorities in spring security)
 
-### Contents of lab 1 folder
+### Contents of lab 1
 
 In the lab 1 folder you find 3 applications:
 
