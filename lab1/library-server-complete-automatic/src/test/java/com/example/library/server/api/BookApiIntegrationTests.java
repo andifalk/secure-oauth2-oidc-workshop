@@ -112,8 +112,7 @@ class BookApiIntegrationTests {
     this.mockMvc
         .perform(
             post("/library-server/books/{bookId}/borrow", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
-                .contextPath("/library-server")
-                .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+                .contextPath("/library-server"))
         .andExpect(status().isOk())
         .andDo(document("borrow-book"));
   }
@@ -126,8 +125,7 @@ class BookApiIntegrationTests {
     this.mockMvc
         .perform(
             post("/library-server/books/{bookId}/return", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
-                .contextPath("/library-server")
-                .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+                .contextPath("/library-server"))
         .andExpect(status().isOk())
         .andDo(document("return-book"));
   }
@@ -152,8 +150,7 @@ class BookApiIntegrationTests {
             post("/library-server/books")
                 .contextPath("/library-server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(bookResource))
-                .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+                .content(objectMapper.writeValueAsString(bookResource)))
         .andExpect(status().isCreated())
         .andDo(document("create-book"));
   }
@@ -183,8 +180,7 @@ class BookApiIntegrationTests {
             put("/library-server/books/{bookId}", DataInitializer.BOOK_SPRING_ACTION_IDENTIFIER)
                 .contextPath("/library-server")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(bookResource))
-                .header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+                .content(objectMapper.writeValueAsString(bookResource)))
         .andExpect(status().isOk())
         .andDo(document("update-book"));
   }

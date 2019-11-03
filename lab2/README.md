@@ -297,7 +297,8 @@ With the snippet
 ```
 we configure an OAuth2 client and an OIDC login client and reconfigure the _userinfo_ endpoint user mapping
 to map authorities different as the standard one. The custom mapping is done in the implementation
-of the _GrantedAuthoritiesMapper_ interface that maps entries of the _groups_ claim to authority roles . 
+of the _GrantedAuthoritiesMapper_ interface that maps entries of the _groups_ claim to spring security 
+authority roles . 
 
 <hr>
 
@@ -311,21 +312,18 @@ We have to change this in class _com.example.library.client.web.BookResource_:
 ```
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 ...
-public boolean isReturnBookAllowed() {
+public boolean returnBookAllowed(OidcUser user) {
     if (!isBorrowed()) {
       return false;
     }
 
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (principal instanceof OidcUser) {
-      OidcUser oidcUser =
-          (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      return borrowedBy != null && borrowedBy.getEmail().equals(oidcUser.getEmail());
+    if (user != null) {
+      return borrowedBy != null && borrowedBy.getEmail().equals(user.getEmail());
     } else {
       // Always fail secure
       return false;
     }
-  }
+}
 ...  
 ```
 
@@ -336,12 +334,12 @@ and We have to change this in class _com.example.library.client.web.BooksControl
     import org.springframework.security.oauth2.core.user.OAuth2User;
     ...
     @GetMapping("/")
-      Mono<String> index(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
+      Mono<String> index(@AuthenticationPrincipal OidcUser oidcUser, Model model) {
     
-        model.addAttribute("fullname", oauth2User.getName());
+        model.addAttribute("fullname", oidcUser.getName());
         model.addAttribute(
             "isCurator",
-            ((JSONArray) oauth2User.getAttributes().get("groups")).get(0).equals("library_curator"));
+            ((JSONArray) oidcUser.getClaim("groups")).get(0).equals("library_curator"));
         ...    
     }    
     ...  

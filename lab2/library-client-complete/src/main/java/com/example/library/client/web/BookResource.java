@@ -1,6 +1,5 @@
 package com.example.library.client.web;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.ArrayList;
@@ -90,16 +89,13 @@ public class BookResource {
     }
   }
 
-  public boolean isReturnBookAllowed() {
+  public boolean returnBookAllowed(OidcUser user) {
     if (!isBorrowed()) {
       return false;
     }
 
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (principal instanceof OidcUser) {
-      OidcUser oidcUser =
-          (OidcUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      return borrowedBy != null && borrowedBy.getEmail().equals(oidcUser.getEmail());
+    if (user != null) {
+      return borrowedBy != null && borrowedBy.getEmail().equals(user.getEmail());
     } else {
       // Always fail secure
       return false;

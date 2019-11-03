@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +31,12 @@ public class BooksController {
   }
 
   @GetMapping("/")
-  Mono<String> index(@AuthenticationPrincipal OAuth2User oauth2User, Model model) {
+  Mono<String> index(@AuthenticationPrincipal OidcUser oidcUser, Model model) {
 
-    model.addAttribute("fullname", oauth2User.getName());
+    model.addAttribute("fullname", oidcUser.getName());
     model.addAttribute(
         "isCurator",
-        ((JSONArray) oauth2User.getAttributes().get("groups")).get(0).equals("library_curator"));
+        ((JSONArray) oidcUser.getClaim("groups")).get(0).equals("library_curator"));
     return webClient
         .get()
         .uri(libraryServer + "/books")

@@ -25,13 +25,14 @@ Option 3 is a bit out of focus of this workshop, so we will go for option 2 as p
 
 * [Learning Targets](#learning-targets)
 * [Folder Contents](#folder-contents)
-* [Learning Targets](#lab-4-tutorial)
+* [Learning Targets](#learning-targets)
 * [Hands-On: Testing Environment for OIDC/JWT](#start-the-lab)
     * [Step 1: Implement a resource server with static public key](#step-1-resource-server-with-static-token-validation)
     * [Step 2: Generate custom JWT with the JWT generator app](#step-2-run-jwt-generator-web-application)
     * [Step 3: Run and test basic resource server](#step-3-run-and-test-static-resource-server)
+    * [Step 4: Use new JWT based test approach](#step-4-use-new-approach-for-jwt-based-authorization-tests)
 
-The [Keycloak](https://keycloak.org) identity provider is not required any more for this lab .  
+The [Keycloak](https://keycloak.org) identity provider is not required any more for this lab.  
 
 ## Learning Targets
 
@@ -290,4 +291,54 @@ This request should succeed with an '200' OK status and return a list of users.
 
 <hr>
 
-This concludes the final Lab 4 and the whole hands-on workshop part.
+### Step 4: Use new approach for JWT based authorization tests
+
+As of version 5.2 of spring security new support for JWT based authorization tests is provided.
+
+To see the new approach please have a look into the test class 
+_com.example.library.server.api.BookApiJwtAuthorizationTests_.
+
+Here you see that you may configure either default or customized JWT tokens to test different
+authorization scenarios.
+
+```
+...
+@Test
+  @DisplayName("get list of books")
+  void verifyGetBooks() throws Exception {
+
+    this.mockMvc
+        .perform(get("/books").with(jwt()))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("get single book")
+  void verifyGetBook() throws Exception {
+
+    Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("sub", "bwanye")
+            .claim("groups", new String[] {"library_user"}).build();
+
+    this.mockMvc
+        .perform(
+            get("/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+                .with(jwt(jwt)))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("delete a book")
+  void verifyDeleteBook() throws Exception {
+    this.mockMvc
+        .perform(
+            delete("/books/{bookId}", DataInitializer.BOOK_DEVOPS_IDENTIFIER)
+                .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_LIBRARY_CURATOR"))))
+        .andExpect(status().isNoContent());
+  }
+...
+``` 
+<hr>
+
+This concludes the Lab 4.

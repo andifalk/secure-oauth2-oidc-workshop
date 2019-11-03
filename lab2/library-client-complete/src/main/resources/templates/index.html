@@ -48,7 +48,7 @@
             <td th:text="${bookResource.isbn}">isbn</td>
             <td><a class="btn btn-primary" href="#" role="button" sec:authorize="hasRole('LIBRARY_USER')"
                    th:href="@{'/return?identifier=' + ${bookResource.identifier}}"
-                   th:unless="${!bookResource.returnBookAllowed}">Return</a><a class="btn btn-primary" href="#"
+                   th:unless="${!bookResource.returnBookAllowed(#authentication.getPrincipal())}">Return</a><a class="btn btn-primary" href="#"
                                                                                role="button"
                                                                                sec:authorize="hasRole('LIBRARY_USER')"
                                                                                th:href="@{'/borrow?identifier=' + ${bookResource.identifier}}"
