@@ -135,6 +135,12 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
 * [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
+## Feedback
+
+Any feedback on this hands-on workshop is highly appreciated.
+
+Just send an email to _andreas.falk(at)novatec-gmbh.de_ or contact me via Twitter (_@andifalk_).
+
 ## License
 
 Apache 2.0 licensed

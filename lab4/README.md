@@ -339,6 +339,11 @@ authorization scenarios.
   }
 ...
 ``` 
+
+Details on JWT testing support can be found in the 
+corresponding [spring security reference documentation](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#testing-bearer-authentication) 
+section.
+
 <hr>
 
 This concludes the Lab 4.
