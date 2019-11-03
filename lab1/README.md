@@ -5,115 +5,48 @@ In this first part we extend an existing Microservice to an OAuth 2.0 and OpenID
 See [Spring Security 5 Resource Server reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2resourceserver) 
 for all details on how to build and configure a resource server. 
 
+__Please check out the [complete documentation](../application-architecture) for the sample application before 
+starting with the first hands-on lab (especially the server side parts)__. 
+
 ## Lab Contents
 
-* [The workshop application](#the-workshop-application)
-  * [Architecture](#architecture)
-  * [REST API](#rest-api)
-  * [User roles](#users-and-roles)
-* [The Lab 1 tutorial & learning targets](#lab-1-tutorial-learning-targets)
-  * [Lab 1 folder contents](#contents-of-lab-1-folder)
-  * [Part 1: Implement a resource server with custom user/authorities mapping](#lab-1---part-1)
+* [Learning Targets](#learning-targets)
+* [Folder Contents](#folder-contents)
+* [Tutorial: Implement a resource server with custom user/authorities mapping](#start-the-lab)
     * [Explore the initial server application](#explore-the-initial-application)    
     * [Step 1: Configure as resource server](#step-1-configure-as-resource-server)
     * [Step 2: Run and test basic resource server](#step-2-run-and-test-basic-resource-server)
     * [Step 3: Implement a custom JWT converter](#step-3-implement-a-custom-jwt-converter)
     * [Step 4: An additional JWT validator for 'audience' claim](#step-4-add-an-additional-jwt-validator-for-the-audience-claim)
-  * [Part 2: Look inside a resource server with automatic scope mapping](#lab-1---part-2)
-    * [Step 1: Adapting authorization checks](#step-1-adapting-the-authorization-checks)
-    * [Part 1: Changing the authentication principal](#step-2-adapting-the-authentication-principal)
+* [Bonus-Part: Look inside a resource server with automatic scope mapping](#lab-1---bonus-part)
+  * [Step 1: Adapting authorization checks](#step-1-adapting-the-authorization-checks)
+  * [Step 2: Changing the authentication principal](#step-2-adapting-the-authentication-principal)
 
-## The workshop application
+## Learning Targets
 
-In this first workshop lab you will be provided a complete spring mvc web server application together
-with a corresponding spring mvc thymeleaf web client app (which will come into play in [lab 2](../lab2/README.md)).  
-The server application is already secured by basic authentication and also includes authorization using static roles. 
+In this lab we will build an OAuth2/OIDC compliant resource server.
 
-![Workshop Architecture](../docs/images/demo-architecture.png)
-
-The server application provides a RESTful service for administering books and users 
-(a very _lightweight_ books library).
-
-Use cases of this application are:
-
-* Administer books (Creating/editing/deleting books)
-* List available books
-* Borrow a book
-* Return a borrowed book
-* Administer library users 
-
-### Architecture
-
-The RESTful service for books and users is build using the Spring MVC annotation model and Spring HATEOAS.
-
-The application also contains a complete documentation for the RESTful API that is automatically 
-generated with spring rest docs. You can find this in the directory _'build/asciidoc/html5'_ after performing a full 
-gradle build or online here: [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
-
-The domain model of this application is quite simple and just consists of _Book_ and _User_ models.   
-The packages of the application are organized according to the different application layers:
-
-* __api__: Contains the complete RESTful service
-* __business__: The service classes (quite simple for workshop, usually these contain the business logic)
-* __dataaccess__: All domain models and repositories
-
-In addition there more packages with supporting functions:
-
-* __common__: Classes that are reused in multiple other packages
-* __config__: All spring configuration classes
-* __security__: All security relevant classes, e.g. a _UserDetailsService_ implementation
-
-### REST API
-
-To call the provided REST API you can use curl or httpie. 
-For details on how to call the REST API please consult the [REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html) 
-which also provides sample requests for curl and httpie.
-
-### Users and roles
-
-There are three target user roles for this application:
-
-* LIBRARY_USER: Standard library user who can list, borrow and return his currently borrowed books
-* LIBRARY_CURATOR: A curator user who can add, edit or delete books
-* LIBRARY_ADMIN: An administrator user who can list, add or remove users
-
-__Important:__ We will use the following users in all subsequent labs from now on:
-
-| Username | Email                    | Password | Role            |
-| ---------| ------------------------ | -------- | --------------- |
-| bwayne   | bruce.wayne@example.com  | wayne    | LIBRARY_USER    |
-| bbanner  | bruce.banner@example.com | banner   | LIBRARY_USER    |
-| pparker  | peter.parker@example.com | parker   | LIBRARY_CURATOR |
-| ckent    | clark.kent@example.com   | kent     | LIBRARY_ADMIN   |
-
-These users are configured for basic authentication and also later for authenticating using keycloak.
-
-In the next labs we will build an OAuth2/OIDC resource server (lab 1) and an OAuth2/OIDC client application.
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup
-keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
-
-## Lab 1 Tutorial Learning Targets
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 
 Lab-1 is actually split into two parts:
 
 1. Build a resource server with __custom user & authorities mapping__ 
    and also implement additional validation of _audience_ claim in access token 
-2. Having a closer look into an alternative resource server that is using __automatic authorities mapping__ 
-   provided by Spring Security 5 (i.e. automatically maps scopes inside JWT tokens 
-   to corresponding authorities in spring security)
 
-### Contents of lab 1
+## Folder Contents
 
 In the lab 1 folder you find 3 applications:
 
 * __library-server-initial__: This is the application we will use as starting point for this lab
-* __library-server-complete-custom__: This application is the completed one for the __first part__ of this lab 
-* __library-server-complete-automatic__: This application is the completed one for the __second part__ of this lab 
+* __library-server-complete-custom__: This application is the completed reference for this lab 
+* __library-server-complete-automatic__: This application is the completed reference for the same but 
+with automatic mapping by spring security (using defaults to read roles from 'scope' claims inside the token and 
+map these to authorities with 'SCOPE_' prefix)
 
-### Lab 1 - Part 1
+### Start the Lab
 
-Now, let's start with part 1 of this lab. Here we will implement the required additions to get an 
+Now, let's start with this lab. Here we will implement the required additions to get an 
 OAuth2/OIDC compliant resource server with customized mapping of token claims to Spring Security authorities.
 
 ![Manual Role Mapping](../docs/images/manual_role_mapping.png)
@@ -295,14 +228,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 This configuration above...
 * configures stateless sessions (i.e. no 'JSESSION' cookies an more)
-* disables CSRF protection (without session cookies we do not need this any more) 
-  (which also makes it possible to make post requests on the command line)
+* disables CSRF protection (with stateless sessions, i.e. without session cookies we do not need this any more) 
+  (which also enables us to even make post requests on the command line)
 * protects any request (i.e. requires authentication)
-* enables this as a resource server with expecting access tokens in JWT format
+* enables this as a resource server with expecting access tokens in JWT format (as of spring security 5.2 you may also
+use opaque tokens instead)
 
 Usually _PasswordEncoder_ would not be required any more as we now do not verify passwords
-any more in a resource server, but for time reasons we won't delete it. Otherwise we would need
-plenty of time just removing all password related stuff from other places.
+any more in a resource server, but for time reasons we won't delete it. Otherwise we probably will need
+plenty of time just removing all password related stuff from other source code locations.
 
 <hr>
 
@@ -320,7 +254,8 @@ from keycloak by specifying our credentials as part of the request.
 __You may argue now: "This is just like doing basic authentication??"__
 
 Yes, you're right. You should __ONLY__ use this grant flow for testing purposes as it
-completely bypasses the base concepts of OAuth 2.
+completely bypasses the base concepts of OAuth 2. Especially when using the command line this is the only possible
+flow to use. When using Postman then the other flows are supported by Postman out of the box as well.
 
 This is how this password grant request looks like:
 
@@ -781,16 +716,17 @@ Now, with our previous changes this request should succeed with an '200' OK stat
 
 <hr>
 
-This ends part 1 of this lab.  
-We continue with [part 2](#lab-1---part-2) to have a closer look
-into a resource server just using the automatic mapping provided by Spring Security 5.
+This ends lab 1. In the next [lab 2](../lab2) we will build the corresponding web client.  
 
 __<u>Important Note</u>__: If you could not manage to finish part 1 then just use the 
 project __lab1/library-server-complete-custom__ for the next labs.
 
+If you have already finished lab and there is still time you may continue with [bonus part](#lab-1---bonus-part) of lab 1 
+to have a closer look into a resource server just using the automatic mapping provided by Spring Security 5.
+
 <hr>
 
-### Lab 1 - Part 2
+## Lab 1 - Bonus Part
 
 In part 2 of this lab we just have a look inside the completed resource server using
 the automatic mapping approach provided by Spring Security 5.
@@ -806,7 +742,7 @@ To have a look open the project __lab1/library-server-complete-automatic__.
 
 <hr>
 
-#### Step 1: Adapting the authorization checks 
+### Step 1: Adapting the authorization checks 
 
 As already mentioned in part 1 of this lab the authorities do not map to the verified ones any more
 when using the automatic scope mapping:
@@ -827,7 +763,7 @@ _com.example.library.server.business.UserService_.
 
 <hr>
 
-#### Step 2: Adapting the Authentication Principal 
+### Step 2: Adapting the Authentication Principal 
 
 Please open _com.example.library.server.api.BookRestController_ class and look
 for the methods to borrow or return a book:
@@ -903,8 +839,8 @@ It is required to do the same for the _return_ books method as well:
 
 <hr>
 
-This concludes the [Lab 1](../lab1/README.md).   
+This concludes the [Bonus part] of [lab 1](../lab1).   
 We will continue with implementing the corresponding OAuth2/OIDC client for the 
 resource server in project __library-server-complete-custom__.
 
-To continue with the OAuth2/OIDC client please continue at [Lab 2](../lab2/README.md).
+To continue with the OAuth2/OIDC client please continue at [Lab 2](../lab2).

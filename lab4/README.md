@@ -1,42 +1,64 @@
-# Lab 4: Creating a static OAuth 2.0/OIDC resource server
+# Lab 4: Creating a Testing Environment for an OIDC Resource Server
 
-In this fourth and final lab you will see how you can
-configure the resource server from [Lab 1](../lab1/README.md) with a custom static private/public key pair
-and create an application to generate your own JWT tokens using the corresponding signing private key.
+Creating a testing environment is useful to perform
 
-This is quite helpful in testing environments, e.g. doing load/performance testing and preventing
-from load testing the identity server as well.
+* Performance & Load Tests
+* Security Tests
+* Other User Acceptance tests
+* ...
 
-In this lab you will not really implement anything yourself but you will see how to use such static resource server
-with custom generated JWt tokens.
+By using OAuth2/OIDC you have an additional external component in place that is required to
+run your clients and server applications.
 
-<u>Note:</u>  
-The contents of this lab are build against the brand new [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga).
+To support testing environments without having external dependencies you have several possibilities:
+
+1. Test with Security disabled
+2. Test using your own self-signed JWT tokens
+3. Test using the [TestContainers](https://www.testcontainers.org/) library using a dockerized Keycloak instance
+
+Option 1. is of course the worst option to follow. Quickly, security may also be disabled in __Production__ environments.
+And that can have serious consequences!
+
+Option 3 is a bit out of focus of this workshop, so we will go for option 2 as part of this workshop.  
 
 ## Lab Contents
 
-* [Lab 4 contents](#lab-contents)
-* [Lab 4 Tutorial](#lab-4-tutorial)
+* [Learning Targets](#learning-targets)
+* [Folder Contents](#folder-contents)
+* [Learning Targets](#lab-4-tutorial)
+* [Hands-On: Testing Environment for OIDC/JWT](#start-the-lab)
     * [Step 1: Implement a resource server with static public key](#step-1-resource-server-with-static-token-validation)
     * [Step 2: Generate custom JWT with the JWT generator app](#step-2-run-jwt-generator-web-application)
     * [Step 3: Run and test basic resource server](#step-3-run-and-test-static-resource-server)
 
 The [Keycloak](https://keycloak.org) identity provider is not required any more for this lab .  
 
-## Lab 4 Tutorial
+## Learning Targets
 
-Lab-4 is actually split into three steps:
+In this fourth lab you will see how you can configure the resource server from [Lab 1](../lab1) with a custom static private/public key pair
+and create an application to generate your own JWT tokens using the corresponding self-signing private key.
+
+This is quite helpful in testing environments, e.g. doing load/performance testing and preventing
+from load testing the identity server as well.
+
+This lab is actually split into three steps:
 
 1. Look into a resource server with __static public key__ to verify JWT tokens 
 2. Generate custom JWT tokens for different user identities to be used at the resource server of step 1
 3. Make requests to the resource server of step 1 with generated JWT from step 2
 
-### Contents of lab 4 folder
+## Folder Contents
 
 In the lab 4 folder you find 3 applications:
 
 * __library-server-static-complete__: This application is the complete static resource server 
 * __jwt-generator__: This application is the JWT generator to generate custom JWT tokens 
+
+## Start the Lab
+
+In this lab you will not really implement anything yourself but you will see how to use such static resource server
+with custom generated JWt tokens.
+So let's start.
 
 ### Step 1: Resource server with static token validation
 

@@ -1,9 +1,34 @@
 # Lab 2: Creating an OAuth 2.0/OIDC compliant Client
 
-In the second lab we want to build an OAuth2/OIDC client for the resource server we have built in Lab 1.
+In the second lab we want to build an OAuth2/OIDC client for the resource server we have built in [lab 1](../lab1).
 
-In [Lab 2](../lab2/README.md) the client will be using
-the [OAuth2 authorization code grant flow](https://tools.ietf.org/html/rfc6749#section-4.1).
+
+See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2client) 
+for all details on how to build and configure an OAuth 2.0 client. 
+
+__Please check out the [complete documentation](../application-architecture) for the sample application before 
+starting with the first hands-on lab (especially the client side parts)__. 
+
+## Lab Contents
+
+* [Learning Targets](#learning-targets)
+* [Folder Contents](#folder-contents)
+* [Logout Users](#logout-users)
+* [Hands-On: Implement the OAuth 2.0/OIDC client](#start-the-lab)
+    * [Explore the initial client application](#explore-the-initial-application)
+    * [Step 1: Configure as OAuth2/OIDC client](#step-1-configure-as-oauth-2oidc-client)
+    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
+    * [Step 3: Configure web client authorities](#step-3-configure-web-client-authorities)
+    * [Step 4: Change authentication principal](#step-4-change-authentication-principal)
+
+## Learning Targets
+
+In this second workshop lab you will be provided a complete spring mvc web client application that works
+together with the [resource server of Lab 1](../lab1/library-server-complete-custom). 
+
+In [Lab 2](../lab2) the client will be using
+the [OAuth2 authorization code grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) to extend the provided
+web client to act as an OIDC compliant client.
 
 According to the specification this grant flow is described as follows:
 <blockquote cite="https://tools.ietf.org/html/rfc6749#section-4.1">
@@ -12,66 +37,10 @@ and is optimized for confidential clients. Since this is a redirection-based flo
 must be capable of interacting with the resource owner's user-agent (typically a web browser) 
 and capable of receiving incoming requests (via redirection) from the authorization server.</blockquote>
 
-__Important Note: The client credentials grant type MUST only be used by confidential clients.__
+__Important Note: The authorization code grant type (without PKCE) MUST only be used by confidential clients.__
 
-Later in [Lab 3](../lab3/README.md) we will build almost the same OAuth2 client but in Lab 3 we will be 
+Later in [Lab 3](../lab3) we will build almost the same OAuth2 client but in Lab 3 we will be 
 using the [client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4) instead. 
-
-See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2client) 
-for all details on how to build and configure an OAuth 2.0 client. 
-
-## Lab Contents
-
-* [The workshop application](#the-workshop-application)
-  * [Architecture](#the-client-application)
-  * [Users and Roles](#users-and-roles)
-  * [Logout Users](#logout-users)
-* [The Lab 2 tutorial](#lab-2-tutorial)
-  * [Lab 2 contents](#lab-2-contents)
-  * [Implement the OAuth 2.0/OIDC client](#implement-the-client)
-    * [Explore the initial client application](#explore-the-initial-application)
-    * [Step 1: Configure as OAuth2/OIDC client](#step-1-configure-as-oauth-2oidc-client)
-    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
-    * [Step 3: Configure web client authorities](#step-3-configure-web-client-authorities)
-    * [Step 4: Change authentication principal](#step-4-change-authentication-principal)
-
-## The workshop application
-
-In this second workshop lab you will be provided a complete spring mvc web client application that works
-together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
-
-![Demo Architecture](../docs/images/demo-architecture.png)
-
-### The client application
-
-The client is able to fulfill most of the provided uses cases by the server application like:
-
-* View all available books in a list
-* Borrow available books
-* Return my borrowed books
-* Create new books
-
-All action buttons are visible depending on user authorizations, e.g. only users with _LIBRARY_USER_ role can see
-the _Borrow_ and _Return_ buttons. The _Return_
-
-![Library Client](../docs/images/library_client.png)
-
-### Users and Roles
-
-There are three target user roles for this client and server application:
-
-* LIBRARY_USER: Standard library user who can list, borrow and return his currently borrowed books
-* LIBRARY_CURATOR: A curator user who can add, edit or delete books
-* LIBRARY_ADMIN: An administrator user who can list, add or remove users
-
-| Username | Email                    | Password | Role            |
-| ---------| ------------------------ | -------- | --------------- |
-| bwayne   | bruce.wayne@example.com  | wayne    | LIBRARY_USER    |
-| bbanner  | bruce.banner@example.com | banner   | LIBRARY_USER    |
-| pparker  | peter.parker@example.com | parker   | LIBRARY_CURATOR |
-| ckent    | clark.kent@example.com   | kent     | LIBRARY_ADMIN   |
-
-These users are configured for authenticating using keycloak.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
 Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md).
@@ -100,21 +69,19 @@ users:
 
 Now when you refresh the library client in the browser you should be redirected again to the login page of keycloak.
 
-## Lab 2 Tutorial
-
-Now, let's start with lab 2. Here we will implement the required additions to get an 
-OAuth2/OIDC compliant client that calls the resource server we have implemented in lab 1.
-
-### Lab 2 Contents
+## Folder Contents
 
 In the lab 2 folder you find 2 applications:
 
 * __library-client-initial__: This is the client application we will use as starting point for this lab
-* __library-client-complete__: This client application is the completed OAuth 2.0/OIDC client for this lab 
+* __library-client-complete__: This client application is the completed OAuth 2.0/OIDC client reference for this lab 
 
-### Implement the Client
+## Start the Lab
 
-#### Explore the initial application
+Now, let's start with lab 2. Here we will implement the required additions to get an 
+OAuth2/OIDC compliant client that calls the resource server we have implemented in lab 1.
+
+### Explore the initial application
 
 First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
 then use and start the completed reference application 
@@ -135,7 +102,7 @@ finished this client.
 
 <hr>
 
-#### Step 1: Configure as OAuth 2/OIDC client
+### Step 1: Configure as OAuth 2/OIDC client
 
 To change this application into an OAuth2/OIDC client you have to make changes in the dependencies 
 of the gradle build file _build.gradle_:
@@ -250,7 +217,7 @@ access token is available.
 
 <hr>
 
-#### Step 3: Configure web client authorities
+### Step 3: Configure web client authorities
 
 Same as on resource server side we don't want to use the automatic _SCOPE_xxx_ authorities but instead want to
 map again the _groups_ claim we get from the automatically called _userinfo_ endpoint to the expected _ROLE_xxx_
@@ -334,7 +301,7 @@ of the _GrantedAuthoritiesMapper_ interface that maps entries of the _groups_ cl
 
 <hr>
 
-#### Step 4: Change authentication principal
+### Step 4: Change authentication principal
 
 The final required step is to change the authentication principal from _org.springframework.security.core.userdetails.User_ 
 to _org.springframework.security.oauth2.core.oidc.user.OidcUser_.
@@ -382,7 +349,7 @@ and We have to change this in class _com.example.library.client.web.BooksControl
 
 <hr>
 
-#### Step 5: Run/debug the OAuth2 web client application
+### Step 5: Run/debug the OAuth2 web client application
   
 Now re-start the library client and browse again 
 to [localhost:9090/library-client](http://localhost:9090/library-client) and login using the different
@@ -428,6 +395,6 @@ in class _org.springframework.security.oauth2.client.endpoint.DefaultAuthorizati
 
 That's a wrap for this second Lab.
 
-If time still allows you can continue with [Lab 3](../lab3/README.md) to implement almost the same OAuth2 client
+If time still allows you can continue with [Lab 3](../lab3) to implement almost the same OAuth2 client
 but this time using another OAuth2 grant flow: The client credentials flow (
 for machine-to-machine interactions without the need for a user identity).

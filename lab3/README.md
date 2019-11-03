@@ -1,10 +1,32 @@
 # Lab 3: Creating an OAuth 2.0/OIDC compliant Client (Client Credentials Flow)
 
-In this third lab we want to build again an OAuth2/OIDC client 
-for the resource server we have built in Lab 1.
+In this third lab we want to build again an OAuth2/OIDC client for the resource server 
+we have built in [lab 1](../lab1).
 
-In contrast to [Lab 2](../lab2/README.md) this time the client will be using
+In contrast to [Lab 2](../lab2) this time the client will be using
 the [OAuth2 client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4).
+
+See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#webclient) 
+for all details on how to build and configure a OAuth 2.0 client. 
+
+## Lab Contents
+
+* [Learning Targets](#learning-targets)
+  * [Batch Client Application](#the-batch-client-application)
+* [Folder Contents](#folder-contents)
+* [Hands-On: Implement the OAuth 2.0/OIDC batch client](#start-the-lab)
+    * [Explore the initial client application](#explore-the-initial-application)
+    * [Step 1: Configure as OAuth2/OIDC client w/ client credentials](#step-1-configure-as-oauth-2oidc-client-with-client-credentials)
+    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
+    * [Step 3: Run and debug the web client authorities](#step-3-rundebug-the-oauth2-batch-job-client-application)
+
+## Learning Targets
+
+In this third workshop lab you will be provided a complete spring batch client application that works
+together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
+
+In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client without a web environment 
+by using the [OAuth2 client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4).
 
 According to the specification this grant flow is described as follows:
 <blockquote cite="https://tools.ietf.org/html/rfc6749#section-4.4">The client can request an access token using only its client credentials 
@@ -13,27 +35,7 @@ under its control</blockquote>
 
 __Important Note: The client credentials grant type MUST only be used by confidential clients.__
 
-See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#webclient) 
-for all details on how to build and configure a reactive OAuth 2.0 client. 
-
-## Lab Contents
-
-* [The workshop application](#the-workshop-application)
-  * [Book import batch job](#the-client-application)
-* [The Lab 3 tutorial](#lab-3-tutorial)
-  * [Lab 3 contents](#lab-3-contents)
-  * [Implement the OAuth 2.0/OIDC client](#implement-the-client)
-    * [Explore the initial client application](#explore-the-initial-application)
-    * [Step 1: Configure as OAuth2/OIDC client w/ client credentials](#step-1-configure-as-oauth-2oidc-client-with-client-credentials)
-    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
-    * [Step 3: Run and debug the web client authorities](#step-3-rundebug-the-oauth2-batch-job-client-application)
-
-## The workshop application
-
-In this third workshop lab you will be provided a complete spring batch client application that works
-together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
-
-### The client application
+### The Batch Client Application
 
 The client of this lab is just able to fulfill the following uses case:
 
@@ -44,25 +46,23 @@ We cannot dive into the world of batch jobs as part of this workshop. But if you
 batch jobs are implemented you may have a look into the intro section of the 
 corresponding [Spring Batch Reference Documentation](https://docs.spring.io/spring-batch/4.2.x/reference/html/spring-batch-intro.html#spring-batch-intro).
 
-## Lab 3 Tutorial
-
-Now, let's start with Lab 3. Here we will implement the required additions to get an 
-OAuth2/OIDC compliant batch job client that calls the resource server we have implemented in lab 1.
-But this time we will use the client credentials flow.
-
-We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md).
-
-### Lab 3 Contents
+## Folder Contents
 
 In the lab 3 folder you find 2 applications:
 
 * __library-client-credentials-initial__: This is the client application we will use as starting point for this lab
 * __library-client-credentials-complete__: This client application is the completed OAuth 2.0/OIDC client for this lab 
 
-### Implement the Client
+## Start the Lab
 
-#### Explore the initial application
+Now, let's start with Lab 3. Here we will implement the required additions to get an 
+OAuth2/OIDC compliant batch job client that calls the resource server we have implemented in [lab 1](../lab1).
+But this time we will use the client credentials flow.
+
+We will use [Keycloak](https://keycloak.org) as identity provider.  
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak).
+
+### Explore the initial application
 
 First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
 then use and start the completed reference application 
@@ -82,9 +82,9 @@ finished this client.
 
 <hr>
 
-#### Step 1: Configure as OAuth 2/OIDC client with client credentials
+### Step 1: Configure as OAuth 2/OIDC client with client credentials
   
-__Make sure keycloak has been started as described in the [setup section](../setup_keycloak/README.md).__
+__Make sure keycloak has been started as described in the [setup section](../setup_keycloak).__
 
 To get rid of the authentication error we will now configure the OAuth2 client credentials flow for our 
 batch job application. A batch job is a typical machine-to-machine use case for this type of OAuth2 flow. 
@@ -116,7 +116,7 @@ authorization grant type _AuthorizationGrantType.CLIENT_CREDENTIALS_.
 
 <hr>
 
-#### Step 2: Configure web client to send bearer access token
+### Step 2: Configure web client to send bearer access token
 
 The batch job uses the new reactive _WebClient_ to call the corresponding server endpoint for creating books.
 Now the existing web client configuration in _WebClientConfiguration.java_ needs to be extended to use this new
@@ -141,21 +141,21 @@ To achieve this change the existing WebClient configuration in _WebClientConfigu
 
 <hr>
 
-#### Step 3: Run/debug the OAuth2 batch job client application
+### Step 3: Run/debug the OAuth2 batch job client application
   
 Now re-start the library client and have a look into the console log.
 This time the batch job should have been completed successfully.
 
 If you want to check that the new books really have been imported just use the 
-web client of [Lab 2](../lab2/README.md). After login you should see lots of more books than before.
+web client of [Lab 2](../lab2). After login you should see lots of more books than before.
 Alternatively you could also just use _Postman_, _Curl_ or _Httpie_. 
  
 <hr>
 
 That's a wrap for this third Lab.
 
-If time still allows you can continue with [Lab 4](../lab4/README.md) to see how you can
-configure the resource server from [Lab 1](../lab1/README.md) with a custom static private/public key pair
+If time still allows you can continue with [Lab 4](../lab4) to see how you can
+configure the resource server from [Lab 1](../lab1) with a custom static private/public key pair
 and create your own JWT tokens using the private key.
 
 This is quite helpful in testing environments, e.g. doing load/performance testing and preventing

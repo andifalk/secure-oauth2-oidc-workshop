@@ -31,22 +31,15 @@ __Table of Contents__
 
 ## Hands-On Workshop
 
-For the hands-on workshop you will extend the following provided sample application:
-
-An Online Book Library with following use cases:
-
-* Administer Library Users
-* Administer Books
-* List available Books
-* Borrow a Book
-* Return a previously borrowed Book
+For the hands-on workshop you will extend a provided sample application along with guided tutorials.
 
 The components you will build (and use) look like this:
 
 ![Architecture](docs/images/demo-architecture.png)
 
-To use the RESTful API of the sample library server application please consult the 
-[REST API documentation](https://andifalk.github.io/secure-oauth2-oidc-workshop/api-doc.html).
+
+__Please check out the [complete documentation](application-architecture) for the sample application before 
+starting with the first hands-on lab__. 
 
 All the code currently is build using:
 * [Spring Boot 2.2.0 Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
