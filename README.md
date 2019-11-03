@@ -111,12 +111,30 @@ After that you can import the whole workshop project directory into your IDE as 
    (this directory will be referenced as _<KEYCLOAK_INSTALL_DIR>_ in next steps)
 3. To startup [Keycloak](https://keycloak.org):
     1. Open a terminal and change directory to sub directory _<KEYCLOAK_INSTALL_DIR>/bin_ and start Keycloak using 
-the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
+the __standalone.sh__ (Linux or Mac OS) or __standalone.bat__ (Windows) scripts
     2. Wait until keycloak has been started completely - you should see something like this `...(WildFly Core ...) started in 6902ms - Started 580 of 842 services`
     3. Now direct your browser to [localhost:8080/auth/admin](http://localhost:8080/auth/admin/)
     4. Login into the admin console using __admin/admin__ as credentials   
 
-Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop
+Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop.
+
+##### Remap default port of Keycloak
+
+In case port 8080 does not work on your local machine then you have to change Keycloak to use another port.
+This can be done like this (e.g. for remapping port to 8090 instead of 8080):
+
+On Linux/MAC:
+```
+./standalone.sh -Djboss.socket.binding.port-offset=10
+```
+
+On Windows:
+```
+./standalone.bat -Djboss.socket.binding.port-offset=10
+```
+
+But take into account that in all following hands-on steps using Keycloak you always have to use the remapped port
+instead of default one as well. 
 
 ### Intro Labs
 
