@@ -78,8 +78,9 @@ This eclipse variant already has all the required gradle and spring boot support
 In case you want to stick to your plain Eclipse installation then you have to add the following features via the
 eclipse marketplace: 
 
-* Buildship Gradle Integration (Version 3.x)
-* Spring Tools 4 - for Spring Boot
+* Buildship Gradle Integration (Version 3.x). This might be already pre-installed depending 
+on your eclipse variant (e.g. Eclipse JavaEE) installed
+* Spring Tools 4 for Spring Boot (Spring Tool Suite 4)
 
 ##### Visual Studio Code specific requirements
 
