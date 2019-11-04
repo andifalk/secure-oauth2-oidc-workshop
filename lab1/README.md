@@ -29,10 +29,14 @@ In this lab we will build an OAuth2/OIDC compliant resource server.
 We will use [Keycloak](https://keycloak.org) as identity provider.  
 Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 
-Lab-1 is actually split into two parts:
+In lab 1 you will learn how to:
 
-1. Build a resource server with __custom user & authorities mapping__ 
-   and also implement additional validation of _audience_ claim in access token 
+1. Implement a basic resource server requiring bearer token authentication using JSON web tokens (JWT)
+2. Customize the resource server with __custom user & authorities mapping__
+3. Implement additional recommended validation of the _audience_ claim of the access token 
+
+In the [bonus part](#lab-1---bonus-part) you may look into an alternative resource server solution that just uses
+the default configuration of spring security (default principal, autorities mapping and validation).
 
 ## Folder Contents
 

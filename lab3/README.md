@@ -35,6 +35,12 @@ under its control</blockquote>
 
 __Important Note: The client credentials grant type MUST only be used by confidential clients.__
 
+After you have completed this lab you will have learned:
+
+* that you can also use OAuth2 and OpenID Connect in a non-web environment using the client credentials flow
+* how to configure the reactive web client for the client credentials flow
+* a little bit about implementing batch jobs using the spring batch framework
+
 ### The Batch Client Application
 
 The client of this lab is just able to fulfill the following uses case:

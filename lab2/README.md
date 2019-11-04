@@ -1,7 +1,8 @@
 # Lab 2: Creating an OAuth 2.0/OIDC compliant Client
 
 In the second lab we want to build an OAuth2/OIDC client for the resource server we have built in [lab 1](../lab1).
-
+Therefore you will be provided a complete spring mvc web client application that works
+together with the resource server of [lab 1](../lab1/library-server-complete-custom). 
 
 See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2client) 
 for all details on how to build and configure an OAuth 2.0 client. 
@@ -23,12 +24,8 @@ starting with the first hands-on lab (especially the client side parts)__.
 
 ## Learning Targets
 
-In this second workshop lab you will be provided a complete spring mvc web client application that works
-together with the [resource server of Lab 1](../lab1/library-server-complete-custom). 
-
-In [Lab 2](../lab2) the client will be using
-the [OAuth2 authorization code grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) to extend the provided
-web client to act as an OIDC compliant client.
+In [Lab 2](../lab2) we will use the [OAuth2 authorization code grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) 
+to extend the provided web client to act as an OIDC compliant client.
 
 According to the specification this grant flow is described as follows:
 <blockquote cite="https://tools.ietf.org/html/rfc6749#section-4.1">
@@ -39,26 +36,28 @@ and capable of receiving incoming requests (via redirection) from the authorizat
 
 __Important Note: The authorization code grant type (without PKCE) MUST only be used by confidential clients.__
 
-Later in [Lab 3](../lab3) we will build almost the same OAuth2 client but in Lab 3 we will be 
-using the [client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4) instead. 
+After you have completed this lab you will have learned
 
-We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md).
+* how to implement an OIDC compliant web client using the authorization code flow
+* how to use the authenticated user principle (mapped from user info endpoint)
+* authorization on the client side (but only to hide/show buttons, real authorization must always be implemented on the server side)
+
+Later in [lab 3](../lab3) we will build almost the same OAuth2/OIDC client but then we will be 
+using the [client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4) instead. 
 
 ### Logout Users
 
 After you have logged in into the library client using keycloak your session will remain valid until
 the access token has expired or the session at keycloak is invalidated.
 
-As the library client does not have a logout functionality, you have to follow the following steps to actually log out 
-users:
+Either you always open the web client in a private/incognito window of your web browser or you follow the steps 
+described below:
 
 * Login to keycloak [admin console](http://localhost:8080/auth/admin) and navigate on the left to menu item _session_
   Here you'll see all user sessions (active/offline ones). By clicking on button _Logout all_ you can revocate 
   all active sessions.
 
 ![Keycloak Sessions](../docs/images/keycloak_sessions.png)
-
 
 * After you have revocated sessions in keycloak you have to delete the current JSESSION cookie 
   for the library client. You can do this by opening the application tab in the developer tools of chrome.
@@ -81,9 +80,12 @@ In the lab 2 folder you find 2 applications:
 Now, let's start with lab 2. Here we will implement the required additions to get an 
 OAuth2/OIDC compliant client that calls the resource server we have implemented in lab 1.
 
+We will use [Keycloak](https://keycloak.org) as identity provider.  
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md).
+
 ### Explore the initial application
 
-First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
+First start the resource server application of [lab 1](../lab1). If you could not complete the previous Lab yourself
 then use and start the completed reference application 
 in project [lab1/library-server-complete-custom](../lab1/library-server-complete-custom)
 
