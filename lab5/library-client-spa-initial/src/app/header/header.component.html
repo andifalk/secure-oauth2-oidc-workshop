@@ -1,0 +1,19 @@
+<h1>Library Client</h1>
+
+    <div class="row">
+
+        <div class="col">
+            <p>A nice library to borrow books</p>
+        </div>
+
+        <div class="col">
+            <p>Hello {{fullname}} <button class="btn btn-danger" (click)="logout()">Logout</button></p>
+        </div>
+
+    </div>
+
+    <hr>
+    
+    <div class="jumbotron">
+        <a class="btn btn-primary" href="#" role="button" [routerLink]="['/createBook']" routerLinkActive="router-link-active">Create Book</a>
+    </div>
