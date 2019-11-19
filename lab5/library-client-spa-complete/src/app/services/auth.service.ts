@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, OAuthErrorEvent, AuthConfig, NullValidationHandler } from 'angular-oauth2-oidc';
 import { Observable, BehaviorSubject, ReplaySubject, combineLatest } from 'rxjs';
-import { Router } from '@angular/router';
 import { map, filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 const authConfig: AuthConfig = {
 
@@ -51,7 +51,7 @@ export class AuthService {
 
   constructor(
     private oauthService: OAuthService,
-    private router: Router,
+    private router: Router
   ) {
     this.oauthService.configure(authConfig);
     this.oauthService.tokenValidationHandler = new NullValidationHandler();
@@ -66,9 +66,11 @@ export class AuthService {
 
   public runInitialLoginSequence(): Promise<void> {
     return this.oauthService.loadDiscoveryDocument()
-      .then(() => this.oauthService.tryLoginCodeFlow())
+      .then(() => this.oauthService.tryLogin())
       .then(() => {
         this.isDoneLoadingSubject$.next(true);
+        // remove query params
+        this.router.navigate(['']);
       })
       .catch(() => this.isDoneLoadingSubject$.next(true));
   }
@@ -90,7 +92,7 @@ export class AuthService {
     }
     return undefined;
   }
-  
+
   public login() { this.oauthService.initCodeFlow(); }
   public logout() { this.oauthService.logOut(); }
   public refresh() { this.oauthService.silentRefresh(); }
