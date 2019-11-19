@@ -35,4 +35,8 @@ export class BookCreateComponent implements OnInit {
     );
   }
 
+  cancel() {
+    this.router.navigate(['']);
+  }
+
 }
