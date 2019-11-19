@@ -12,9 +12,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'createBook', component: BookCreateComponent, canActivate: [BookCreateGuard]},
-      {path: '',
-      component: BookListComponent,
-      canActivate: [AuthGuard]}
+      {path: '', component: BookListComponent, canActivate: [AuthGuard]}
     ]
   },
   {
