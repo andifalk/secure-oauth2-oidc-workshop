@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -11,17 +10,16 @@ export class HeaderComponent implements OnInit {
 
   fullname: string;
 
-  constructor(
-    private oauthService: OAuthService,
-    private authService: AuthService
-    ) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.fullname = this.authService.getFullname();
+    this.authService.isDoneLoading$.subscribe(_ => {
+      this.fullname = this.authService.getFullname();
+    });
   }
 
   logout() {
-    this.oauthService.logOut();
+    this.authService.logout();
   }
 
 }
