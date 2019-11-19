@@ -19,7 +19,8 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: ''
+    component: BookListComponent,
+    canActivate: [AuthGuard]
   }
 ];
 
