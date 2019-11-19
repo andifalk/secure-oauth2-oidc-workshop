@@ -1,0 +1,18 @@
+<div class="form-group">
+    <label for="author">Author</label>
+    <input class="form-control" id="author" name="author" placeholder="author" type="text" [(ngModel)]="author" />
+</div>
+<div class="form-group">
+    <label for="title">Title</label>
+    <input class="form-control" id="title" name="title" placeholder="title" type="text" [(ngModel)]="bookToCreate.title" />
+</div>
+<div class="form-group">
+    <label for="description">Description</label>
+    <input class="form-control" id="description" name="description" placeholder="description" [(ngModel)]="bookToCreate.description"
+        type="text" />
+</div>
+<div class="form-group">
+    <label for="isbn">ISBN</label>
+    <input class="form-control" id="isbn" name="isbn" placeholder="isbn" type="text" [(ngModel)]="bookToCreate.isbn" />
+</div>
+<button class="btn btn-primary" id="create" name="create" type="submit" (click)="createBook()">Create</button>

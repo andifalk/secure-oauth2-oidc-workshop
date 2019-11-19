@@ -1,0 +1,33 @@
+<table class="table table-striped" *ngIf="books && books.length > 0;else noBooks">
+    <thead>
+        <tr>
+            <th scope="col">Author(s)</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">ISBN</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let book of books">
+            <td>{{book.authors}}</td>
+            <td>{{book.title}}</td>
+            <td>{{book.description}}</td>
+            <td>{{book.isbn}}</td>
+        </tr>
+        <!--
+                <td><a class="btn btn-primary" href="#" role="button" sec:authorize="hasRole('LIBRARY_USER')"
+                        th:href="@{'/return?identifier=' + ${bookResource.identifier}}"
+                        th:unless="${!bookResource.returnBookAllowed(#authentication.getPrincipal())}">Return</a><a
+                        class="btn btn-primary" href="#" role="button" sec:authorize="hasRole('LIBRARY_USER')"
+                        th:href="@{'/borrow?identifier=' + ${bookResource.identifier}}"
+                        th:unless="${bookResource.borrowed}">Borrow</a>
+                </td>
+                -->
+    </tbody>
+</table>
+<ng-template #noBooks>
+    No books saved so far.
+</ng-template>
+
+<hr>
