@@ -11,9 +11,7 @@ export class AuthGuard implements CanActivate {
 
   private isAuthenticated: boolean;
 
-  constructor(
-    private authService: AuthService,
-  ) {
+  constructor(private authService: AuthService) {
     this.authService.isAuthenticated$.subscribe(i => this.isAuthenticated = i);
   }
 
@@ -26,5 +24,4 @@ export class AuthGuard implements CanActivate {
       .pipe(tap(_ => this.isAuthenticated || this.authService.login()))
       .pipe(map(_ => this.isAuthenticated));
   }
-
 }
