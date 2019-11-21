@@ -18,10 +18,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
   private final OAuth2ResourceServerProperties oAuth2ResourceServerProperties;
 
@@ -39,6 +41,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .cors()
         .and()
         .csrf()
         .disable()
@@ -77,5 +81,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   LibraryUserRolesJwtAuthenticationConverter libraryUserRolesJwtAuthenticationConverter() {
     return new LibraryUserRolesJwtAuthenticationConverter(libraryUserDetailsService);
+  }
+
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**");
   }
 }
