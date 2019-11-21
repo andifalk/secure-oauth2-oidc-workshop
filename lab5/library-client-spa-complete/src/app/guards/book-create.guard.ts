@@ -19,5 +19,4 @@ export class BookCreateGuard implements CanActivate {
     }
     return true;
   }
-
 }

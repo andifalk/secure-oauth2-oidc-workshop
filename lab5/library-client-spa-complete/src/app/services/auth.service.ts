@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 const authConfig: AuthConfig = {
 
   // Url of the Identity Provider
-  issuer: 'http://localhost:8000/auth/realms/workshop',
+  issuer: 'http://localhost:8080/auth/realms/workshop',
 
   // URL of the SPA to redirect the user to after login
   redirectUri: window.location.origin + '/index.html',
