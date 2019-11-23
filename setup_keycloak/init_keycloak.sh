@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# sample shell for using the rest api
+# DO NOT USE ANY MORE!!!
+
 export KEYCLOAK_HOME=/home/afa/development/keycloak-7.0.0
 export PATH=$PATH:$KEYCLOAK_HOME/bin
 
