@@ -22,6 +22,7 @@ __Table of Contents__
     * [Lab 2: Client (Auth Code)](lab2)
     * [Lab 3: Client (Client-Credentials)](lab3)
     * [Lab 4: Testing](lab4)
+    * [Lab 5: Angular Client](lab5)
   * [Bonus Labs](#bonus-labs)  
     * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
     * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
@@ -149,6 +150,7 @@ instead of default one as well.
 * [Lab 2: OAuth2/OIDC Web Client (Auth Code Flow)](lab2)
 * [Lab 3: OAuth2/OIDC Batch Job Client (Client-Credentials Flow)](lab3)
 * [Lab 4: OAuth2/OIDC Testing Environment](lab4)
+* [Lab 5: OAuth2/OIDC Angular Client](lab5)
 
 ### Bonus Labs
 
@@ -164,6 +166,5 @@ Just send an email to _andreas.falk(at)novatec-gmbh.de_ or contact me via Twitte
 ## License
 
 Apache 2.0 licensed
-Copyright (c) by 2019 Andreas Falk
 
 [1]:http://www.apache.org/licenses/LICENSE-2.0.txt
