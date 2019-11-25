@@ -13,10 +13,10 @@ spring:
       client:
         registration:
           keycloak:
-            client-id: 'library-client'
-            client-secret: '9584640c-3804-4dcd-997b-93593cfb9ea7'
+            client-id: 'library-client-pkce'
             authorizationGrantType: authorization_code
             redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-authentication-method: none
             scope: openid
         provider:
           keycloak:
