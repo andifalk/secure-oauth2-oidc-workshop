@@ -143,8 +143,11 @@ _token_endpoint_, _userinfo_endpoint_ and _jwks_uri_.
 Spring Security 5 automatically configures an OAuth2 client by just specifying the _issuer_ uri value 
 as part of the predefined spring property _spring.security.oauth2.client.provider.[id].issuer-uri_.
 
-For OAuth2 clients you always have to specify the client registration (with client id, client secret, 
-authorization grant type, redirect uri to your client callback and optionally the scope).
+For OAuth2 clients you have to specify the client registration, which usually consists of `client id`, `client secret`, 
+`authorization grant type`, `redirect uri` to your client callback and optionally the `scope`. With Spring Security 5.2.0 you can use the authorization code grant with PKCE. This is the recommend grant type for this kind of application meanwhile. (see https://tools.ietf.org/html/draft-ietf-oauth-security-topics-13#section-3.1.1)
+
+To make use of this grant type, make sure you have a public client and just omit the client secret. If you want to make sure PKCE is being used, you can specify `client-authentication-method` to `none`. (as in the code below)
+
 The client registration requires an OAuth2 provider. If you want to use your own provider you have to configure
 at least the _issuer uri_. We want to change the default user name mapping for the user identity as well (
 using the user name instead of the default value 'sub'). 
@@ -163,10 +166,10 @@ spring:
       client:
         registration:
           keycloak:
-            client-id: 'library-client'
-            client-secret: '9584640c-3804-4dcd-997b-93593cfb9ea7'
+            client-id: 'library-client-pkce'
             authorizationGrantType: authorization_code
             redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-authentication-method: none
             scope: openid
         provider:
           keycloak:
