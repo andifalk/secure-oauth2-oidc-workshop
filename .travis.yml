@@ -11,12 +11,12 @@ jobs:
     - stage: build
       jdk: openjdk8
       script:
-        - ./gradlew build -x buildNative -x testNative
+        - ./gradlew build
     - stage: build
       jdk: openjdk10
       script:
-        - ./gradlew build -x buildNative -x testNative
+        - ./gradlew build
     - stage: build
       jdk: openjdk11
       script:
-        - ./gradlew build -x buildNative -x testNative
+        - ./gradlew build
