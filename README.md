@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/License-Apache%20License%202.0-brightgreen.svg)][1]
-![](https://github.com/andifalk/secure-oauth2-oidc-workshop/workflows/Java%20CI/badge.svg)
+![Java CI](https://github.com/andifalk/secure-oauth2-oidc-workshop/workflows/Java%20CI/badge.svg)
 [![Release](https://img.shields.io/github/release/andifalk/secure-oauth2-oidc-workshop.svg?style=flat)](https://github.com/andifalk/secure-oauth2-oidc-workshop/releases)
 
 # OAuth 2.0 / OpenID Connect 1.0 Workshop
