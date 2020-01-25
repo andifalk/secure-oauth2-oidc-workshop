@@ -277,8 +277,8 @@ You'll see, that `hasRole` is missing in your `AuthService`. You can try to impl
 ```typescript
   public hasRole(role: string) {
     let claims: any = this.oauthService.getIdentityClaims();
-    if (claims && claims.roles) {
-      let roles: string[] = claims.roles;
+    if (claims && claims.groups) {
+      let roles: string[] = claims.groups;
       roles = roles.map(role => role.toUpperCase());
       return roles.includes(role.toLocaleUpperCase());
     }

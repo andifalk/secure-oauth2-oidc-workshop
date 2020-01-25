@@ -10,18 +10,18 @@ export class Book {
     borrowedBy: User;
 
     doBorrow(user: User) {
-        if(!this.borrowed) {
+        if (!this.borrowed) {
             this.borrowed = true;
             this.borrowedBy = user;
         }
     }
 
     returnBookAllowed(user: User): boolean {
-        if(!this.borrowed) {
+        if (!this.borrowed) {
             return false;
         }
 
-        if(user !== null) {
+        if (user !== null) {
             return this.borrowedBy !== null && this.borrowedBy.username === user.username;
         }
 

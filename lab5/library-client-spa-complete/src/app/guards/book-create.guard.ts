@@ -14,7 +14,7 @@ export class BookCreateGuard implements CanActivate {
     ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if(!this.authService.hasRole('LIBRARY_CURATOR')) {
+    if (!this.authService.hasRole('library_curator')) {
       return this.router.navigate(['']);
     }
     return true;
