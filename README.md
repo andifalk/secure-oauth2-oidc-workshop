@@ -25,7 +25,6 @@ __Table of Contents__
     * [Lab 5: Angular Client](lab5)
   * [Bonus Labs](#bonus-labs)  
     * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
-    * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
 ## Presentation Slides 
 
@@ -44,18 +43,18 @@ __Please check out the [complete documentation](application-architecture) for th
 starting with the first hands-on lab__. 
 
 All the code currently is build using:
-* [Spring Boot 2.2.0 Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
-* [Spring Framework 5.2.0 Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
-* [Spring Security 5.2.0 Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
-* [Spring Batch 4.2.0 Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
+* [Spring Boot 2.2.x Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
+* [Spring Framework 5.2.x Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
+* [Spring Security 5.2.x Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
+* [Spring Batch 4.2.x Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
 
-and is verified against Java versions 8, 10 and 11.
+and is verified against the currently supported long-term versions 8 and 11 of Java.
 
 ### Preparation and Setup
 
 #### Requirements and useful tools
 
-* [Java SDK](https://openjdk.java.net/install) Version 8, 10 or 11
+* [Java SDK](https://openjdk.java.net/install) Version 8 or 11
 * A Java IDE like
   * [Eclipse](https://www.eclipse.org/downloads)
   * [Spring Toolsuite](https://spring.io/tools)
@@ -108,36 +107,11 @@ After that you can import the whole workshop project directory into your IDE as 
 
 
 #### Setup Keycloak
+
+You need a compliant OAuth 2.0 / OpenID Connect provider for this workshop.
+Here we will use [Keycloak](https://keycloak.org) by RedHat/JBoss.
                   
-1. Download 'keycloak_workshop.zip' from https://tinyurl.com/y3wjzwch (Use password: 'Workshop')
-2. Extract the downloaded __keycloak_workshop.zip__ file into a new local directory of your choice 
-   (this directory will be referenced as _<KEYCLOAK_INSTALL_DIR>_ in next steps)
-3. To startup [Keycloak](https://keycloak.org):
-    1. Open a terminal and change directory to sub directory _<KEYCLOAK_INSTALL_DIR>/bin_ and start Keycloak using 
-the __standalone.sh__ (Linux or Mac OS) or __standalone.bat__ (Windows) scripts
-    2. Wait until keycloak has been started completely - you should see something like this `...(WildFly Core ...) started in 6902ms - Started 580 of 842 services`
-    3. Now direct your browser to [localhost:8080/auth/admin](http://localhost:8080/auth/admin/)
-    4. Login into the admin console using __admin/admin__ as credentials   
-
-Now, if you see the realm _workshop_ on the left then Keycloak is ready to use it for this workshop.
-
-##### Remap default port of Keycloak
-
-In case port 8080 does not work on your local machine then you have to change Keycloak to use another port.
-This can be done like this (e.g. for remapping port to 8090 instead of 8080):
-
-On Linux/MAC:
-```
-./standalone.sh -Djboss.socket.binding.port-offset=10
-```
-
-On Windows:
-```
-./standalone.bat -Djboss.socket.binding.port-offset=10
-```
-
-But take into account that in all following hands-on steps using Keycloak you always have to use the remapped port
-instead of default one as well. 
+To setup and configure Keycloak for this workshop please follow the [setup guide](setup_keycloak).
 
 ### Intro Labs
 
@@ -155,7 +129,6 @@ instead of default one as well.
 ### Bonus Labs
 
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
-* [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
 ## Feedback
 
