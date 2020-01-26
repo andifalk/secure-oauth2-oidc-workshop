@@ -6,13 +6,34 @@ implements OAuth 2.0 and OpenID Connect 1.0.
 
 ## Setup Keycloak
 
+To setup Keycloak you have 2 options:
+
+1. Run Keycloak using Docker (if you have Docker installed)
+2. Local Keycloak installation & configuration
+
+### Run Keycloak using Docker
+
+If you have Docker installed then setting up Keycloak is quite easy.
+
+To install, configure and run Keycloak 
+
+1. Open a new command line terminal window
+2. Change directory to subdirectory _setup_keycloak_ of the workshop repository
+3. Execute script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS)
+
+After you see the line _Started 590 of 885 services_ Keycloak is configured and running.  
+Now open your web browser and navigate to [localhost:8080/auth/admin](http://localhost:8080/auth/admin) and login
+using the credentials _admin_/_admin_.
+
+### Local Installation
+
 To setup [Keycloak](https://keycloak.org): 
 
 1. Download the [Standard Server Distribution of Keycloak (Version 8.0.0 or higher)](https://www.keycloak.org/downloads.html).
 2. Extract the downloaded zip/tar file __keycloak-x.x.x.zip__/__keycloak-x.x.x.tar-gz__ into a new local directory of your choice 
 (this directory will be referenced as __<KEYCLOAK_INSTALL_DIR>__ in next steps)
 
-## Configure Keycloak for this Workshop
+#### Configure Keycloak for this Workshop
 
 The workshop requires some configuration for Keycloak (i.e. different OAuth2/OpenID Connect clients and some user accounts).
 
