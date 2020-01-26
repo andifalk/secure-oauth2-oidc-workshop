@@ -720,6 +720,7 @@
       "consentRequired" : false,
       "config" : {
         "user.session.note" : "clientId",
+        "userinfo.token.claim" : "true",
         "id.token.claim" : "true",
         "access.token.claim" : "true",
         "claim.name" : "clientId",
@@ -734,7 +735,8 @@
       "config" : {
         "id.token.claim" : "false",
         "access.token.claim" : "true",
-        "included.custom.audience" : "library-service"
+        "included.custom.audience" : "library-service",
+        "userinfo.token.claim" : "false"
       }
     }, {
       "id" : "f60222b8-b6c0-49c9-b15f-ed16cc342dbb",
@@ -831,7 +833,7 @@
     "clientAuthenticatorType" : "client-secret",
     "secret" : "8e21b4bf-ec27-47f3-a172-1981b8942514",
     "redirectUris" : [ "http://localhost:4200/*", "http://127.0.0.1:4200/*" ],
-    "webOrigins" : [ ],
+    "webOrigins" : [ "http://localhost:4200" ],
     "notBefore" : 0,
     "bearerOnly" : false,
     "consentRequired" : false,
@@ -861,6 +863,31 @@
     "authenticationFlowBindingOverrides" : { },
     "fullScopeAllowed" : true,
     "nodeReRegistrationTimeout" : -1,
+    "protocolMappers" : [ {
+      "id" : "74ddf1f3-a1f7-4b14-923f-5c90babb1284",
+      "name" : "Library-Audience",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-audience-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "id.token.claim" : "false",
+        "access.token.claim" : "true",
+        "included.custom.audience" : "library-service"
+      }
+    }, {
+      "id" : "4d973139-97fe-4b95-81ff-e7a15dc8a5f1",
+      "name" : "Library-Group",
+      "protocol" : "openid-connect",
+      "protocolMapper" : "oidc-group-membership-mapper",
+      "consentRequired" : false,
+      "config" : {
+        "full.path" : "false",
+        "id.token.claim" : "true",
+        "access.token.claim" : "true",
+        "claim.name" : "groups",
+        "userinfo.token.claim" : "true"
+      }
+    } ],
     "defaultClientScopes" : [ "web-origins", "role_list", "library_user", "profile", "roles", "library_curator", "library_admin", "email" ],
     "optionalClientScopes" : [ "address", "phone", "offline_access", "microprofile-jwt" ]
   } ],
@@ -1355,7 +1382,7 @@
       "subType" : "anonymous",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-full-name-mapper", "saml-user-attribute-mapper", "saml-user-property-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-usermodel-attribute-mapper", "saml-role-list-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-role-list-mapper", "saml-user-property-mapper", "oidc-usermodel-property-mapper", "saml-user-attribute-mapper", "oidc-usermodel-attribute-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper", "oidc-full-name-mapper" ]
       }
     }, {
       "id" : "93b53e7b-74ee-4be8-a6cc-829486479a5e",
@@ -1415,7 +1442,7 @@
       "subType" : "authenticated",
       "subComponents" : { },
       "config" : {
-        "allowed-protocol-mapper-types" : [ "oidc-sha256-pairwise-sub-mapper", "saml-role-list-mapper", "oidc-full-name-mapper", "oidc-usermodel-attribute-mapper", "saml-user-attribute-mapper", "oidc-usermodel-property-mapper", "saml-user-property-mapper", "oidc-address-mapper" ]
+        "allowed-protocol-mapper-types" : [ "saml-user-attribute-mapper", "oidc-usermodel-attribute-mapper", "saml-user-property-mapper", "saml-role-list-mapper", "oidc-full-name-mapper", "oidc-usermodel-property-mapper", "oidc-address-mapper", "oidc-sha256-pairwise-sub-mapper" ]
       }
     } ],
     "org.keycloak.keys.KeyProvider" : [ {
@@ -1947,6 +1974,6 @@
     "waitIncrementSeconds" : "60",
     "offlineSessionMaxLifespanEnabled" : "true"
   },
-  "keycloakVersion" : "8.0.0",
+  "keycloakVersion" : "8.0.1",
   "userManagedAccessAllowed" : false
 }
