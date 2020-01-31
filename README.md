@@ -28,7 +28,7 @@ __Table of Contents__
 
 ## Presentation Slides 
 
-[Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop_2019.pdf)
+[Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop.pdf)
 
 ## Hands-On Workshop
 
