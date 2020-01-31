@@ -9,11 +9,10 @@ Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and O
 __Table of Contents__
 
 * [Presentation Slides](#presentation-slides)
-* [Hands-On Workshop](#hands-on-workshop)
-  * [Preparation and Setup](#preparation-and-setup)
-    * [System Requirements](#requirements-and-useful-tools)
-    * [Get the Source Code](#get-the-source-code)
-    * [Setup Keycloak](#setup-keycloak)
+* [Requirements and Setup](#requirements-and-setup)
+* [Get the Source Code](#get-the-source-code)
+* [Setup Keycloak](#setup-keycloak)
+* [Hands-On Workshop](#hands-on-workshop)    
   * [Intro Labs](#intro-labs)
     * [Demo: Auth Code Flow in Action](intro-labs/auth-code-demo)
     * [Demo: GitHub Client](intro-labs/github-client)
@@ -30,7 +29,7 @@ __Table of Contents__
 
 [Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop.pdf)
 
-## Hands-On Workshop
+## Requirements and Setup
 
 For the hands-on workshop you will extend a provided sample application along with guided tutorials.
 
@@ -49,10 +48,6 @@ All the code currently is build using:
 * [Spring Batch 4.2.x Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
 
 and is verified against the currently supported long-term versions 8 and 11 of Java.
-
-### Preparation and Setup
-
-#### Requirements and useful tools
 
 * [Java SDK](https://openjdk.java.net/install) Version 8 or 11
 * A Java IDE like
@@ -112,6 +107,8 @@ You need a compliant OAuth 2.0 / OpenID Connect provider for this workshop.
 Here we will use [Keycloak](https://keycloak.org) by RedHat/JBoss.
                   
 To setup and configure Keycloak for this workshop please follow the [setup guide](setup_keycloak).
+
+## Hands-On Workshop
 
 ### Intro Labs
 

@@ -2,8 +2,8 @@
 
 ## Introduction
 
-* [Introduction](./README.md)  
-* [Setup](setup_keycloak/README.md)  
+* [Introduction and Requirements](./README.md)  
+* [Setup Keycloak](setup_keycloak/README.md)  
 
 ## Intro Labs
 
