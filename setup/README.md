@@ -89,7 +89,7 @@ To setup [Keycloak](https://keycloak.org):
 2. Extract the downloaded zip/tar file __keycloak-x.x.x.zip__/__keycloak-x.x.x.tar-gz__ into a new local directory of your choice 
 (this directory will be referenced as __<KEYCLOAK_INSTALL_DIR>__ in next steps)
 
-#### Configure Keycloak for this Workshop
+### Configure Keycloak for this Workshop
 
 The workshop requires some configuration for Keycloak (i.e. different OAuth2/OpenID Connect clients and some user accounts).
 
@@ -112,7 +112,7 @@ All you need to configure Keycloak is located in the subdirectory _setup_keycloa
 
 If all worked successfully you should see the settings page of the _Workshop_ realm and Keycloak is ready for this Workshop !
 
-## Startup Keycloak
+### Startup Keycloak
 
 You only have to do the configuration section once.
 If you have stopped Keycloak and want to start it again then follow the next lines in this section.
@@ -129,7 +129,7 @@ Now, if you see the realm _workshop_ on the left then Keycloak is ready to use i
 
 ![Keycloak Workshop](keycloak_workshop.png)
 
-## Remap default port of Keycloak
+### Remap default port of Keycloak
 
 In case port _8080_ does not work on your local machine (i.e. is used by another process) then you may have to change Keycloak to use another port.
 This can be done like this (e.g. for remapping port to 8090 instead of 8080):
@@ -147,7 +147,7 @@ On Windows:
 Note: Take into account that for all URL's pointing to Keycloak in the hands-on steps you always have to use the remapped port
 instead of default one (8080) as well. 
 
-## Further Information
+### Further Information
 
 If you want to know more about setting up a Keycloak server for your own projects 
 then please consult the [keycloak administration docs](https://www.keycloak.org/docs/latest/server_admin/index.html).
