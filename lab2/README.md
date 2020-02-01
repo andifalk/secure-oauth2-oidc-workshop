@@ -2,7 +2,7 @@
 
 In the second lab we want to build an OAuth2/OIDC client for the resource server we have built in [lab 1](../lab1).
 Therefore you will be provided a complete spring mvc web client application that works
-together with the resource server of [lab 1](../lab1/library-server-complete-custom). 
+together with the resource server of [lab 1](../lab1). 
 
 See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2client) 
 for all details on how to build and configure an OAuth 2.0 client. 
