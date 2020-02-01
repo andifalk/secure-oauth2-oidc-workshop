@@ -24,6 +24,7 @@ __Table of Contents__
     * [Lab 5: Angular Client](lab5)
   * [Bonus Labs](#bonus-labs)  
     * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
+    * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
 ## Presentation Slides 
 

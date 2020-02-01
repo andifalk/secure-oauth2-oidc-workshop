@@ -14,7 +14,8 @@ public class HelloController {
 
   @Get
   public String sayHello(Principal principal) {
-    AuthenticationJWTClaimsSetAdapter jwtClaimsSetAdapter = (AuthenticationJWTClaimsSetAdapter) principal;
+    AuthenticationJWTClaimsSetAdapter jwtClaimsSetAdapter =
+        (AuthenticationJWTClaimsSetAdapter) principal;
     Map<String, Object> claims = jwtClaimsSetAdapter.getAttributes();
 
     return "it works for user: " + claims.get("name") + " (" + claims.get("email") + ")";

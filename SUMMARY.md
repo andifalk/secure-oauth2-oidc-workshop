@@ -21,3 +21,4 @@
 ## Bonus Labs​
 
 * [Micronaut](bonus-labs/micronaut-server-app/README.md)
+* [Quarkus](bonus-labs/quarkus-server-app/README.md)
