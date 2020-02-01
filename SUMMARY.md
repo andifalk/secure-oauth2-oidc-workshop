@@ -2,8 +2,8 @@
 
 ## Introduction
 
-* [Introduction and Requirements](./README.md)  
-* [Setup Keycloak](setup_keycloak/README.md)  
+* [Requirements and Setup](setup/README.md)  
+* [Sample Application Architecture](application-architecture/README.md)  
 
 ## Intro Labs
 
@@ -12,7 +12,6 @@
 
 ## Hands-On Labs
      
-* [Sample Application Architecture](application-architecture/README.md)  
 * [Resource Server](lab1/README.md)    
 * [Client (Authorization Code Flow)](lab2/README.md)
 * [Client (Client Credentials Flow)](lab3/README.md)
