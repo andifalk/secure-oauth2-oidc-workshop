@@ -27,7 +27,7 @@ starting with the first hands-on lab (especially the server side parts)__.
 In this lab we will build an OAuth2/OIDC compliant resource server.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup/README.md)
 
 In lab 1 you will learn how to:
 
@@ -48,14 +48,14 @@ In the lab 1 folder you find 3 applications:
 with automatic mapping by spring security (using defaults to read roles from 'scope' claims inside the token and 
 map these to authorities with 'SCOPE_' prefix)
 
-### Start the Lab
+## Start the Lab
 
 Now, let's start with this lab. Here we will implement the required additions to get an 
 OAuth2/OIDC compliant resource server with customized mapping of token claims to Spring Security authorities.
 
 ![Manual Role Mapping](../docs/images/manual_role_mapping.png)
 
-#### Explore the initial application
+### Explore the initial application
 
 Please navigate your Java IDE to the __lab1/library-server-initial__ project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.server.Lab1InitialLibraryServerApplication_.
@@ -116,7 +116,7 @@ __Question:__ What response would you expect here?
 
 <hr>
 
-#### Step 1: Configure as resource server  
+### Step 1: Configure as resource server  
 To change this application into a resource server you have to make changes in the dependencies 
 of the gradle build file _build.gradle_:
 
@@ -137,7 +137,7 @@ Spring security 5 uses the
 [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
 to completely configure the resource server to use our keycloak instance.
   
-__Make sure keycloak has been started as described in the [setup section](../setup_keycloak/README.md).__
+__Make sure keycloak has been started as described in the [setup section](../setup/README.md).__
 
 Navigate your web browser to the url [localhost:8080/auth/realms/workshop/.well-known/openid-configuration](http://localhost:8080/auth/realms/workshop/.well-known/openid-configuration).  
 Then you should see the public discovery information that keycloak provides 
@@ -244,7 +244,7 @@ plenty of time just removing all password related stuff from other source code l
 
 <hr>
 
-#### Step 2: Run and test basic resource server 
+### Step 2: Run and test basic resource server 
 
 Now it should be possible to re-start
 the reconfigured application _com.example.library.server.Lab1InitialLibraryServerApplication_.
@@ -368,7 +368,7 @@ customized JWT to Spring Security authorities mapping. So let's continue with th
 
 <hr>
 
-#### Step 3: Implement a custom JWT converter 
+### Step 3: Implement a custom JWT converter 
     
 To add our custom mapping for a JWT access token Spring Security requires us to implement
 the interface _Converter<Jwt, AbstractAuthenticationToken>_.
@@ -506,7 +506,7 @@ application in project _library-server-complete-custom_.
 
 <hr>
 
-#### Step 4: Add an additional JWT validator for the 'audience' claim 
+### Step 4: Add an additional JWT validator for the 'audience' claim 
 
 Implementing an additional token validator is quite easy, you just have to implement the 
 provided interface _OAuth2TokenValidator_.

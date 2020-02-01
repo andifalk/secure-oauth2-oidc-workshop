@@ -81,7 +81,7 @@ Now, let's start with lab 2. Here we will implement the required additions to ge
 OAuth2/OIDC compliant client that calls the resource server we have implemented in lab 1.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak/README.md).
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup/README.md).
 
 ### Explore the initial application
 
@@ -122,7 +122,7 @@ Spring security 5 uses the
 [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
 to completely configure the client to use our keycloak instance.
   
-__Make sure keycloak has been started as described in the [setup section](../setup_keycloak/README.md).__
+__Make sure keycloak has been started as described in the [setup section](../setup/README.md).__
 
 Navigate your web browser to the url [localhost:8080/auth/realms/workshop/.well-known/openid-configuration](http://localhost:8080/auth/realms/workshop/.well-known/openid-configuration).  
 Then you should see the public discovery information that keycloak provides 
@@ -181,7 +181,7 @@ This can lead to unexpected errors later when you try to run all this stuff.
 
 <hr>
 
-#### Step 2: Configure web client to send bearer access token
+### Step 2: Configure web client to send bearer access token
 
 For all requests to the resource server we use the reactive web client, that was introduced by Spring 5.
 The next required step is to make this web client aware of transmitting the required bearer access tokens
