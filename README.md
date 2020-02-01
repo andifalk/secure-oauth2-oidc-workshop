@@ -27,7 +27,12 @@ __Table of Contents__
 
 ## Presentation Slides 
 
-[Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop.pdf)
+The corresponding [Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop.pdf)
+for the workshop and an introduction into OAuth 2.0 and OpenID Connect.
+
+## Workshop Tutorial
+
+To follow the hands-on workshop please open the [workshop tutorial](https://andifalk.gitbook.io/openid-connect-workshop).
 
 ## Requirements and Setup
 
