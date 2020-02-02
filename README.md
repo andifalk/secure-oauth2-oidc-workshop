@@ -9,9 +9,8 @@ Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and O
 __Table of Contents__
 
 * [Presentation Slides](#presentation-slides)
+* [Workshop Tutorial](#workshop-tutorial)
 * [Requirements and Setup](#requirements-and-setup)
-* [Get the Source Code](#get-the-source-code)
-* [Setup Keycloak](#setup-keycloak)
 * [Hands-On Workshop](#hands-on-workshop)    
   * [Intro Labs](#intro-labs)
     * [Demo: Auth Code Flow in Action](intro-labs/auth-code-demo)
@@ -23,8 +22,11 @@ __Table of Contents__
     * [Lab 4: Testing](lab4)
     * [Lab 5: Angular Client](lab5)
   * [Bonus Labs](#bonus-labs)  
+    * [Demo: Multi-Tenant Resource Server](bonus-labs/multi-tenant-server-app)
     * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
     * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
+* [Feedback](#feedback)
+* [License](#license)    
 
 ## Presentation Slides 
 
@@ -73,7 +75,9 @@ To check system requirements and setup for this workshop please follow the [setu
 
 ### Bonus Labs
 
+* [Demo: Multi-Tenant Resource Server](bonus-labs/multi-tenant-server-app)
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
+* [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
 
 ## Feedback
 

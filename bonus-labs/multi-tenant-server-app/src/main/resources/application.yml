@@ -1,0 +1,11 @@
+auth0:
+  jwk-set-uri: https://access-me.eu.auth0.com/.well-known/jwks.json
+okta:
+  jwk-set-uri: https://dev-667216.oktapreview.com/oauth2/auskfyzkaoXSRnwTV0h7/v1/keys
+
+spring:
+  security:
+    user:
+      password: secret
+server:
+  port: 9090
