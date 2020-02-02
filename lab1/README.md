@@ -18,9 +18,6 @@ starting with the first hands-on lab (especially the server side parts)__.
     * [Step 2: Run and test basic resource server](#step-2-run-and-test-basic-resource-server)
     * [Step 3: Implement a custom JWT converter](#step-3-implement-a-custom-jwt-converter)
     * [Step 4: An additional JWT validator for 'audience' claim](#step-4-add-an-additional-jwt-validator-for-the-audience-claim)
-* [Bonus-Part: Look inside a resource server with automatic scope mapping](#lab-1---bonus-part)
-  * [Step 1: Adapting authorization checks](#step-1-adapting-the-authorization-checks)
-  * [Step 2: Changing the authentication principal](#step-2-adapting-the-authentication-principal)
 
 ## Learning Targets
 
@@ -35,18 +32,12 @@ In lab 1 you will learn how to:
 2. Customize the resource server with __custom user & authorities mapping__
 3. Implement additional recommended validation of the _audience_ claim of the access token 
 
-In the [bonus part](#lab-1---bonus-part) you may look into an alternative resource server solution that just uses
-the default configuration of spring security (default principal, autorities mapping and validation).
-
 ## Folder Contents
 
 In the lab 1 folder you find 3 applications:
 
 * __library-server-initial__: This is the application we will use as starting point for this lab
-* __library-server-complete-custom__: This application is the completed reference for this lab 
-* __library-server-complete-automatic__: This application is the completed reference for the same but 
-with automatic mapping by spring security (using defaults to read roles from 'scope' claims inside the token and 
-map these to authorities with 'SCOPE_' prefix)
+* __library-server-complete__: This application is the completed reference for this lab 
 
 ## Start the Lab
 
