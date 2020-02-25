@@ -85,7 +85,7 @@ using the credentials _admin_/_admin_.
 
 To setup [Keycloak](https://keycloak.org): 
 
-1. Download the [Standard Server Distribution of Keycloak (Version 8.0.0 or higher)](https://www.keycloak.org/downloads.html).
+1. Download the [Standard Server Distribution of Keycloak (Version 8.0.x)](https://www.keycloak.org/downloads-archive.html).
 2. Extract the downloaded zip/tar file __keycloak-x.x.x.zip__/__keycloak-x.x.x.tar-gz__ into a new local directory of your choice 
 (this directory will be referenced as __<KEYCLOAK_INSTALL_DIR>__ in next steps)
 

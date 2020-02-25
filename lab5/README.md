@@ -1,334 +1,346 @@
-# Lab 5: Creating an OAuth 2.0/OIDC compliant Single-Page-Application using Angular
+# Lab 5: Creating a Testing Environment for an OIDC Resource Server
 
-In this third lab we want to build again an OAuth2/OIDC client for the resource server 
-we have built in [lab 1](../lab1).
+Creating a testing environment is useful to perform
 
-In contrast to [Lab 2](../lab2) and [Lab 3](../lab3) this time the client will be using
-the [Angular](https://angular.io/) and the corresponding [OAuth 2.0/OIDC library](https://github.com/manfredsteyer/angular-oauth2-oidc).
+* Performance & Load Tests
+* Security Tests
+* Other User Acceptance tests
+* ...
+
+By using OAuth2/OIDC you have an additional external component in place that is required to
+run your clients and server applications.
+
+To support testing environments without having external dependencies you have several possibilities:
+
+1. Spring Integration Tests for JWT (see last lab)
+2. Test using your own self-signed JWT tokens
+3. Test using the [TestContainers](https://www.testcontainers.org/) library using a dockerized Keycloak instance
+
+Option 3 is a bit out of focus of this workshop, so we will go for option 2 as part of this workshop.  
 
 ## Lab Contents
 
 * [Learning Targets](#learning-targets)
 * [Folder Contents](#folder-contents)
-* [Hands-On: Implement the OAuth 2.0/OIDC batch client](#start-the-lab)
-    * [Explore the initial client application](#explore-the-initial-application)
-    * [Step 1: Configure as OAuth2/OIDC client w/ client credentials](#step-1-configure-as-oauth-2oidc-client-with-client-credentials)
-    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
-    * [Step 3: Run and debug the web client authorities](#step-3-rundebug-the-oauth2-batch-job-client-application)
+* [Learning Targets](#learning-targets)
+* [Hands-On: Testing Environment for OIDC/JWT](#start-the-lab)
+    * [Step 1: Implement a resource server with static public key](#step-1-resource-server-with-static-token-validation)
+    * [Step 2: Generate custom JWT with the JWT generator app](#step-2-run-jwt-generator-web-application)
+    * [Step 3: Run and test basic resource server](#step-3-run-and-test-static-resource-server)
+    * [Step 4: Use new JWT based test approach](#step-4-use-new-approach-for-jwt-based-authorization-tests)
+
+The [Keycloak](https://keycloak.org) identity provider is not required any more for this lab.  
 
 ## Learning Targets
 
-In this fifth workshop lab you will be learning how to build an OAuth 2.0/OIDC compliant frontend using Angular that works together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
+In this fourth lab you will see how you can configure the resource server from [Lab 1](../lab1) with a custom static private/public key pair
+and create an application to generate your own JWT tokens using the corresponding self-signing private key.
 
-In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client with a browser environment without having a secure backchannel. We will use the most modern way to make this possible by facilitating the [authorization code grant with PKCE](https://tools.ietf.org/html/rfc7636).
+This is quite helpful in testing environments, e.g. doing load/performance testing and preventing
+from load testing the identity server as well.
 
-After you have completed this lab you will have learned:
+This lab is actually split into three steps:
 
-* that you can also use OAuth2 and OpenID Connect in a browser environment without having a secure backchannel
-* how to configure an Angular application to use OAuth2.0/OIDC
+1. Look into a resource server with __static public key__ to verify JWT tokens 
+2. Generate custom JWT tokens for different user identities to be used at the resource server of step 1
+3. Make requests to the resource server of step 1 with generated JWT from step 2
 
 ## Folder Contents
 
-In the lab 5 folder you find 2 applications:
+In the lab 5 folder you find 3 applications:
 
-* __library-client-spa-initial__: This is the client application we will use as starting point for this lab
-* __library-client-spa-complete__: This client application is the completed OAuth 2.0/OIDC client for this lab 
+* __library-server-static-complete__: This application is the complete static resource server 
+* __jwt-generator__: This application is the JWT generator to generate custom JWT tokens 
 
 ## Start the Lab
 
-Now, let's start with Lab 5. Here we will implement the required additions to get an Single-Page-Application that calls the resource server we have implemented in [lab 1](../lab1). This time we will use the authorization code flow, but with PKCE.
+In this lab you will not really implement anything yourself but you will see how to use such static resource server
+with custom generated JWt tokens.
+So let's start.
 
-We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak).
+### Step 1: Resource server with static token validation
 
-### Explore the initial application
+Now, let's start with step 1 of this lab. Here we will have a look into the required changes we need
+compared to the resource server of [Lab 1](../lab1/README.md) to support static public keys for token signature validation.
 
-First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
-then use and start the completed reference application 
-in project [lab1/library-server-complete-automatic](../lab1/library-server-complete-automatic)
+In [Lab 1](../lab1/README.md) we have seen how Spring security 5 uses the 
+[OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
+to completely configure the resource server to use our keycloak instance.
 
-Start by downloading the necessary dependencies. Move to the __lab3/library-client-spa-initial__ folder using commandline and execute `npm install`.
+As we will now locally validate the incoming JWT access tokens using a static public key we do not
+need the discovery entries (especially the JWKS uri) any more.  
 
-Then navigate your IDE of choice (suggesting VS Code) to the __lab3/library-client-spa-initial__ project and at first explore this project a bit.
-Then start the application by running `ng serve` on your commandline.
-
-You will notice that the application starts up but in your browsers console you'll notice some failing HTTP requests when accessing the application. (should be 401 errors)
-This is because there's no authentication to your IAM solution (Keycloak).
-
-Now stop the client application again. You can leave the resource server running as we will need this after we have 
-finished this client.
-
-<hr>
-
-### Step 1: Install the angular-oauth2-oidc library
+You can see the changes in _application.yml_, here no _issuer uri_ property is required any more.
+Instead we specify a location reference to a file containing a public key to verify JWT tokens.
   
-In this step you're supposed to install the library, nothing else.
+This looks like this:
+
+```yaml
+spring:
+  jpa:
+    open-in-view: false
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: non_null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          publicKeyLocation: classpath:library_server.pub
 ```
-npm install --save angular-oauth2-oidc
-```
 
-This will install the latest version of [Manfred Steyer](https://github.com/manfredsteyer)'s OIDC certified OAuth 2.0 / OpenID Connect library for the Angular framework.
+Now we have to use this public key to configure the _JwtDecoder_ to use this for validating
+JWT tokens instead of contacting keycloak.
 
-Next step is to import the library in your `app.module.ts` in the `imports` array.
-```typescript
-    OAuthModule.forRoot({
-      resourceServer: {
-        allowedUrls: ['http://localhost:9091/'],
-        sendAccessToken: true
-      }
-    })
-```
+This requires a small change in the class _com.example.library.server.config.WebSecurityConfiguration_:
 
-<hr>
+Open the class _com.example.library.server.config.WebSecurityConfiguration_ and look at the
+changes:
 
-### Step 2: Configure the library
+```java
+package com.example.library.server.config;
 
-The library we just installed gives us the ability to choose between using the implicit grant or the authorization code grant with PKCE.
+import com.example.library.server.security.AudienceValidator;
+import com.example.library.server.security.LibraryUserDetailsService;
+import com.example.library.server.security.LibraryUserJwtAuthenticationConverter;
+import com.example.library.server.security.LibraryUserRolesJwtAuthenticationConverter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 
-As introduced, we are going to use the authorization code grant with PKCE. This special addition allows us to use the great authorization code grant without having a secure backchannel. As our application is executing in the user's browser, we are in an unsafe environment, meaning there's no secure channel the user (and by this means also an attacker) can eavesdrop.
+import java.security.interfaces.RSAPublicKey;
 
-Let's get started by creating a new service to encapsulate the authentication (and handle a few implementation quirks): `ng g s services/auth --skip-tests`
+@Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-Now open the created file and initialize the configuration object:
-```typescript
-authConfig: AuthConfig = {
-
-    // Url of the Identity Provider
-    issuer: 'http://localhost:8080/auth/realms/workshop',
+  private final LibraryUserDetailsService libraryUserDetailsService;
   
-    // URL of the SPA to redirect the user to after login
-    redirectUri: window.location.origin + '/index.html',
-  
-    // The SPA's id. The SPA is registered with this id at the auth-server
-    clientId: 'spa',
+  @Value("${spring.security.oauth2.resourceserver.jwt.publicKeyLocation}")
+  private RSAPublicKey key;
 
-    responseType: 'code',
-    disableAtHashCheck: true,
-  
-    // set the scope for the permissions the client should request
-    // The first three are defined by OIDC. The 4th is a usecase-specific one
-    scope: 'openid profile'
-  }
-```
-`disableAtHashCheck` is currently necessary as Keycloak does not include an `at_hash` claim in its id tokens. According to the [OIDC Core 1.0 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken) this claim is optional.
-
-After you've added this configuration to your service class (or as a constant to the file) you can start implementing the authentication. Start by adding an OAuthService and Router instance using dependency injection.
-```typescript
-  constructor(
-    private oauthService: OAuthService,
-    private router: Router
-  ) {
-```
-
-Now start by adding a few subjects and observables to your class. These are needed to synchronize some function calls (e.g. checking token claims should only be done once authentication is completed) and prevent race conditions.
-```typescript
-  private isAuthenticatedSubject$ = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this.isAuthenticatedSubject$.asObservable();
-
-  private isDoneLoadingSubject$ = new ReplaySubject<boolean>();
-  public isDoneLoading$ = this.isDoneLoadingSubject$.asObservable();
-
-  /**
-   * Publishes `true` if and only if (a) all the asynchronous initial
-   * login calls have completed or errorred, and (b) the user ended up
-   * being authenticated.
-   *
-   * In essence, it combines:
-   *
-   * - the latest known state of whether the user is authorized
-   * - whether the ajax calls for initial log in have all been done
-   */
-  public canActivateProtectedRoutes$: Observable<boolean> = combineLatest(
-    this.isAuthenticated$,
-    this.isDoneLoading$
-  ).pipe(map(values => values.every(b => b)));
-```
-
-Kudos to [Jeroen Heijmans](https://github.com/jeroenheijmans), who published an example on this library which takes care of multiple race condition problems. Major parts of this service are taken directly from his example.
-
-Let's get started to setup the library in your `constructor()`-function:
-```typescript
-  constructor(
-    private oauthService: OAuthService,
-    private router: Router
-  ) {
-    this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new NullValidationHandler();
-
-    this.oauthService.events
-      .subscribe(_ => {
-        this.isAuthenticatedSubject$.next(this.oauthService.hasValidAccessToken());
-      });
-
-    this.oauthService.setupAutomaticSilentRefresh();
-  }
-```
-As you can see the configuration object we create before is put into the OAuthService. Afterwards the `tokenValidationHandler` is set to `NullValidationHandler`. This has one reason: The library currently has a bug which leads to being unable to disable the at_hash check with `JwksValidationHandler`. Once this has been fixed, you should NOT use `NullValidationHandler`.
-
-`setupAutomaticSilentRefresh()` is used to enable background refreshing of the tokens once they exceed a percentage of their maximum lifetime. (by default 75%)
-
-<hr>
-
-### Step 3: Implementing the authentication triggering method
-
-Next step is to implement the method that starts the authentication process. This process is split into multiple parts:
-
-1. Get the OIDC discovery document as specified in [OpenID Connect Discovery 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-discovery-1_0.html)
-2. Start the actual login procedure that redirects the user-agent to the authentication server discovered in 1. The library decides whether to use implicit or authorization code grant (with PKCE) by evaluating if `responseType: 'code'` was set.
-3. After the login has taken place, the library will automatically store the tokens and resolve the promise. After resolving the promise we are publishing that the login __*is done loading*__. In addition the query params are cleared by navigating to `/`.
-
-__NOTE:__ Currently it's not possible to keep the state when using authorization code grant with PKCE. This is a limitation by the library and will soon be fixed.
-
-```typescript
-  public runInitialLoginSequence(): Promise<void> {
-    return this.oauthService.loadDiscoveryDocument()
-      .then(() => this.oauthService.tryLogin())
-      .then(() => {
-        this.isDoneLoadingSubject$.next(true);
-        // remove query params
-        this.router.navigate(['']);
-      })
-      .catch(() => this.isDoneLoadingSubject$.next(true));
-  }
-```
-
-After you implemented this function, you can use it in your `AppComponent` component (`app/app.component.ts`) :
-```typescript
-  constructor(private authService: AuthService) {
-    this.authService.runInitialLoginSequence();
-  }
-```
-
-<hr>
-
-### Step 4: Add a few additional features
-
-As you can now already see, you are directly forced to login and your token is later on used to query APIs. But there are a few things missing:
-- Your routes are not protected yet. Meaning by clever modification, users can access any part of your UI.
-- The name of the user logged in is not shown.
-- The logout button has no function at all
-
-Let's get these bullet points fixed step-by-step.
-
-#### Step 4a: Guarding routes
-
-Start by generating guard classes using the Angular CLI `ng g g guards/auth` and `ng g g guards/bookCreate`. If you're asked, select `canActivate`. This will create two classes `app/guards/auth.guard.ts` and `app/guards/book-create.guard.ts`. Both should implement the `CanActivate`-interface. If not, add that manually.
-
-We'll start by modifying the routing first (without having the guards implemented). Open your `app/app-routing.module.ts` and apply modifications (import necessary classes):
-```typescript
-const routes: Routes = [
-  {
-    path: '',
-    canActivate: [AuthGuard],
-    children: [
-      {path: 'createBook', component: BookCreateComponent, canActivate: [BookCreateGuard]},
-      {path: '', component: BookListComponent, canActivate: [AuthGuard]}
-    ]
-  },
-  {
-    path: '**',
-    component: BookListComponent,
-    canActivate: [AuthGuard]
-  }
-];
-```
-
-Now you shouldn't be able to access any component (except the header) anymore. That's correct, let's get this fixed, starting with the `AuthGuard` component:
-```typescript
-export class AuthGuard implements CanActivate {
-
-  private isAuthenticated: boolean;
-
-  constructor(private authService: AuthService) {
-    this.authService.isAuthenticated$.subscribe(i => this.isAuthenticated = i);
+  public WebSecurityConfiguration(LibraryUserDetailsService libraryUserDetailsService) {
+    this.libraryUserDetailsService = libraryUserDetailsService;
   }
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> {
-    return this.authService.isDoneLoading$
-      .pipe(filter(isDone => isDone))
-      .pipe(tap(_ => this.isAuthenticated || this.authService.login()))
-      .pipe(map(_ => this.isAuthenticated));
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .csrf()
+        .disable()
+        .authorizeRequests()
+        .anyRequest()
+        .fullyAuthenticated()
+        .and()
+        .oauth2ResourceServer()
+        .jwt()
+        .jwtAuthenticationConverter(libraryUserJwtAuthenticationConverter());
+  }
+
+  @Bean
+  JwtDecoder jwtDecoder() {
+    NimbusJwtDecoder jwtDecoder =
+            NimbusJwtDecoder.withPublicKey(this.key).build();
+
+    OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
+    OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer("test_issuer");
+    OAuth2TokenValidator<Jwt> withAudience =
+        new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+
+    jwtDecoder.setJwtValidator(withAudience);
+
+    return jwtDecoder;
+  }
+
+  @Bean
+  LibraryUserJwtAuthenticationConverter libraryUserJwtAuthenticationConverter() {
+    return new LibraryUserJwtAuthenticationConverter(libraryUserDetailsService);
   }
 }
 ```
 
-Next we'll implement the `BookCreateGuard`, which will be less complicated:
-```typescript
-export class BookCreateGuard implements CanActivate {
+This configuration above looks like the one as in [Lab 1](../lab1/README.md) with one important change:
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-    ) {}
+```
+@Value("${spring.security.oauth2.resourceserver.jwt.publicKeyLocation}")
+private RSAPublicKey key;
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    if(!this.authService.hasRole('LIBRARY_CURATOR')) {
-      return this.router.navigate(['']);
-    }
-    return true;
-  }
+...
+
+NimbusJwtDecoder jwtDecoder =
+            NimbusJwtDecoder.withPublicKey(this.key).build();
+```            
+
+Here we use the public key (using RSA crypto algorithm) we read from the _publicKeyLocation_
+and create a NimbusJwtDecoder using this public key instead of configuring a JwtDecoder 
+from issuer uri. 
+
+With this configuration in place we have already a working resource server
+that can handle JWt access tokens transmitted via http bearer token header. 
+Spring Security also validates by default:
+
+* the JWT signature against the given static public key
+* the JWT _iss_ claim against the configured issuer uri
+* that the JWT is not expired, if the JWT contains such entry
+
+<hr>
+
+### Step 2: Run JWT generator web application 
+
+Please navigate your Java IDE to the __lab4/jwt-generator__ project.  
+Then start the application by running the class _com.example.jwt.generator.Lab5JwtGeneratorApplication_.
+
+After starting navigate your browser to [localhost:9093](http://localhost:9093).
+
+Then you should see a screen like the following one.
+
+![JWT Generator](../docs/images/jwt_generator.png)
+
+To generate an JWT access token with the correct user identity and role information
+please fill the shown form with one of the following users and roles:
+
+| Username | Email                    | Role            |
+| ---------| ------------------------ | --------------- |
+| bwayne   | bruce.wayne@example.com  | library_user    |
+| bbanner  | bruce.banner@example.com | library_user    |
+| pparker  | peter.parker@example.com | library_curator |
+| ckent    | clark.kent@example.com   | library_admin   |
+
+After filling the form click on the button _Generate JWT_ then you should get another web page
+with the generate access token. This should look like this one.
+
+![JWT Generator Result](../docs/images/jwt_generator_result.png)
+
+To continue with this lab copy the contents of the JWT and use this JWT as access token to 
+make a request to the resource server in the next step.
+
+### Step 3: Run and test static resource server 
+
+Please navigate your Java IDE to the __lab5/library-server-static-complete__ project and at first explore this project a bit.  
+Then start the application by running the class _com.example.library.server.Lab5CompleteStaticLibraryServerApplication_.
+
+Same as in [Lab 1](../lab1/README.md) we require bearer tokens in JWT format to authenticate at our resource server.
+
+To do this we will need to run the copied access token from the JWT generator web application in the previous step.
+  
+To make a request for a list of users we have to
+specify the access token as part of a _Authorization_ header of type _Bearer_ like this:
+
+httpie:
+
+```bash
+http localhost:9091/library-server/users \
+'Authorization: Bearer [access_token]'
+```
+
+curl:
+
+```bash
+curl -H 'Authorization: Bearer [access_token]' \
+-v http://localhost:9091/library-server/users | jq
+```
+
+You have to replace _[access_token]_ with the one you have obtained from the 
+JWt generator application.  
+
+Navigate your web browser to [jwt.io](https://jwt.io) and paste your access token into the
+_Encoded_ text field. 
+
+![JWT IO](../docs/images/jwt_io.png)
+
+If you scroll down a bit on the right hand side then you will see the following block 
+(depending on which user you have specified when generating a JWT):
+
+```json
+{
+  "scope": "library_admin email profile",
+  "email_verified": true,
+  "name": "Clark Kent",
+  "groups": [
+    "library_admin"
+  ],
+  "preferred_username": "ckent",
+  "given_name": "Clark",
+  "family_name": "Kent",
+  "email": "clark.kent@example.com"
 }
 ```
+As you can see our user has the scopes _library_admin_, _email_ and _profile_.
+These scopes are now mapped to the Spring Security authorities 
+_SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.  
 
-You'll see, that `hasRole` is missing in your `AuthService`. You can try to implement it on your own by fiddeling with the id token or you simply take my set of convenience methods and add them to your `app/services/auth.service.ts`:
-```typescript
-  public hasRole(role: string) {
-    let claims: any = this.oauthService.getIdentityClaims();
-    if (claims && claims.groups) {
-      let roles: string[] = claims.groups;
-      roles = roles.map(role => role.toUpperCase());
-      return roles.includes(role.toLocaleUpperCase());
-    }
-    return false;
+![JWT IO Decoded](../docs/images/jwt_io_decoded.png)
+
+This request should succeed with an '200' OK status and return a list of users.
+
+<hr>
+
+### Step 4: Use new approach for JWT based authorization tests
+
+As of version 5.2 of spring security new support for JWT based authorization tests is provided.
+
+To see the new approach please have a look into the test class 
+_com.example.library.server.api.BookApiJwtAuthorizationTests_.
+
+Here you see that you may configure either default or customized JWT tokens to test different
+authorization scenarios.
+
+```
+...
+@Test
+  @DisplayName("get list of books")
+  void verifyGetBooks() throws Exception {
+
+    this.mockMvc
+        .perform(get("/books").with(jwt()))
+        .andExpect(status().isOk());
   }
 
-  public getFullname() {
-    let claims: any = this.oauthService.getIdentityClaims();
-    if (claims && claims.name) {
-      return claims.name;
-    }
-    return undefined;
+  @Test
+  @DisplayName("get single book")
+  void verifyGetBook() throws Exception {
+
+    Jwt jwt = Jwt.withTokenValue("token")
+            .header("alg", "none")
+            .claim("sub", "bwanye")
+            .claim("groups", new String[] {"library_user"}).build();
+
+    this.mockMvc
+        .perform(
+            get("/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER)
+                .with(jwt(jwt)))
+        .andExpect(status().isOk());
   }
 
-  public login() { this.oauthService.initCodeFlow(); }
-  public logout() { this.oauthService.logOut(); }
-  public refresh() { this.oauthService.silentRefresh(); }
-  public hasValidToken() { return this.oauthService.hasValidAccessToken(); }
-```
-
-Your routes should now be protected, but you still see the `Create Book` button, even if you're not authorized to do so. Let's fix this quickly. Go to `app/header/header.component.ts` and inject the `AuthService`:
-
-```typescript
-constructor(private authService: AuthService) { }
-```
-
-Now go to the template `app/header/header.component.html` and add a `ngIf` to the jumbotron at the bottom:
-
-```typescript
- <div class="jumbotron" *ngIf="authService.hasRole('LIBRARY_CURATOR') || authService.hasRole('LIBRARY_ADMIN'">
-     <a class="btn btn-primary" href="#" role="button" [routerLink]="['/createBook']" routerLinkActive="router-link-active">Create Book</a>
- </div>
-```
-
-If you're not an admin or a curator, you shouldn't see the whole jumbotron anymore by now.
-
-#### Step 4b Show the user's name
-
-As you already opened the file that needs to be modified (`app/header/header.component.ts`) if you followed the guide step-by-step, you can quickly add this feature. Simply fill the `fullname` attribute on init: 
-
-```typescript
-  ngOnInit() {
-    this.authService.isDoneLoading$.subscribe(_ => {
-      this.fullname = this.authService.getFullname();
-    });
+  @Test
+  @DisplayName("delete a book")
+  void verifyDeleteBook() throws Exception {
+    this.mockMvc
+        .perform(
+            delete("/books/{bookId}", DataInitializer.BOOK_DEVOPS_IDENTIFIER)
+                .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_LIBRARY_CURATOR"))))
+        .andExpect(status().isNoContent());
   }
-```
+...
+``` 
 
-As you can see we wait until the authService has finished processing so we can safely access the attribute.
+Details on JWT testing support can be found in the 
+corresponding [spring security reference documentation](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#testing-bearer-authentication) 
+section.
 
-#### Step 4c Enable logout
+<hr>
 
-As in Step 4b, you'll need to modify the `HeaderComponent`. Try to implement the `logout()`-function yourself. 😉
+This concludes the Lab 5.
