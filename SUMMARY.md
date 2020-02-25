@@ -12,12 +12,12 @@
 
 ## Hands-On Labs
      
-* [Resource Server](lab1/README.md)    
-* [Client (Authorization Code Flow)](lab2/README.md)
-* [Client (Client Credentials Flow)](lab3/README.md)
-* [Testing JWT Auth&Authz](lab4/README.md)
-* [JWT Testing Server](lab5/README.md)
-* [SPA Client (Authz Code with PKCE)](lab6/README.md)
+* [1.Resource Server](lab1/README.md)    
+* [2.Client (Authorization Code Flow)](lab2/README.md)
+* [3.Client (Client Credentials Flow)](lab3/README.md)
+* [4.Testing JWT Auth&Authz](lab4/README.md)
+* [5.JWT Testing Server](lab5/README.md)
+* [6.SPA Client (Authz Code with PKCE)](lab6/README.md)
     
 ## Bonus Labs​
 
