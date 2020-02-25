@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # replace this config with your own directory
-export WORKSHOP_HOME=/home/afa/development/localgit/secure-oauth2-oidc-workshop/setup_keycloak
+export WORKSHOP_HOME=/home/afa/development/localgit/secure-oauth2-oidc-workshop/setup
 
 docker run --rm -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin \
     -e KEYCLOAK_IMPORT=/tmp/keycloak_realm_workshop.json \

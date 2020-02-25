@@ -34,7 +34,7 @@ In lab 1 you will learn how to:
 
 ## Folder Contents
 
-In the lab 1 folder you find 3 applications:
+In the lab 1 folder you find 2 applications:
 
 * __library-server-initial__: This is the application we will use as starting point for this lab
 * __library-server-complete__: This application is the completed reference for this lab 
