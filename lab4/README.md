@@ -3,17 +3,6 @@
 In the first lab we extended an existing Microservice to an OAuth 2.0 and OpenID Connect 1.0 compliant Resource Server.
 Target of this lab is to add automated security tests for this Microservice.
 
-## Lab Contents
-
-* [Learning Targets](#learning-targets)
-* [Folder Contents](#folder-contents)
-* [Tutorial: Implement a resource server with custom user/authorities mapping](#start-the-lab)
-    * [Explore the initial server application](#explore-the-initial-application)    
-    * [Step 1: Configure as resource server](#step-1-configure-as-resource-server)
-    * [Step 2: Run and test basic resource server](#step-2-run-and-test-basic-resource-server)
-    * [Step 3: Implement a custom JWT converter](#step-3-implement-a-custom-jwt-converter)
-    * [Step 4: An additional JWT validator for 'audience' claim](#step-4-add-an-additional-jwt-validator-for-the-audience-claim)
-
 ## Learning Targets
 
 In this lab we will add security tests for an OAuth2/OIDC compliant resource server.
