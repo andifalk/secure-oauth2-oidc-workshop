@@ -64,12 +64,24 @@ public class AuthorizationRequestController {
 
   @GetMapping("/authrequest")
   @ResponseBody
-  public Mono<ResponseEntity<String>> performAuthRequest() {
-    return webClient
-        .get()
-        .uri(authorizationRequest)
-        .exchange()
-        .map(cr -> ResponseEntity.status(cr.statusCode()).body(cr.statusCode().getReasonPhrase()));
+  public ResponseEntity<String> performAuthRequest() {
+    ResponseEntity<String> responseEntity = webClient
+            .get()
+            .uri(uriBuilder -> uriBuilder
+                    .scheme("http")
+                    .host("localhost")
+                    .port(8080)
+                    .path("/auth/realms/workshop/protocol/openid-connect/auth")
+                    .queryParam("client_id", clientid)
+                    .queryParam("response_type", responseType)
+                    .queryParam("redirect_uri", redirectUri.toString())
+                    .queryParam("scope", String.join(" ", scope))
+                    .build())
+            .exchange()
+            .map(cr -> ResponseEntity.status(cr.statusCode()).body(cr.statusCode().getReasonPhrase())).block();
+    int status = responseEntity.getStatusCodeValue();
+    String test = responseEntity.getHeaders().getLocation().toString();
+    return responseEntity;
   }
 
   private String generateRandomState() throws UnsupportedEncodingException {
