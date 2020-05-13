@@ -40,7 +40,7 @@ class BookApiJwtAuthorizationTest {
 
   private MockMvc mockMvc;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setup() {
@@ -65,16 +65,12 @@ class BookApiJwtAuthorizationTest {
     @DisplayName("get single book")
     void verifyGetBook() throws Exception {
 
-      Jwt jwt =
-          Jwt.withTokenValue("token")
-              .header("alg", "none")
-              .claim("sub", "bwanye")
-              .claim("groups", new String[] {"library_user"})
-              .build();
-
       mockMvc
           .perform(
-              get("/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER).with(jwt(jwt)))
+              get("/books/{bookId}", DataInitializer.BOOK_CLEAN_CODE_IDENTIFIER).with(jwt().jwt(jwt ->
+                      jwt.tokenValue("token").header("alg", "none")
+                              .claim("sub", "bwayne")
+                              .claim("groups", new String[] {"library_user"}))))
           .andExpect(status().isOk());
     }
 

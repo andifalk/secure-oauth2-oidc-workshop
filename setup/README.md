@@ -9,6 +9,7 @@
   * [IntelliJ](https://www.jetbrains.com/idea/download)
   * [Visual Studio Code](https://code.visualstudio.com)
   * ...
+* [Keycloak](https://keycloak.org)
 * [Git](https://git-scm.com)
 * [Postman](https://www.getpostman.com/downloads), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
 

@@ -10,7 +10,7 @@ public interface BookRepository extends JpaRepository<Book, UUID> {
 
   Optional<Book> findOneByIdentifier(UUID identifier);
 
-  @EntityGraph(attributePaths = "borrowedBy")
+  @EntityGraph(attributePaths = {"borrowedBy", "authors"})
   Optional<Book> findOneWithDetailsByIdentifier(UUID identifier);
 
   void deleteBookByIdentifier(UUID identifier);
