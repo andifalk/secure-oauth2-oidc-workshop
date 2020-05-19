@@ -50,9 +50,9 @@ __Please check out the [complete documentation](application-architecture) for th
 starting with the first hands-on lab__. 
 
 All the code currently is build using:
-* [Spring Boot 2.2.x Release](https://spring.io/blog/2019/10/16/spring-boot-2-2-0) 
+* [Spring Boot 2.3.x Release](https://spring.io/blog/2020/05/15/spring-boot-2-3-0-available-now) 
 * [Spring Framework 5.2.x Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
-* [Spring Security 5.2.x Release](https://spring.io/blog/2019/10/01/spring-security-5-2-goes-ga)
+* [Spring Security 5.3.x Release](https://spring.io/blog/2020/03/05/spring-security-5-3-goes-ga)
 * [Spring Batch 4.2.x Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
 
 and is verified against the currently supported long-term versions 8 and 11 of Java.
