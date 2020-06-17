@@ -63,7 +63,7 @@ implements OAuth 2.0 and OpenID Connect 1.0.
 You need a compliant OAuth 2.0 / OpenID Connect provider for this workshop.
 Here we will use [Keycloak](https://keycloak.org) by RedHat/JBoss.
 
-To setup Keycloak you have 2 options:
+To set up Keycloak you have 2 options:
 
 1. Run Keycloak using Docker (if you have Docker installed)
 2. Local Keycloak installation & configuration
@@ -84,9 +84,9 @@ using the credentials _admin_/_admin_.
 
 ### Local Installation
 
-To setup [Keycloak](https://keycloak.org): 
+To set up [Keycloak](https://keycloak.org): 
 
-1. Download the [Standard Server Distribution of Keycloak (Version 8.0.x)](https://www.keycloak.org/downloads-archive.html).
+1. Download the [Standard Server Distribution of Keycloak (Version 10.0.x)](https://www.keycloak.org/downloads-archive.html).
 2. Extract the downloaded zip/tar file __keycloak-x.x.x.zip__/__keycloak-x.x.x.tar-gz__ into a new local directory of your choice 
 (this directory will be referenced as __<KEYCLOAK_INSTALL_DIR>__ in next steps)
 
