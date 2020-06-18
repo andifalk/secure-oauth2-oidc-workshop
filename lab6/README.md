@@ -47,9 +47,9 @@ First start the resource server application of Lab 1. If you could not complete 
 then use and start the completed reference application 
 in project [lab1/library-server-complete-automatic](../lab1/library-server-complete-automatic)
 
-Start by downloading the necessary dependencies. Move to the __lab3/library-client-spa-initial__ folder using commandline and execute `npm install`.
+Start by downloading the necessary dependencies. Move to the __lab6/library-client-spa-initial__ folder using commandline and execute `npm install`.
 
-Then navigate your IDE of choice (suggesting VS Code) to the __lab3/library-client-spa-initial__ project and at first explore this project a bit.
+Then navigate your IDE of choice (suggesting VS Code) to the __lab6/library-client-spa-initial__ project and at first explore this project a bit.
 Then start the application by running `ng serve` on your commandline.
 
 You will notice that the application starts up but in your browsers console you'll notice some failing HTTP requests when accessing the application. (should be 401 errors)
