@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Java SDK](https://adoptopenjdk.net) Version 8 or 11
+* [Java SDK](https://adoptopenjdk.net) Version 8 or 11 (The latest version 14 should also work)
 * A Java IDE like
   * [Eclipse](https://www.eclipse.org/downloads)
   * [Spring Toolsuite](https://spring.io/tools)
@@ -22,13 +22,13 @@ IntelliJ does not require any specific additional plugins or configuration.
 
 ### Eclipse IDE specific requirements
 
-If you are an Eclipse user, then the usage of the Eclipse-based [Spring Toolsuite](https://spring.io/tools) is strongly recommended.
+If you are an Eclipse user, then the usage of the Eclipse-based [Spring ToolSuite](https://spring.io/tools) is strongly recommended.
 This eclipse variant already has all the required gradle and spring boot support pre-installed.
 
 In case you want to stick to your plain Eclipse installation then you have to add the following features via the
 eclipse marketplace: 
 
-* Buildship Gradle Integration (Version 3.x). This might be already pre-installed depending 
+* BuildShip Gradle Integration (Version 3.x). This might be already pre-installed depending 
 on your eclipse variant (e.g. Eclipse JavaEE) installed
 * Spring Tools 4 for Spring Boot (Spring Tool Suite 4)
 

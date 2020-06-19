@@ -2,7 +2,7 @@
 ![Java CI](https://github.com/andifalk/secure-oauth2-oidc-workshop/workflows/Java%20CI/badge.svg)
 [![Release](https://img.shields.io/github/release/andifalk/secure-oauth2-oidc-workshop.svg?style=flat)](https://github.com/andifalk/secure-oauth2-oidc-workshop/releases)
 
-# OAuth 2.0 / OpenID Connect 1.0 Workshop
+# OAuth 2.0 / OpenID Connect Workshop
 
 Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and OpenID Connect 1.0 (OIDC).
 
@@ -55,7 +55,7 @@ All the code currently is build using:
 * [Spring Security 5.3.x Release](https://spring.io/blog/2020/03/05/spring-security-5-3-goes-ga)
 * [Spring Batch 4.2.x Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
 
-and is verified against the currently supported long-term versions 8 and 11 of Java.
+and is verified against the currently supported long-term versions 8 and 11 of Java (The latest version 14 should work as well).
 
 To check system requirements and setup for this workshop please follow the [setup guide](setup).
 
