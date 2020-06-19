@@ -13,7 +13,7 @@
     </div>
 
     <hr>
-    
-    <div class="jumbotron" *ngIf="authService.hasRole('LIBRARY_CURATOR') || authService.hasRole('LIBRARY_ADMIN')">
+
+    <div class="jumbotron" *ngIf="hasRole('LIBRARY_CURATOR') || hasRole('LIBRARY_ADMIN')">
         <a class="btn btn-primary" href="#" role="button" [routerLink]="['/createBook']" routerLinkActive="router-link-active">Create Book</a>
     </div>

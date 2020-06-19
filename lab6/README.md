@@ -18,44 +18,57 @@ the [Angular](https://angular.io/) and the corresponding [OAuth 2.0/OIDC library
 
 ## Learning Targets
 
-In this fifth workshop lab you will be learning how to build an OAuth 2.0/OIDC compliant frontend using Angular that works together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
+In this sixth workshop lab you will be learning how to build an OAuth 2.0/OIDC compliant frontend using Angular, 
+that works together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
 
-In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client with a browser environment without having a secure backchannel. We will use the most modern way to make this possible by facilitating the [authorization code grant with PKCE](https://tools.ietf.org/html/rfc7636).
+In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client with a browser environment without having a secure back-channel. 
+We will use the most modern way to make this possible by facilitating the [authorization code](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.1) grant 
+with [PKCE](https://tools.ietf.org/html/rfc7636).
+
+The latest IETF working group drafts of [OAuth 2.0 for Browser-Based Apps](https://tools.ietf.org/html/draft-ietf-oauth-browser-based-apps) 
+and [OAuth 2.0 Security Best Current Practice](https://tools.ietf.org/html/draft-ietf-oauth-security-topics) clearly
+deprecated the [implicit grant](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.2) in 
+favor of the [authorization code](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.1) + [PKCE](https://tools.ietf.org/html/rfc7636) grant.
 
 After you have completed this lab you will have learned:
 
-* that you can also use OAuth2 and OpenID Connect in a browser environment without having a secure backchannel
-* how to configure an Angular application to use OAuth2.0/OIDC
+* that you can also use OAuth2 and OpenID Connect in a browser environment that does not provide any secure back-channel
+* how to configure an Angular application to use OAuth2.0/OIDC with authorization code + [PKCE](https://tools.ietf.org/html/rfc7636) grant
 
 ## Folder Contents
 
-In the lab 6 folder you find 2 applications:
+Inside the folder _lab 6_ you can find 2 applications:
 
 * __library-client-spa-initial__: This is the client application we will use as starting point for this lab
 * __library-client-spa-complete__: This client application is the completed OAuth 2.0/OIDC client for this lab 
 
 ## Start the Lab
 
-Now, let's start with Lab 6. Here we will implement the required additions to get an Single-Page-Application that calls the resource server we have implemented in [lab 1](../lab1). This time we will use the authorization code flow, but with PKCE.
+Now, let's start with Lab 6. Here we will implement the required additions to get a Single-Page-Application (SPA) that calls 
+the resource server we have implemented in [lab 1](../lab1). This time we will use the [authorization code](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.1) grant 
+with the addition of [PKCE](https://tools.ietf.org/html/rfc7636).
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak).
+Please again make sure you have set up keycloak as described in the [Setup](../setup) section.
 
-### Explore the initial application
+### Explore and run the initial application
 
 First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-automatic](../lab1/library-server-complete-automatic)
+in project [lab1/library-server-complete](../lab1/library-server-complete).
 
-Start by downloading the necessary dependencies. Move to the __lab6/library-client-spa-initial__ folder using commandline and execute `npm install`.
+Start by downloading the necessary dependencies. 
+Therefore, change to the __lab6/library-client-spa-initial__ folder using a terminal execute `npm install` via command line.
 
-Then navigate your IDE of choice (suggesting VS Code) to the __lab6/library-client-spa-initial__ project and at first explore this project a bit.
+Then navigate your IDE of choice (suggesting VS Code or IntelliJ) to the __lab6/library-client-spa-initial__ project and at first explore this project a bit.
 Then start the application by running `ng serve` on your commandline.
+
+To see the application action open your browser on http://localhost:4200 (as shown in the terminal after issuing `ng serve`).
 
 You will notice that the application starts up but in your browsers console you'll notice some failing HTTP requests when accessing the application. (should be 401 errors)
 This is because there's no authentication to your IAM solution (Keycloak).
 
-Now stop the client application again. You can leave the resource server running as we will need this after we have 
+Now stop the client application again (Ctrl-C). You can leave the resource server running as we will need this after we have 
 finished this client.
 
 <hr>
@@ -64,7 +77,7 @@ finished this client.
   
 In this step you're supposed to install the library, nothing else.
 ```
-npm install --save angular-oauth2-oidc
+npm i angular-oauth2-oidc --save
 ```
 
 This will install the latest version of [Manfred Steyer](https://github.com/manfredsteyer)'s OIDC certified OAuth 2.0 / OpenID Connect library for the Angular framework.
@@ -83,13 +96,16 @@ Next step is to import the library in your `app.module.ts` in the `imports` arra
 
 ### Step 2: Configure the library
 
-The library we just installed gives us the ability to choose between using the implicit grant or the authorization code grant with PKCE.
+The library we just installed gives us the ability to use the recommended authorization code grant with PKCE.
 
-As introduced, we are going to use the authorization code grant with PKCE. This special addition allows us to use the great authorization code grant without having a secure backchannel. As our application is executing in the user's browser, we are in an unsafe environment, meaning there's no secure channel the user (and by this means also an attacker) can eavesdrop.
+This allows us to use this improved authorization code grant without having a secure back-channel. 
+As our application is executing in the user's browser, we are in an unsafe environment, meaning there's no secure channel the user 
+(and by this means also an attacker) can eavesdrop.
 
 Let's get started by creating a new service to encapsulate the authentication (and handle a few implementation quirks): `ng g s services/auth --skip-tests`
 
-Now open the created file and initialize the configuration object:
+Now open the created file `services/auth.service.ts` and initialize the configuration object:
+
 ```typescript
 authConfig: AuthConfig = {
 
@@ -106,13 +122,15 @@ authConfig: AuthConfig = {
     disableAtHashCheck: true,
   
     // set the scope for the permissions the client should request
-    // The first three are defined by OIDC. The 4th is a usecase-specific one
+    // The first three are defined by OIDC. The 4th is a use case specific one
     scope: 'openid profile'
   }
 ```
 `disableAtHashCheck` is currently necessary as Keycloak does not include an `at_hash` claim in its id tokens. According to the [OIDC Core 1.0 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken) this claim is optional.
 
-After you've added this configuration to your service class (or as a constant to the file) you can start implementing the authentication. Start by adding an OAuthService and Router instance using dependency injection.
+After you've added this configuration to your service class (or as a constant to the file) you can start implementing the authentication. 
+Start by adding instances of OAuthService and Router using dependency injection.
+
 ```typescript
   constructor(
     private oauthService: OAuthService,
@@ -146,7 +164,8 @@ Now start by adding a few subjects and observables to your class. These are need
 
 Kudos to [Jeroen Heijmans](https://github.com/jeroenheijmans), who published an example on this library which takes care of multiple race condition problems. Major parts of this service are taken directly from his example.
 
-Let's get started to setup the library in your `constructor()`-function:
+Let's get started to set up the library in your `constructor()`-function:
+
 ```typescript
   constructor(
     private oauthService: OAuthService,
@@ -203,7 +222,7 @@ After you implemented this function, you can use it in your `AppComponent` compo
 
 ### Step 4: Add a few additional features
 
-As you can now already see, you are directly forced to login and your token is later on used to query APIs. But there are a few things missing:
+As you can now already see, you are directly forced to login, and your token is later on used to query APIs. But there are a few things missing:
 - Your routes are not protected yet. Meaning by clever modification, users can access any part of your UI.
 - The name of the user logged in is not shown.
 - The logout button has no function at all
@@ -215,6 +234,7 @@ Let's get these bullet points fixed step-by-step.
 Start by generating guard classes using the Angular CLI `ng g g guards/auth` and `ng g g guards/bookCreate`. If you're asked, select `canActivate`. This will create two classes `app/guards/auth.guard.ts` and `app/guards/book-create.guard.ts`. Both should implement the `CanActivate`-interface. If not, add that manually.
 
 We'll start by modifying the routing first (without having the guards implemented). Open your `app/app-routing.module.ts` and apply modifications (import necessary classes):
+
 ```typescript
 const routes: Routes = [
   {
@@ -273,7 +293,9 @@ export class BookCreateGuard implements CanActivate {
 }
 ```
 
-You'll see, that `hasRole` is missing in your `AuthService`. You can try to implement it on your own by fiddeling with the id token or you simply take my set of convenience methods and add them to your `app/services/auth.service.ts`:
+You'll see, that `hasRole` is missing in your `AuthService`. You can try to implement it on your own by fiddling with the id token, 
+or you simply take my set of convenience methods and add them to your `app/services/auth.service.ts`:
+
 ```typescript
   public hasRole(role: string) {
     let claims: any = this.oauthService.getIdentityClaims();
@@ -299,7 +321,8 @@ You'll see, that `hasRole` is missing in your `AuthService`. You can try to impl
   public hasValidToken() { return this.oauthService.hasValidAccessToken(); }
 ```
 
-Your routes should now be protected, but you still see the `Create Book` button, even if you're not authorized to do so. Let's fix this quickly. Go to `app/header/header.component.ts` and inject the `AuthService`:
+Your routes should now be protected, but you still see the `Create Book` button, even if you're not authorized to do so. Let's fix this quickly. 
+Go to `app/header/header.component.ts` and inject the `AuthService`:
 
 ```typescript
 constructor(private authService: AuthService) { }
@@ -308,7 +331,7 @@ constructor(private authService: AuthService) { }
 Now go to the template `app/header/header.component.html` and add a `ngIf` to the jumbotron at the bottom:
 
 ```typescript
- <div class="jumbotron" *ngIf="authService.hasRole('LIBRARY_CURATOR') || authService.hasRole('LIBRARY_ADMIN'">
+ <div class="jumbotron" *ngIf="hasRole('LIBRARY_CURATOR') || hasRole('LIBRARY_ADMIN'">
      <a class="btn btn-primary" href="#" role="button" [routerLink]="['/createBook']" routerLinkActive="router-link-active">Create Book</a>
  </div>
 ```
@@ -325,10 +348,40 @@ As you already opened the file that needs to be modified (`app/header/header.com
       this.fullname = this.authService.getFullname();
     });
   }
+
+  logout() {
+    this.authService.logout();
+  }
+
+  hasRole(role: string): boolean {
+    return this.authService.hasRole(role);
+  }
 ```
 
-As you can see we wait until the authService has finished processing so we can safely access the attribute.
+As you can see we wait until the authService has finished processing, so we can safely access the attribute.
 
 #### Step 4c Enable logout
 
 As in Step 4b, you'll need to modify the `HeaderComponent`. Try to implement the `logout()`-function yourself. 😉
+
+### Run the completed application
+
+Now it is time to see the completed application running in action.
+
+First make sure you still have Keycloak running, and you have started the 
+resource server application of Lab 1 ([lab1/library-server-complete](../lab1/library-server-complete)).
+
+Then start the application by running `ng serve` on your commandline.
+
+To see the application action open your browser on http://localhost:4200 (as shown in the terminal after issuing `ng serve`).
+
+You will notice that the application starts up, and your browser will automatically redirect to our IAM solution (Keycloak) to authenticate the user.
+
+By using the [authorization code](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.1) grant + [PKCE](https://tools.ietf.org/html/rfc7636) instead of the 
+[implicit grant](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.2) we reduced risks for token leakage pretty much.
+The only drawback we are still facing is the fact that the library stores the tokens in browser local storage which is not a safe place
+in case of a cross site scripting vulnerability.
+
+Please consult the latest [OAuth 2.0 for Browser-Based Apps](https://tools.ietf.org/html/draft-ietf-oauth-browser-based-apps) draft for more details on this.
+
+This concludes our lab on securing a SPA with OAuth 2.0 and OpenID Connect.

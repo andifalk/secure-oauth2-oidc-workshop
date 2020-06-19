@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { OAuthService, AuthConfig, NullValidationHandler } from 'angular-oauth2-oidc';
 import { AuthService } from './services/auth.service';
 
 @Component({

@@ -20,7 +20,9 @@ const authConfig: AuthConfig = {
 
   // set the scope for the permissions the client should request
   // The first three are defined by OIDC. The 4th is a usecase-specific one
-  scope: 'openid profile'
+  scope: 'openid profile',
+
+  showDebugInformation: true,
 }
 
 @Injectable({
