@@ -21,7 +21,7 @@ This Micronaut demo app just provides one secured endpoint at [localhost:9096/he
 To test if the application works as expected, either
 
 * open Postman and configure request for [localhost:9096/hello](http://localhost:9096/hello)
-* or use a command line like curl or httpie or postman (if you like a UI)
+* or use a command line like _curl_, _httpie_ or _postman_ (if you like a UI)
 
 Httpie:
 ```bash
@@ -102,7 +102,7 @@ Micronaut also validates by default:
 * the JWT signature against the queried public key(s) from _jwks_url_
 * that the JWT is not expired
 
-In addition Micronaut automatically maps all _'groups'_ claim entries to corresponding roles that may be checked via _@Secured_ annotations.
+In addition, Micronaut automatically maps all _'groups'_ claim entries to corresponding roles that may be checked via _@Secured_ annotations.
 
 <hr>
 
@@ -117,7 +117,7 @@ package micronaut.server.app;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
-import io.micronaut.security.token.jwt.validator.AuthenticationJWTClaimsSetAdapter;
+import io.micronaut.security.authentication.AuthenticationUserDetailsAdapter;
 
 import java.security.Principal;
 import java.util.Map;
@@ -128,7 +128,7 @@ public class HelloController {
 
   @Get
   public String sayHello(Principal principal) {
-    AuthenticationJWTClaimsSetAdapter jwtClaimsSetAdapter = (AuthenticationJWTClaimsSetAdapter) principal;
+    AuthenticationUserDetailsAdapter jwtClaimsSetAdapter = (AuthenticationUserDetailsAdapter) principal;
     Map<String, Object> claims = jwtClaimsSetAdapter.getAttributes();
 
     return "it works for user: " + claims.get("name") + " (" + claims.get("email") + ")";

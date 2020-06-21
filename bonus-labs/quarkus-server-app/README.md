@@ -57,10 +57,10 @@ keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 The easiest way to create a Quarkus application is usually by using the web based init application (similar to generating a spring boot application)
 by navigating your web browser to [code.quarkus.io](https://code.quarkus.io/).
 As the web based generator does not yet support gradle tooling we just use the maven based project creator instead.
-Therefore this application has been generated using the [maven create command](https://docs.micronaut.io/latest/guide/index.html#buildCLI):
+Therefore, this application has been generated using the [maven create command](https://docs.micronaut.io/latest/guide/index.html#buildCLI):
 
 ```bash
-mvn io.quarkus:quarkus-maven-plugin:0.27.0:create \
+mvn io.quarkus:quarkus-maven-plugin:1.5.2.Final:create \
     -DprojectGroupId=com.example \
     -DprojectArtifactId=quarkus-server-app \
     -DprojectVersion=1.0.0-SNAPSHOT \
@@ -73,6 +73,7 @@ mvn io.quarkus:quarkus-maven-plugin:0.27.0:create \
 
 #### Step 2: Add dependencies  
 
+After generation has been finished, change into the created directory.
 To extend a Quarkus application into a resource server you have to make sure to add the 'quarkus-oidc' extension.  
 This can be done using the following gradle command:
 
