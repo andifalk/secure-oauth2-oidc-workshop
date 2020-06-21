@@ -10,7 +10,7 @@ for all details on how to build and configure a resource server requiring JWT be
 
 * [Step 1: Generate the application](#step-1-generate-the-application)
 * [Step 2: Add required extra dependencies](#step-2-add-dependencies)
-* [Step 3: Configure JWT authentication and token validation](#step-3-add-jwt-configuration)
+* [Step 3: Configure JWT authentication and token validation](#step-3-add-oidc-configuration)
 * [Step 4: Secure the endpoint](#step-4-secure-the-endpoint)
 * [Step 5: Run the application](#step-5-run-and-test-basic-resource-server)
 
@@ -21,7 +21,7 @@ This Quarkus demo app just provides one secured endpoint at [localhost:9096/hell
 To test if the application works as expected, either
 
 * open Postman and configure request for [localhost:9096/hello](http://localhost:9096/hello)
-* or use a command line like curl or httpie or postman (if you like a UI)
+* or use a command line like _curl_, _httpie_ or _postman_ (if you like a UI)
 
 Httpie:
 ```bash
@@ -47,8 +47,8 @@ As this app uses the same Keycloak client configuration you can just use the sam
 | ckent    | clark.kent@example.com   | kent     | LIBRARY_ADMIN   |
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup and running
-keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
+Please again make sure you have set up and running
+keycloak as described in [Setup Keycloak](../../setup/README.md).
 
 <hr>
 
@@ -56,8 +56,8 @@ keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 
 The easiest way to create a Quarkus application is usually by using the web based init application (similar to generating a spring boot application)
 by navigating your web browser to [code.quarkus.io](https://code.quarkus.io/).
-As the web based generator does not yet support gradle tooling we just use the maven based project creator instead.
-Therefore, this application has been generated using the [maven create command](https://docs.micronaut.io/latest/guide/index.html#buildCLI):
+As an alternative you may just use the maven based project creator instead.
+This application has been generated using the [maven create command](https://docs.micronaut.io/latest/guide/index.html#buildCLI):
 
 ```bash
 mvn io.quarkus:quarkus-maven-plugin:1.5.2.Final:create \
@@ -104,8 +104,8 @@ Quarkus also validates by default:
 
 #### Step 4: Secure the endpoint
 
-Look into the class _com.example.ServerApp_ to see how the only REST endpoint is secured and the details of the JWT based
-principal are read and returned:
+Look into the class _com.example.ServerApp_ to see how Quarkus secures the only REST endpoint, and returns the details of the JWT based
+principal:
 
 ```java
 package com.example;
