@@ -87,7 +87,7 @@ Please again make sure you have setup keycloak as described in [Setup Keycloak](
 
 First start the resource server application of [lab 1](../lab1). If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-custom](../lab1/library-server-complete-custom)
+in project [lab1/library-server-complete-custom](../lab1/library-server-complete)
 
 Then navigate your Java IDE to the lab2/library-client-initial project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.client.Lab2LibraryClientInitialApplication_.

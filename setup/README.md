@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Java SDK](https://adoptopenjdk.net) Version 8 or 11 (The latest version 14 should also work)
+* [Java SDK](https://adoptopenjdk.net) Version 8, 11 or 14
 * A Java IDE like
   * [Eclipse](https://www.eclipse.org/downloads)
   * [Spring Toolsuite](https://spring.io/tools)
@@ -29,8 +29,8 @@ In case you want to stick to your plain Eclipse installation then you have to ad
 eclipse marketplace: 
 
 * BuildShip Gradle Integration (Version 3.x). This might be already pre-installed depending 
-on your eclipse variant (e.g. Eclipse JavaEE) installed
-* Spring Tools 4 for Spring Boot (Spring Tool Suite 4)
+on your eclipse variant (e.g. Eclipse JavaEE) installed.
+* Spring Tools 4 for Spring Boot (Spring Tool Suite 4).
 
 ### Visual Studio Code specific requirements
 

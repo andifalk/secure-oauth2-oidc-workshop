@@ -23,7 +23,7 @@ for all details on how to build and configure a OAuth 2.0 client.
 ## Learning Targets
 
 In this third workshop lab you will be provided a complete spring batch client application that works
-together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
+together with the [resource server of Lab 1](../lab1/library-server-complete/README.md). 
 
 In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client without a web environment 
 by using the [OAuth2 client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4).
@@ -66,13 +66,13 @@ OAuth2/OIDC compliant batch job client that calls the resource server we have im
 But this time we will use the client credentials flow.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup_keycloak).
+Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup).
 
 ### Explore the initial application
 
 First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-custom](../lab1/library-server-complete-custom)
+in project [lab1/library-server-complete-custom](../lab1/library-server-complete)
 
 Then navigate your Java IDE to the __lab3/library-client-credentials-initial__ project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.client.Lab3LibraryClientCredentialsInitialApplication_.
@@ -90,7 +90,7 @@ finished this client.
 
 ### Step 1: Configure as OAuth 2/OIDC client with client credentials
   
-__Make sure keycloak has been started as described in the [setup section](../setup_keycloak).__
+__Make sure keycloak has been started as described in the [setup section](../setup).__
 
 To get rid of the authentication error we will now configure the OAuth2 client credentials flow for our 
 batch job application. A batch job is a typical machine-to-machine use case for this type of OAuth2 flow. 

@@ -11,15 +11,15 @@ the [Angular](https://angular.io/) and the corresponding [OAuth 2.0/OIDC library
 * [Learning Targets](#learning-targets)
 * [Folder Contents](#folder-contents)
 * [Hands-On: Implement the OAuth 2.0/OIDC batch client](#start-the-lab)
-    * [Explore the initial client application](#explore-the-initial-application)
-    * [Step 1: Configure as OAuth2/OIDC client w/ client credentials](#step-1-configure-as-oauth-2oidc-client-with-client-credentials)
-    * [Step 2: Configure web client to send bearer access token](#step-2-configure-web-client-to-send-bearer-access-token)
-    * [Step 3: Run and debug the web client authorities](#step-3-rundebug-the-oauth2-batch-job-client-application)
+    * [Explore the initial client application](#explore-and-run-the-initial-application)
+    * [Step 1: Configure as OAuth2/OIDC client w/ client credentials](#step-1-install-the-angular-oauth2-oidc-library)
+    * [Step 2: Configure web client to send bearer access token](#step-2-configure-the-library)
+    * [Step 3: Run and debug the web client authorities](#step-3-implementing-the-authentication-triggering-method)
 
 ## Learning Targets
 
 In this sixth workshop lab you will be learning how to build an OAuth 2.0/OIDC compliant frontend using Angular, 
-that works together with the [resource server of Lab 1](../lab1/library-server-complete-custom/README.md). 
+that works together with the [resource server of Lab 1](../lab1/library-server-complete/README.md). 
 
 In contrast to [Lab 2](../lab2/README.md) this time we will see how to build a client with a browser environment without having a secure back-channel. 
 We will use the most modern way to make this possible by facilitating the [authorization code](https://www.rfc-editor.org/rfc/rfc6749.html#section-4.1) grant 

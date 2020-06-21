@@ -29,7 +29,7 @@ Option 3 is a bit out of focus of this workshop, so we will go for option 2 as p
     * [Step 3: Run and test basic resource server](#step-3-run-and-test-static-resource-server)
     * [Step 4: Use new JWT based test approach](#step-4-use-new-approach-for-jwt-based-authorization-tests)
 
-The [Keycloak](https://keycloak.org) identity provider is not required any more for this lab.  
+The [Keycloak](https://keycloak.org) identity provider is not required anymore for this lab.  
 
 ## Learning Targets
 
