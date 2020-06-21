@@ -7,7 +7,7 @@
 
 ## Intro Labs
 
-* [Lab: Authorization Grant Flows in Action](intro-labs/oauth-grants)
+* [Lab: Authorization Grant Flows in Action](intro-labs/oauth-grants/README.md)
 * [Authorization Code Demo](intro-labs/auth-code-demo/README.md)    
 * [GitHub Client](intro-labs/github-client/README.md)
 

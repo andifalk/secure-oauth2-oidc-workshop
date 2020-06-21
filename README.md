@@ -9,10 +9,11 @@ Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and O
 __Table of Contents__
 
 * [Presentation Slides](#presentation-slides)
-* [Workshop Tutorial](#workshop-tutorial)
-* [Requirements and Setup](#requirements-and-setup)
+* [Workshop Tutorial](https://andifalk.gitbook.io/openid-connect-workshop)
+* [Requirements and Setup](setup)
 * [Hands-On Workshop](#hands-on-workshop)    
   * [Intro Labs](#intro-labs)
+    * [Lab: Authorization Grant Flows in Action](intro-labs/oauth-grants)
     * [Demo: Auth Code Flow in Action](intro-labs/auth-code-demo)
     * [Demo: GitHub Client](intro-labs/github-client)
   * [Hands-On Labs](#hands-on-labs)
