@@ -63,6 +63,7 @@ To check system requirements and setup for this workshop please follow the [setu
 
 ### Intro Labs
 
+* [Lab: Authorization Grant Flows in Action](intro-labs/oauth-grants)
 * [Demo: Authorization Code Grant Flow in Action](intro-labs/auth-code-demo)
 * [Demo: A pre-defined OAuth2 client for GitHub](intro-labs/github-client)
 
