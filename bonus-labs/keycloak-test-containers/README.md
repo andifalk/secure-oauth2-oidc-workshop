@@ -269,8 +269,8 @@ class BookApiEnd2EndTest {
 ### Step 4: Running the Tests
 
 Now you can run the tests and all tests should run fine and report a green status. 
-Please also notice that the test is also tagged with `@Tag("end2end")`
-This way you can for example exclude such long-running tests from the regular build and instead only run these in anightly build.
+Please also notice that the test is tagged with `@Tag("end2end")`.
+This way you can for example exclude such long-running tests from the regular build and instead only run these as part of a nightly build.
 
 Actually the gradle build excludes this test here as well using the following additional snippet in the _build.gradle_ file:
 
