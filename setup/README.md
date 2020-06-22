@@ -10,6 +10,7 @@
   * [Visual Studio Code](https://code.visualstudio.com)
   * ...
 * [Keycloak](https://keycloak.org)
+* [Docker](https://docs.docker.com/engine/install) if you want to run Keycloak as docker container
 * [Git](https://git-scm.com)
 * [Postman](https://www.getpostman.com/downloads), [Httpie](https://httpie.org/#installation), or [Curl](https://curl.haxx.se/download.html) for REST calls
 
