@@ -51,6 +51,24 @@ OAuth2/OIDC compliant resource server with customized mapping of token claims to
 Please navigate your Java IDE to the __lab1/library-server-initial__ project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.server.Lab1InitialLibraryServerApplication_.
 
+As already described in the [application architecture](../application-architecture) section the initial application
+is secured using basic authentication.
+
+There are three target user roles for this application:
+
+* LIBRARY_USER: Standard library user who can list, borrow and return his currently borrowed books
+* LIBRARY_CURATOR: A curator user who can add, edit or delete books
+* LIBRARY_ADMIN: An administrator user who can list, add or remove users
+
+__Important:__ To log into the application using basic authentication you have to use the _email_ as username.
+
+| Username | Email                    | Password | Role            |
+| ---------| ------------------------ | -------- | --------------- |
+| bwayne   | bruce.wayne@example.com  | wayne    | LIBRARY_USER    |
+| bbanner  | bruce.banner@example.com | banner   | LIBRARY_USER    |
+| pparker  | peter.parker@example.com | parker   | LIBRARY_CURATOR |
+| ckent    | clark.kent@example.com   | kent     | LIBRARY_ADMIN   |
+
 To test if the application works as expected, either
 
 * open a web browser and navigate to [localhost:9091/library-server/books](http://localhost:9091/library-server/books)
@@ -64,12 +82,12 @@ http localhost:9091/library-server/books --auth 'bruce.wayne@example.com:wayne'
 
 Curl:
 ```shell
-curl http://localhost:9091/library-server/books -u bruce.wayne@example.com:wayne | jq
+curl http://localhost:9091/library-server/books -u bruce.wayne@example.com:wayne
 ```
 
 If this succeeds you should see a list of books in JSON format.  
 
-Also try same request without specifying any user:
+Try the same request without specifying any user:
 
 ```shell
 http localhost:9091/library-server/books
@@ -91,7 +109,7 @@ WWW-Authenticate: Basic realm="Realm"
 }
 ``` 
 
-Also try to request the list of users with same user credentials of 'bruce.wayne@example.com / wayne'.
+Also, try to request the list of users with same user credentials of 'bruce.wayne@example.com / wayne'.
 
 Httpie:
 
@@ -102,10 +120,27 @@ http localhost:9091/library-server/users --auth 'bruce.wayne@example.com:wayne'
 Curl:
 
 ```shell
-curl http://localhost:9091/library-server/users -u bruce.wayne@example.com:wayne | jq
+curl -i http://localhost:9091/library-server/users -u bruce.wayne@example.com:wayne
 ```
 
 __Question:__ What response would you expect here?
+
+To answer this question have a look again at the user roles and what are the permissions associated with these roles.
+You might try again to get the list of users this way (with Clark Kent):
+
+Httpie:
+
+```shell
+http localhost:9091/library-server/users --auth 'clark.kent@example.com:kent'
+``` 
+
+Curl:
+
+```shell
+curl http://localhost:9091/library-server/users -u clark.kent@example.com:kent
+``` 
+
+This time it should work, and you should see the list of users.
 
 <hr>
 
@@ -142,7 +177,7 @@ __Make sure keycloak has been started as described in the [setup section](../set
 
 Navigate your web browser to the url [localhost:8080/auth/realms/workshop/.well-known/openid-configuration](http://localhost:8080/auth/realms/workshop/.well-known/openid-configuration).  
 Then you should see the public discovery information that keycloak provides 
-(like the following that only shows partial information).
+(like the following, which only shows partial information).
 
 ```json
 {
@@ -155,8 +190,8 @@ Then you should see the public discovery information that keycloak provides
 ```
 
 For configuring a resource server the important entries are _issuer_ and _jwk-set_uri_.
-As resource server only the JWT token validation is important, so it only needs to know where to load
-the public key from for validating the token signature.
+For a resource server only the correct validation of a JWT token is important, so it only needs to know where to load
+the public key from to validate the token signature.
   
 Spring Security 5 automatically configures a resource server by specifying the _jwk-set_ uri value 
 as part of the predefined spring property _spring.security.oauth2.resourceserver.jwt.set-uri_ 
@@ -187,11 +222,14 @@ Spring Security also validates by default:
 * the JWT signature against the queried public key(s) from _jwks_url_
 * that the JWT is not expired
 
-Usually this configuration would be sufficient but as we also want to make sure that 
-our resource server is working with stateless token authentication we have to configure stateless
-sessions (i.e. prevent _JSESSION_ cookies).  
-Starting with Spring Boot 2 you always have to configure Spring Security
-yourself as soon as you introduce a class that extends _WebSecurityConfigurerAdapter_.
+Usually this configuration would be sufficient to configure a resource server (by autoconfiguring all settings using spring boot).
+As there is already a security configuration for basic authentication in place (_com.example.library.server.config.WebSecurityConfiguration_), 
+this disables the spring boot auto configuration. Starting with Spring Boot 2 you always have to configure Spring Security 
+yourself as soon as you introduce a class which extends _WebSecurityConfigurerAdapter_.
+
+So we have to change the existing security configuration to enable token based authentication instead of basic authentication.
+We also want to make sure that our resource server is working with stateless token authentication, so we have to configure stateless
+sessions (i.e. prevent _JSESSION_ cookies).
 
 Open the class _com.example.library.server.config.WebSecurityConfiguration_ and change the
 existing configuration like this:
@@ -204,8 +242,17 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -214,6 +261,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .cors(withDefaults())
         .csrf()
         .disable()
         .authorizeRequests()
@@ -228,12 +276,24 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("https://localhost:4200", "http://localhost:4200"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+    configuration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }
 ```
 
 This configuration above
 * configures stateless sessions (i.e. no _JSESSION_ cookies anymore)
-* disables CSRF protection (with stateless sessions, i.e. without session cookies we do not need this any more) 
+* disables CSRF protection (with stateless sessions, i.e. without session cookies we do not need this anymore) 
   (which also enables us to even make post requests on the command line)
 * protects any request (i.e. requires authentication for any endpoint)
 * enables this application as a resource server with expecting access tokens in JWT format (as of spring security 5.2 you may also
@@ -243,15 +303,50 @@ _PasswordEncoder_ is not required anymore as we now stopped storing passwords
 in our resource server, but for time reasons we won't delete it. Otherwise, we would need
 plenty of time just for removing all password related stuff from other source code locations.
 
+The `.cors(withDefaults())` expression configures [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+This configuration is done in conjunction with the `corsConfigurationSource()` bean definition.
+ 
+For now, we can ignore this setting as this is only important when making AJAX request to this application from a javascript client.
+
 <hr>
 
 ### Step 2: Run and test basic resource server 
 
-Now it should be possible to re-start
-the reconfigured application _com.example.library.server.Lab1InitialLibraryServerApplication_.
+Now it should be possible to re-start the reconfigured application _com.example.library.server.Lab1InitialLibraryServerApplication_.
 
 Now, the requests you have tried when starting this lab using basic authentication won't work anymore
 as we now require bearer tokens in JWT format to authenticate at our resource server.
+
+With basic authentication when omitting the credentials you got this response:
+
+```http
+HTTP/1.1 401 
+WWW-Authenticate: Basic realm="Realm"
+```
+
+Now try again with this request:
+
+httpie:
+
+```shell
+http localhost:9091/library-server/books
+``` 
+
+curl:
+
+```shell
+curl -i http://localhost:9091/library-server/books
+```
+
+You now will get this answer:
+
+```http
+HTTP/1.1 401 
+WWW-Authenticate: Bearer
+```
+
+So what is needed here is a JSON Web Token (JWT).
+First we need to get such token, and then we can try to call this API again.
 
 To do this we will use the _resource owner password grant_ to directly obtain an access token
 from keycloak by specifying our credentials as part of the request.  
@@ -260,7 +355,7 @@ __You may argue now: "This is just like doing basic authentication??"__
 
 Yes, you're right. You should __ONLY__ use this grant flow for testing purposes as it
 completely bypasses the base concepts of OAuth 2. Especially when using the command line this is the only possible
-flow to use if you want to authenticate a user. If no user is involved then you can also use the _client credentials grant_.
+flow to use if you want to authenticate a user. If no user is involved, then you can also use the _client credentials grant_.
 
 By using Postman you can also use the _authorization code grant_.
 
@@ -312,11 +407,12 @@ curl:
 
 ```shell
 curl -H 'Authorization: Bearer [access_token]' \
--v http://localhost:9091/library-server/users | jq
+-v http://localhost:9091/library-server/users
 ```
 
 You have to replace _[access_token]_ with the one you have obtained in previous request.  
-Now you will get a _'403'_ response (_Forbidden_). 
+Now the user authenticates by the given token, but even with using the correct user Clark Kent you get a _'403'_ response (_Forbidden_). 
+
 This is due to the fact that Spring Security 5 automatically maps all scopes that are part of the
 JWT token to the corresponding authorities.
 
@@ -343,8 +439,7 @@ If you scroll down a bit on the right hand side then you will see the following 
 ```
 
 As you can see our user has the scopes _library_admin_, _email_ and _profile_.
-These scopes are now mapped to the Spring Security authorities 
-_SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.  
+Spring Security maps these scopes to the Spring Security authorities _SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_ by default.  
 
 ![JWT IO Decoded](../docs/images/jwt_io_decoded.png)
 
@@ -368,8 +463,9 @@ public List<User> findAll() {
 }
 ```  
 
-Due to time restrictions we won't add these additional authority checks, we rather want to implement our
-customized JWT to Spring Security authorities mapping. So let's continue with this next step. 
+You can imagine what effort this would be especially for big applications using lots of authorizations. S
+o we won't add these additional authority checks, we rather want to implement our customized JWT to Spring Security authorities mapping. 
+So let's continue with this in the next step. 
 
 <hr>
 
@@ -378,7 +474,26 @@ customized JWT to Spring Security authorities mapping. So let's continue with th
 To add our custom mapping for a JWT access token Spring Security requires us to implement
 the interface _Converter<Jwt, AbstractAuthenticationToken>_.
 
-In general you have two choices here:
+```java
+package org.springframework.core.convert.converter;
+
+import org.springframework.lang.Nullable;
+
+public interface Converter<S, T> {
+
+	/**
+	 * Convert the source object of type {@code S} to target type {@code T}.
+	 * @param source the source object to convert, which must be an instance of {@code S} (never {@code null})
+	 * @return the converted object, which must be an instance of {@code T} (potentially {@code null})
+	 * @throws IllegalArgumentException if the source cannot be converted to the desired target type
+	 */
+	@Nullable
+	T convert(S source);
+
+}
+```
+
+In general, you have two choices here:
 
 * Map the corresponding _LibraryUser_ to the JWT token user data and read the 
   authorization data from the token and map it to Spring Security authorities
@@ -452,7 +567,7 @@ public class LibraryUserJwtAuthenticationConverter
 }
 ```
 This converter maps the JWT token information to a _LibraryUser_ by associating 
-these via the _email_ claim. The authorities are read from _groups_ claim in the JWT token and mapped
+these via the _email_ claim. It reads the authorities from _groups_ claim in the JWT token and maps these
 to the corresponding authorities.  
 This way we can map these groups again to our original authorities, e.g. _ROLE_LIBRARY_ADMIN_. 
 
@@ -462,13 +577,36 @@ converter to the JWT configuration:
 ```java
 package com.example.library.server.config;
 
+import com.example.library.server.security.AudienceValidator;
+import com.example.library.server.security.LibraryUserDetailsService;
+import com.example.library.server.security.LibraryUserJwtAuthenticationConverter;
+import com.example.library.server.security.LibraryUserRolesJwtAuthenticationConverter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -483,6 +621,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .cors(withDefaults())
         .csrf()
         .disable()
         .authorizeRequests()
@@ -502,6 +641,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Bean
   PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+  
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("https://localhost:4200", "http://localhost:4200"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+    configuration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 }
 ```
@@ -573,22 +724,32 @@ import com.example.library.server.security.AudienceValidator;
 import com.example.library.server.security.LibraryUserDetailsService;
 import com.example.library.server.security.LibraryUserJwtAuthenticationConverter;
 import com.example.library.server.security.LibraryUserRolesJwtAuthenticationConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoderJwkSupport;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -608,6 +769,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .cors(withDefaults())
         .csrf()
         .disable()
         .authorizeRequests()
@@ -646,6 +808,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   PasswordEncoder passwordEncoder() {
     return PasswordEncoderFactories.createDelegatingPasswordEncoder();
   }  
+
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("https://localhost:4200", "http://localhost:4200"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+    configuration.setAllowedHeaders(Collections.singletonList(CorsConfiguration.ALL));
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 }
 ```  
 
@@ -718,7 +892,7 @@ curl:
 
 ```shell
 curl -H 'Authorization: Bearer [access_token]' \
--v http://localhost:9091/library-server/users | jq
+-v http://localhost:9091/library-server/users
 ```
 
 Now, with our previous changes this request should succeed with an '200' OK status and return a list of users.
