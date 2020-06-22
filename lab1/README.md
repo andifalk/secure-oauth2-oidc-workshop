@@ -17,7 +17,7 @@ starting with the first hands-on lab (especially the server side parts)__.
     * [Step 1: Configure as resource server](#step-1-configure-as-resource-server)
     * [Step 2: Run and test basic resource server](#step-2-run-and-test-basic-resource-server)
     * [Step 3: Implement a custom JWT converter](#step-3-implement-a-custom-jwt-converter)
-    * [Step 4: An additional JWT validator for 'audience' claim](#step-4-add-an-additional-jwt-validator-for-the-audience-claim)
+    * [Step 4: An additional JWT validator for 'audience' claim](#step-4-how-to-add-additional-jwt-validation-for-the-audience-claim)
 
 ## Learning Targets
 
@@ -58,12 +58,12 @@ To test if the application works as expected, either
 * or use a command line like curl or httpie or postman (if you like a UI)
 
 Httpie:
-```bash
+```shell
 http localhost:9091/library-server/books --auth 'bruce.wayne@example.com:wayne'
 ``` 
 
 Curl:
-```bash
+```shell
 curl http://localhost:9091/library-server/books -u bruce.wayne@example.com:wayne | jq
 ```
 
@@ -71,13 +71,13 @@ If this succeeds you should see a list of books in JSON format.
 
 Also try same request without specifying any user:
 
-```bash
+```shell
 http localhost:9091/library-server/books
 ``` 
 
 Then you should see the following response:
 
-```http request
+```http
 HTTP/1.1 401 
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Content-Type: application/json;charset=UTF-8
@@ -94,12 +94,14 @@ WWW-Authenticate: Basic realm="Realm"
 Also try to request the list of users with same user credentials of 'bruce.wayne@example.com / wayne'.
 
 Httpie:
-```bash
+
+```shell
 http localhost:9091/library-server/users --auth 'bruce.wayne@example.com:wayne'
 ``` 
 
 Curl:
-```bash
+
+```shell
 curl http://localhost:9091/library-server/users -u bruce.wayne@example.com:wayne | jq
 ```
 
@@ -107,7 +109,13 @@ __Question:__ What response would you expect here?
 
 <hr>
 
-### Step 1: Configure as resource server  
+### Step 1: Configure as resource server
+
+In the first step we will perform tha basic steps to transform the server application into 
+a basic OAuth2 & OIDC compliant resource server.
+
+#### Add Gradle Dependencies
+
 To change this application into a resource server you have to make changes in the dependencies 
 of the gradle build file _build.gradle_:
 
@@ -123,6 +131,8 @@ implementation('org.springframework.boot:spring-boot-starter-oauth2-resource-ser
 Note: If you still get compilation errors after replacing dependencies please trigger a gradle update 
 (check how this is done in your IDE, e.g. in Eclipse there is an option in project context menu, in IntelliJ 
 click the refresh toolbar button in the gradle tool window).
+
+#### Configure The Resource Server
 
 Spring security 5 uses the 
 [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
@@ -167,8 +177,8 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
 ```
-An error you get very often with files in yaml format is that the indents are not correct. 
-This can lead to unexpected errors later when you try to run all this stuff.
+**Hint: An error you get very often with files in yaml format is that the indents are not correct. 
+This can lead to unexpected errors later when you try to run all this stuff.**
 
 With this configuration in place we have already a working resource server
 that can handle JWT access tokens transmitted via http bearer token header. 
@@ -221,17 +231,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```
 
-This configuration above...
-* configures stateless sessions (i.e. no 'JSESSION' cookies an more)
+This configuration above
+* configures stateless sessions (i.e. no _JSESSION_ cookies anymore)
 * disables CSRF protection (with stateless sessions, i.e. without session cookies we do not need this any more) 
   (which also enables us to even make post requests on the command line)
-* protects any request (i.e. requires authentication)
-* enables this as a resource server with expecting access tokens in JWT format (as of spring security 5.2 you may also
-use opaque tokens instead)
+* protects any request (i.e. requires authentication for any endpoint)
+* enables this application as a resource server with expecting access tokens in JWT format (as of spring security 5.2 you may also
+configure this to use opaque tokens instead)
 
-Usually _PasswordEncoder_ would not be required any more as we now do not verify passwords
-any more in a resource server, but for time reasons we won't delete it. Otherwise we probably will need
-plenty of time just removing all password related stuff from other source code locations.
+_PasswordEncoder_ is not required anymore as we now stopped storing passwords
+in our resource server, but for time reasons we won't delete it. Otherwise, we would need
+plenty of time just for removing all password related stuff from other source code locations.
 
 <hr>
 
@@ -240,7 +250,7 @@ plenty of time just removing all password related stuff from other source code l
 Now it should be possible to re-start
 the reconfigured application _com.example.library.server.Lab1InitialLibraryServerApplication_.
 
-Now, the requests you have tried when starting this lab using basic authentication won't work any more
+Now, the requests you have tried when starting this lab using basic authentication won't work anymore
 as we now require bearer tokens in JWT format to authenticate at our resource server.
 
 To do this we will use the _resource owner password grant_ to directly obtain an access token
@@ -250,27 +260,29 @@ __You may argue now: "This is just like doing basic authentication??"__
 
 Yes, you're right. You should __ONLY__ use this grant flow for testing purposes as it
 completely bypasses the base concepts of OAuth 2. Especially when using the command line this is the only possible
-flow to use. When using Postman then the other flows are supported by Postman out of the box as well.
+flow to use if you want to authenticate a user. If no user is involved then you can also use the _client credentials grant_.
+
+By using Postman you can also use the _authorization code grant_.
 
 This is how this password grant request looks like:
 
 httpie:
 
-```bash
+```shell
 http --form http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token grant_type=password \
 username=ckent password=kent client_id=library-client client_secret=9584640c-3804-4dcd-997b-93593cfb9ea7
 ``` 
 
 curl:
 
-```bash
+```shell
 curl -X POST -d 'grant_type=password&username=ckent&password=kent&client_id=library-client&client_secret=9584640c-3804-4dcd-997b-93593cfb9ea7' \
 http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token
 ```
 
 This should return an access token together with a refresh token:
 
-```http request
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -291,14 +303,14 @@ specify the access token as part of a _Authorization_ header of type _Bearer_ li
 
 httpie:
 
-```bash
+```shell
 http localhost:9091/library-server/users \
 'Authorization: Bearer [access_token]'
 ```
 
 curl:
 
-```bash
+```shell
 curl -H 'Authorization: Bearer [access_token]' \
 -v http://localhost:9091/library-server/users | jq
 ```
@@ -329,6 +341,7 @@ If you scroll down a bit on the right hand side then you will see the following 
   "email": "clark.kent@example.com"
 }
 ```
+
 As you can see our user has the scopes _library_admin_, _email_ and _profile_.
 These scopes are now mapped to the Spring Security authorities 
 _SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.  
@@ -338,16 +351,17 @@ _SCOPE_library_admin_, _SCOPE_email_ and _SCOPE_profile_.
 If you have a look inside the _com.example.library.server.business.UserService_ class
 you will notice that the corresponding method has the following authorization check:
 
-```
+```java
 @PreAuthorize("hasRole('LIBRARY_ADMIN')")
 public List<User> findAll() {
   return userRepository.findAll();
 }
 ``` 
+
 The required authority _ROLE_LIBRARY_ADMIN_ does not match the mapped authority _SCOPE_library_admin_.
 To solve this we would have to add the _SCOPE_xxx_ authorities to the existing ones like this:
 
-```
+```java
 @PreAuthorize("hasRole('LIBRARY_ADMIN') || hasAuthority('SCOPE_library_admin')")
 public List<User> findAll() {
   return userRepository.findAll();
@@ -497,7 +511,7 @@ application in project _library-server-complete-custom_.
 
 <hr>
 
-### Step 4: Add an additional JWT validator for the 'audience' claim 
+### Step 4: How to add additional JWT validation for the 'audience' claim 
 
 Implementing an additional token validator is quite easy, you just have to implement the 
 provided interface _OAuth2TokenValidator_.
@@ -509,7 +523,7 @@ is mandatory for ID tokens:
 Audience(s) that this ID Token is intended for. It MUST contain the OAuth 2.0 client_id of the Relying Party as an audience value. It MAY also contain identifiers for other audiences.
 </blockquote>
 
-Despite of the fact that the _audience_ claim is not specified or mandatory for access tokens
+Despite the fact that the _audience_ claim is not specified or mandatory for access tokens
 specifying and validating the _audience_ claim of access tokens is strongly recommended by OAuth 2 & OIDC experts
 to avoid misusing access tokens for other resource servers.   
 There is also a new [draft specification](https://tools.ietf.org/html/draft-ietf-oauth-access-token-jwt)
@@ -660,21 +674,21 @@ First get another fresh access token:
 
 httpie:
 
-```bash
+```shell
 http --form http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token grant_type=password \
 username=ckent password=kent client_id=library-client client_secret=9584640c-3804-4dcd-997b-93593cfb9ea7
 ``` 
 
 curl:
 
-```bash
+```shell
 curl -X POST -d 'grant_type=password&username=ckent&password=kent&client_id=library-client&client_secret=9584640c-3804-4dcd-997b-93593cfb9ea7' \
 http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token
 ```
 
 This should return an access token together with a refresh token:
 
-```http request
+```http
 HTTP/1.1 200 OK
 Content-Type: application/json
 
@@ -695,14 +709,14 @@ specify the access token as part of a _Authorization_ header of type _Bearer_ li
 
 httpie:
 
-```bash
+```shell
 http localhost:9091/library-server/users \
 'Authorization: Bearer [access_token]'
 ```
 
 curl:
 
-```bash
+```shell
 curl -H 'Authorization: Bearer [access_token]' \
 -v http://localhost:9091/library-server/users | jq
 ```
@@ -713,9 +727,9 @@ Now, with our previous changes this request should succeed with an '200' OK stat
 
 This ends lab 1. In the next [lab 2](../lab2) we will build the corresponding web client.  
 
-__<u>Important Note</u>__: If you could not manage to finish part 1 then just use the 
-project __lab1/library-server-complete-custom__ for the next labs.
+__<u>Important Note</u>__: If you could not finish part 1, then just use the 
+project __lab1/library-server-complete__ to start into the next labs.
 
 <hr>
 
-To continue with the OAuth2/OIDC client please continue at [Lab 2](../lab2).
+To continue with the OAuth2/OIDC client application please head over to [Lab 2](../lab2).
