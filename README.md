@@ -27,6 +27,7 @@ __Table of Contents__
     * [Demo: Multi-Tenant Resource Server](bonus-labs/multi-tenant-server-app)
     * [Demo: Resource Server with Micronaut](bonus-labs/micronaut-server-app)
     * [Demo: Resource Server with Quarkus](bonus-labs/quarkus-server-app)
+    * [Lab: Keycloak Testcontainers](bonus-labs/keycloak-test-containers)
 * [Feedback](#feedback)
 * [License](#license)    
 
@@ -81,6 +82,8 @@ To check system requirements and setup for this workshop please follow the [setu
 * [Demo: Multi-Tenant Resource Server](bonus-labs/multi-tenant-server-app)
 * [Demo: OAuth2/OIDC Resource Server with Micronaut](bonus-labs/micronaut-server-app)
 * [Demo: OAuth2/OIDC Resource Server with Quarkus](bonus-labs/quarkus-server-app)
+* [Lab: Keycloak Testcontainers](bonus-labs/keycloak-test-containers)
+
 
 ## Feedback
 

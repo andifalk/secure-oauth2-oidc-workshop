@@ -1,0 +1,32 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+spring:
+  jpa:
+    open-in-view: false
+  jackson:
+    date-format: com.fasterxml.jackson.databind.util.StdDateFormat
+    default-property-inclusion: non_null
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/workshop
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+server:
+  error:
+    include-stacktrace: never
+  port: 9091
+  servlet:
+    context-path: /library-server

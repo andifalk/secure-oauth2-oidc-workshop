@@ -25,3 +25,4 @@
 * [Multi-Tenant Resource Server](bonus-labs/multi-tenant-server-app/README.md)
 * [Micronaut](bonus-labs/micronaut-server-app/README.md)
 * [Quarkus](bonus-labs/quarkus-server-app/README.md)
+* [Keycloak Testcontainers](bonus-labs/keycloak-test-containers/README.md)
