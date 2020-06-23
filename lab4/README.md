@@ -3,6 +3,28 @@
 In the first lab we extended an existing Microservice to an OAuth 2.0 and OpenID Connect 1.0 compliant Resource Server.
 Target of this lab is to add automated security tests for this Microservice.
 
+Testing is an important topic. The DevOps culture also propagates the _Automate All The Things_.
+This applies to writing and automating tests as well.
+
+The important point here is to write the right tests.
+A well-known approach is shown as part of the Test-Pyramid by Mike Cohn.
+
+![Test Pyramid](images/test-pyramid.png)
+
+Most tests should be written as easy unit tests, this type of testing is quite cheap and provides fast feedback if things
+are still working as expected or something is broken.
+
+Integration tests (aka tests on the service layer) are a bit more effort, often these tests depend on a runtime environment
+like a Java EE or Spring container. Typically, these tests run significantly slower and are often causing long CI/CD waiting times.
+
+The tests with most effort are acceptance tests, UI tests or end2end tests which do a complete test of the application 
+from api to data access layer. These tests run very long and are expensive to write and to maintain.
+
+If you want to get more into this topic then check out this very good article 
+for [The Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html).
+
+In this lab we will write tests on the first layer (a unit test) and on the second layer (a security integration test).
+
 ## Learning Targets
 
 In this lab we will add security tests for an OAuth2/OIDC compliant resource server.
