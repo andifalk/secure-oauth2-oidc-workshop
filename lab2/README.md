@@ -70,7 +70,7 @@ Now when you refresh the library client in the browser you should be redirected 
 
 ## Folder Contents
 
-In the lab 2 folder you find 2 applications:
+In the folder lab 2 you find 2 applications:
 
 * __library-client-initial__: This is the client application we will use as starting point for this lab
 * __library-client-complete__: This client application is the completed OAuth 2.0/OIDC client reference for this lab 
@@ -81,13 +81,15 @@ Now, let's start with lab 2. Here we will implement the required additions to ge
 OAuth2/OIDC compliant client that calls the resource server we have implemented in lab 1.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup/README.md).
+Please again make sure you have set up keycloak as described in [Setup Keycloak](../setup/README.md).
 
 ### Explore the initial application
 
 First start the resource server application of [lab 1](../lab1). If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-custom](../lab1/library-server-complete)
+in project [lab1/library-server-complete-custom](../lab1/library-server-complete).
+
+To start it you may also use the `gradlew bootRun` command.
 
 Then navigate your Java IDE to the lab2/library-client-initial project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.client.Lab2LibraryClientInitialApplication_.
@@ -217,7 +219,7 @@ public class WebClientConfiguration {
 }
 ```
 With this additions we add a filter function to the web client that automatically adds the
-access token to all requests and also initiates the authorization grant flow if no valid 
+access token to all requests and initiates the authorization grant flow if no valid 
 access token is available.
 
 <hr>
@@ -354,7 +356,7 @@ and We have to change this in class _com.example.library.client.web.BooksControl
 
 ### Step 5: Run/debug the OAuth2 web client application
   
-Now re-start the library client and browse again 
+Now re-start the library client using `gradlew bootRun` command and browse again 
 to [localhost:9090/library-client](http://localhost:9090/library-client) and login using the different
 users:
 
@@ -367,11 +369,11 @@ users:
 
 Now, after authenticating at keycloak you should be able to see the library client. 
 
-Please also checkout what happens if you login using users having different roles, e.g. as _pparker_
+Please also checkout what happens if you log in with users having different roles, e.g. as _pparker_
 as the library curator.
 
-If you want to see what is going on behind the scenes just add a debugging breakpoints to the following
-classes and methods
+If you want to see what is going on behind the scenes just add some debugging breakpoints to the following
+classes and methods.
 
 __Authorization Request:__
 
@@ -398,6 +400,5 @@ in class _org.springframework.security.oauth2.client.endpoint.DefaultAuthorizati
 
 That's a wrap for this second Lab.
 
-If time still allows you can continue with [Lab 3](../lab3) to implement almost the same OAuth2 client
-but this time using another OAuth2 grant flow: The client credentials flow (
-for machine-to-machine interactions without the need for a user identity).
+In the [Lab 3](../lab3) we continue to implement almost again an OAuth2 client
+but this time we are using another OAuth2 grant flow: _The client credentials flow_.

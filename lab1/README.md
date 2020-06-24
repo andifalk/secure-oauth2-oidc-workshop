@@ -49,7 +49,8 @@ OAuth2/OIDC compliant resource server with customized mapping of token claims to
 ### Explore the initial application
 
 Please navigate your Java IDE to the __lab1/library-server-initial__ project and at first explore this project a bit.  
-Then start the application by running the class _com.example.library.server.Lab1InitialLibraryServerApplication_.
+Then start the application by running the class _com.example.library.server.Lab1InitialLibraryServerApplication_ inside your IDE
+or by issuing a `gradlew bootRun` command.
 
 As already described in the [application architecture](../application-architecture) section the initial application
 is secured using basic authentication.
@@ -313,6 +314,7 @@ For now, we can ignore this setting as this is only important when making AJAX r
 ### Step 2: Run and test basic resource server 
 
 Now it should be possible to re-start the reconfigured application _com.example.library.server.Lab1InitialLibraryServerApplication_.
+Or just use the `gradlew bootRun` command.
 
 Now, the requests you have tried when starting this lab using basic authentication won't work anymore
 as we now require bearer tokens in JWT format to authenticate at our resource server.
@@ -830,6 +832,7 @@ spring:
 ```
 
 Now we can re-start the application and test again the same request we had retrieved an '403' error before.
+For this just use the `gradlew bootRun` command.
 
 First get another fresh access token:
 
