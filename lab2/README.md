@@ -125,6 +125,8 @@ and add this dependency instead:
 implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
 ```
 
+__Note: Make sure to trigger a gradle update in your Java IDE__
+
 Spring security 5 uses the 
 [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
 to completely configure the client to use our keycloak instance.
