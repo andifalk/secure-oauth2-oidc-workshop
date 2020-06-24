@@ -6,6 +6,8 @@ we have built in [lab 1](../lab1).
 In contrast to [Lab 2](../lab2) this time the client will be using
 the [OAuth2 client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4).
 
+![Client Credentials Grant](images/client_credentials.png)
+
 See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#webclient) 
 for all details on how to build and configure a OAuth 2.0 client. 
 
@@ -48,9 +50,13 @@ The client of this lab is just able to fulfill the following uses case:
 * Batch import of books into the library using a CSV file
 
 Batch jobs can be implemented by using the [Spring Batch Project](https://spring.io/projects/spring-batch).
-We cannot dive into the world of batch jobs as part of this workshop. But if you want to know more on how
-batch jobs are implemented you may have a look into the intro section of the 
+We cannot dive into the world of batch jobs as part of this workshop. If you want to know more on how
+you implement batch jobs then you may have a look into the intro section of the 
 corresponding [Spring Batch Reference Documentation](https://docs.spring.io/spring-batch/4.2.x/reference/html/spring-batch-intro.html#spring-batch-intro).
+
+Here is how the batch job for this lab looks like:
+
+![Import Books Batch Job](images/batch_job.png)
 
 ## Folder Contents
 
