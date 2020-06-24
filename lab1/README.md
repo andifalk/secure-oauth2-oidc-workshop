@@ -23,8 +23,10 @@ starting with the first hands-on lab (especially the server side parts)__.
 
 In this lab we will build an OAuth2/OIDC compliant resource server.
 
+![Resource Server](images/resource_server.png)
+
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup/README.md)
+Please again make sure you have set up keycloak as described in [Setup Keycloak](../setup/README.md)
 
 In lab 1 you will learn how to:
 
