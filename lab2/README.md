@@ -27,28 +27,33 @@ starting with the first hands-on lab (especially the client side parts)__.
 In [Lab 2](../lab2) we will use the [OAuth2 authorization code grant flow](https://tools.ietf.org/html/rfc6749#section-4.1) 
 to extend the provided web client to act as an OIDC compliant client.
 
-According to the specification this grant flow is described as follows:
+![Authorization Code Grant](images/authorization_code_grant.png)
+
+The RFC 6749 specification describes this grant flow as follows:
 <blockquote cite="https://tools.ietf.org/html/rfc6749#section-4.1">
 The authorization code grant type is used to obtain both access tokens and refresh tokens 
 and is optimized for confidential clients. Since this is a redirection-based flow, the client 
 must be capable of interacting with the resource owner's user-agent (typically a web browser) 
 and capable of receiving incoming requests (via redirection) from the authorization server.</blockquote>
 
-__Important Note: The authorization code grant type (without PKCE) MUST only be used by confidential clients.__
+The new draft for [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/draft-ietf-oauth-security-topics)
+clearly recommends the use the authorization grant with PKCE. 
+Although PKCE so far was designed as a mechanism to protect native apps, this advice applies to all kinds of OAuth clients, including web applications.
+
+![Authorization Code Grant + PKCE](images/authorization_code_pkce.png)
+
+__This is why we also use the [authorization code grant](https://tools.ietf.org/html/rfc6749#section-4.1) + [PKCE](https://tools.ietf.org/html/rfc7636) flow here, even for a confidential client.__
 
 After you have completed this lab you will have learned
 
-* how to implement an OIDC compliant web client using the authorization code flow
+* how to implement an OIDC compliant web client using the [authorization code grant](https://tools.ietf.org/html/rfc6749#section-4.1) + [PKCE](https://tools.ietf.org/html/rfc7636) flow
 * how to use the authenticated user principle (mapped from user info endpoint)
 * authorization on the client side (but only to hide/show buttons, real authorization must always be implemented on the server side)
-
-Later in [lab 3](../lab3) we will build almost the same OAuth2/OIDC client but then we will be 
-using the [client credentials grant flow](https://tools.ietf.org/html/rfc6749#section-4.4) instead. 
 
 ### Logout Users
 
 After you have logged in into the library client using keycloak your session will remain valid until
-the access token has expired or the session at keycloak is invalidated.
+the access token has reached expiration or the session at keycloak is invalidated.
 
 Either you always open the web client in a private/incognito window of your web browser or you follow the steps 
 described below:
@@ -59,7 +64,7 @@ described below:
 
 ![Keycloak Sessions](../docs/images/keycloak_sessions.png)
 
-* After you have revocated sessions in keycloak you have to delete the current JSESSION cookie 
+* After you have revoked the sessions in keycloak you have to delete the current JSESSION cookie 
   for the library client. You can do this by opening the application tab in the developer tools of chrome.
   Navigate to the cookies entry on the left and select the url of the library client, then delete the cookie 
   on the right hand side 
