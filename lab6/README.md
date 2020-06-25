@@ -107,7 +107,7 @@ Let's get started by creating a new service to encapsulate the authentication (a
 Now open the created file `services/auth.service.ts` and initialize the configuration object:
 
 ```typescript
-authConfig: AuthConfig = {
+AuthConfig = {
 
     // Url of the Identity Provider
     issuer: 'http://localhost:8080/auth/realms/workshop',
@@ -126,15 +126,17 @@ authConfig: AuthConfig = {
     scope: 'openid profile'
   }
 ```
-`disableAtHashCheck` is currently necessary as Keycloak does not include an `at_hash` claim in its id tokens. According to the [OIDC Core 1.0 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken) this claim is optional.
+`disableAtHashCheck` is currently necessary as Keycloak does not include an `at_hash` claim in its id tokens. 
+According to the [OIDC Core 1.0 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken) this claim is optional.
+Keycloak will add support for this in version 11.0.0.
 
 After you've added this configuration to your service class (or as a constant to the file) you can start implementing the authentication. 
 Start by adding instances of OAuthService and Router using dependency injection.
 
 ```typescript
   constructor(
-    private oauthService: OAuthService,
-    private router: Router
+    private OAuthService,
+    private Router
   ) {
 ```
 
@@ -148,7 +150,7 @@ Now start by adding a few subjects and observables to your class. These are need
 
   /**
    * Publishes `true` if and only if (a) all the asynchronous initial
-   * login calls have completed or errorred, and (b) the user ended up
+   * login calls have completed or errored, and (b) the user ended up
    * being authenticated.
    *
    * In essence, it combines:
@@ -156,7 +158,7 @@ Now start by adding a few subjects and observables to your class. These are need
    * - the latest known state of whether the user is authorized
    * - whether the ajax calls for initial log in have all been done
    */
-  public canActivateProtectedRoutes$: Observable<boolean> = combineLatest(
+  public Observable<boolean> = combineLatest(
     this.isAuthenticated$,
     this.isDoneLoading$
   ).pipe(map(values => values.every(b => b)));
@@ -168,8 +170,8 @@ Let's get started to set up the library in your `constructor()`-function:
 
 ```typescript
   constructor(
-    private oauthService: OAuthService,
-    private router: Router
+    private OAuthService,
+    private Router
   ) {
     this.oauthService.configure(authConfig);
     this.oauthService.tokenValidationHandler = new NullValidationHandler();
@@ -213,7 +215,7 @@ __NOTE:__ Currently it's not possible to keep the state when using authorization
 
 After you implemented this function, you can use it in your `AppComponent` component (`app/app.component.ts`) :
 ```typescript
-  constructor(private authService: AuthService) {
+  constructor(private AuthService) {
     this.authService.runInitialLoginSequence();
   }
 ```
@@ -325,7 +327,7 @@ Your routes should now be protected, but you still see the `Create Book` button,
 Go to `app/header/header.component.ts` and inject the `AuthService`:
 
 ```typescript
-constructor(private authService: AuthService) { }
+constructor(private AuthService) { }
 ```
 
 Now go to the template `app/header/header.component.html` and add a `ngIf` to the jumbotron at the bottom:
