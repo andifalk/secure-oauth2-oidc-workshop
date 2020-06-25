@@ -174,7 +174,7 @@ class BookApiJwtAuthorizationTest {
 
   private MockMvc mockMvc;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
   @BeforeEach
   void setup() {
@@ -372,7 +372,7 @@ Please also have a look at the other tests as well in the reference solution.
 <hr>
 
 This ends lab 4. In the next [lab 5](../lab5) we will use a testing JWT server that works
-using self-signed JWT..  
+using self-signed JWT.
 
 <hr>
 

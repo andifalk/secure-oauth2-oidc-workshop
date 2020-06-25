@@ -3,12 +3,14 @@ package com.example.library.client.credentials.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrations;
 import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
-import org.springframework.security.oauth2.client.web.server.UnAuthenticatedServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -29,11 +31,15 @@ public class WebClientConfiguration {
   }
 
   @Bean
-  WebClient webClient(ReactiveClientRegistrationRepository clientRegistrations) {
+  ReactiveOAuth2AuthorizedClientService authorizedClientService() {
+    return new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrations());
+  }
+
+  @Bean
+  WebClient webClient(ReactiveClientRegistrationRepository clientRegistrations, ReactiveOAuth2AuthorizedClientService authorizedClientService) {
     ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
             new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-                    clientRegistrations,
-                    new UnAuthenticatedServerOAuth2AuthorizedClientRepository());
+                    new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, authorizedClientService));
     oauth.setDefaultClientRegistrationId("library_client");
     return WebClient.builder()
             .filter(oauth)

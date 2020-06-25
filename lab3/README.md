@@ -41,7 +41,7 @@ After you have completed this lab you will have learned:
 
 * that you can also use OAuth2 and OpenID Connect in a non-web environment using the client credentials flow
 * how to configure the reactive web client for the client credentials flow
-* a little bit about implementing batch jobs using the spring batch framework
+* implementing batch jobs using the spring batch framework
 
 ### The Batch Client Application
 
@@ -109,7 +109,23 @@ authorization grant type). A redirect uri is not required this time as now redir
 To perform this step, open the file _WebClientConfiguration.java_ and add the following bean containing the OAuth2/OIDC
 client registration for the client credentials flow.
  
-```
+```java
+...
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrations;
+import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.web.reactive.function.client.WebClient;
+...
+
   @Bean
   ReactiveClientRegistrationRepository clientRegistrations() {
     ClientRegistration clientRegistration = ClientRegistrations
@@ -120,6 +136,11 @@ client registration for the client credentials flow.
             .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
             .build();
     return new InMemoryReactiveClientRegistrationRepository(clientRegistration);
+  }
+
+  @Bean
+  ReactiveOAuth2AuthorizedClientService authorizedClientService() {
+    return new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrations());
   }
 ```
 
@@ -136,19 +157,34 @@ registered OAuth2 client to automatically fetch and use an OAuth2/OIDC access to
 
 To achieve this change the existing WebClient configuration in _WebClientConfiguration.java_ as follows:
 
-```
+```java
+...
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.oauth2.client.AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrations;
+import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.web.reactive.function.client.WebClient;
+...
+
   @Bean
-    WebClient webClient(ReactiveClientRegistrationRepository clientRegistrations) {
-      ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
-              new ServerOAuth2AuthorizedClientExchangeFilterFunction(
-                      clientRegistrations,
-                      new UnAuthenticatedServerOAuth2AuthorizedClientRepository());
-      oauth.setDefaultClientRegistrationId("library_client");
-      return WebClient.builder()
-              .filter(oauth)
-              .build();
-    }
+  WebClient webClient(ReactiveClientRegistrationRepository clientRegistrations, ReactiveOAuth2AuthorizedClientService authorizedClientService) {
+    ServerOAuth2AuthorizedClientExchangeFilterFunction oauth =
+            new ServerOAuth2AuthorizedClientExchangeFilterFunction(
+                    new AuthorizedClientServiceReactiveOAuth2AuthorizedClientManager(clientRegistrations, authorizedClientService));
+    oauth.setDefaultClientRegistrationId("library_client");
+    return WebClient.builder()
+            .filter(oauth)
+            .build();
   }
+...
 ```
 
 <hr>
@@ -159,16 +195,12 @@ Now re-start the library client and have a look into the console log.
 This time the batch job should have been completed successfully.
 
 If you want to check that the new books really have been imported just use the 
-web client of [Lab 2](../lab2). After login you should see lots of more books than before.
+web client of [Lab 2](../lab2). After you log in you should see lots of more books than before.
 Alternatively you could also just use _Postman_, _Curl_ or _Httpie_. 
  
 <hr>
 
 That's a wrap for this third Lab.
 
-If time still allows you can continue with [Lab 4](../lab4) to see how you can
-configure the resource server from [Lab 1](../lab1) with a custom static private/public key pair
-and create your own JWT tokens using the private key.
+Let's continue with [Lab 4](../lab4) to see how you can test your resource server from [Lab 1](../lab1) with unit and integration tests.
 
-This is quite helpful in testing environments, e.g. doing load/performance testing and preventing
-from load testing the identity server as well.
