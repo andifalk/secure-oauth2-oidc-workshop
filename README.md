@@ -5,6 +5,7 @@
 # OAuth 2.0 / OpenID Connect Workshop
 
 Authentication and authorization for Microservices with OAuth 2.0 (OAuth2) and OpenID Connect 1.0 (OIDC).
+This contains both, theory parts on all important concepts, and hands-on practice labs.
 
 __Table of Contents__
 
