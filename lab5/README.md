@@ -54,7 +54,7 @@ In the lab 5 folder you find 3 applications:
 
 ## Start the Lab
 
-In this lab you will not really implement anything yourself but you will see how to use such static resource server
+In this lab you will not really implement anything yourself, but you will see how to use such static resource server
 with custom generated JWt tokens.
 So let's start.
 
@@ -68,10 +68,10 @@ In [Lab 1](../lab1/README.md) we have seen how Spring security 5 uses the
 to completely configure the resource server to use our keycloak instance.
 
 As we will now locally validate the incoming JWT access tokens using a static public key we do not
-need the discovery entries (especially the JWKS uri) any more.  
+need the discovery entries (especially the JWKS uri) anymore.  
 
-You can see the changes in _application.yml_, here no _issuer uri_ property is required any more.
-Instead we specify a location reference to a file containing a public key to verify JWT tokens.
+You can see the changes in _application.yml_, here no _issuer uri_ property is required anymore.
+Instead, we specify a location reference to a file containing a public key to verify JWT tokens.
   
 This looks like this:
 

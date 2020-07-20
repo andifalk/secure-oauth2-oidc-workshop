@@ -1,7 +1,7 @@
 # Lab 2: Creating an OAuth 2.0/OIDC compliant Client
 
 In the second lab we want to build an OAuth2/OIDC client for the resource server we have built in [lab 1](../lab1).
-Therefore you will be provided a complete spring mvc web client application that works
+Therefore, you will be provided a complete spring mvc web client application that works
 together with the resource server of [lab 1](../lab1). 
 
 See [Spring Security 5 OAuth 2.0 Client reference doc](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#oauth2client) 
@@ -38,7 +38,8 @@ and capable of receiving incoming requests (via redirection) from the authorizat
 
 The new draft for [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/draft-ietf-oauth-security-topics)
 clearly recommends the use the authorization grant with PKCE. 
-Although PKCE so far was designed as a mechanism to protect native apps, this advice applies to all kinds of OAuth clients, including web applications.
+Although PKCE so far was designed as a mechanism to protect native apps, this advice applies to all kinds of OAuth clients, 
+including public and confidential web applications.
 
 ![Authorization Code Grant + PKCE](images/authorization_code_pkce.png)
 
@@ -53,18 +54,18 @@ After you have completed this lab you will have learned
 ### Logout Users
 
 After you have logged in into the library client using keycloak your session will remain valid until
-the access token has reached expiration or the session at keycloak is invalidated.
+the access token has reached expiration, or the session at keycloak is invalidated.
 
-Either you always open the web client in a private/incognito window of your web browser or you follow the steps 
+Either you always open the web client in a private/incognito window of your web browser, or you follow the steps 
 described below:
 
 * Login to keycloak [admin console](http://localhost:8080/auth/admin) and navigate on the left to menu item _session_
-  Here you'll see all user sessions (active/offline ones). By clicking on button _Logout all_ you can revocate 
+  Here you'll see all user sessions (active/offline ones). By clicking on the button _Logout all_ you can revoke 
   all active sessions.
 
 ![Keycloak Sessions](../docs/images/keycloak_sessions.png)
 
-* After you have revoked the sessions in keycloak you have to delete the current JSESSION cookie 
+* After you have revoked the sessions in keycloak you have to delete the current _JSESSION_ cookie 
   for the library client. You can do this by opening the application tab in the developer tools of chrome.
   Navigate to the cookies entry on the left and select the url of the library client, then delete the cookie 
   on the right hand side 
@@ -92,7 +93,7 @@ Please again make sure you have set up keycloak as described in [Setup Keycloak]
 
 First start the resource server application of [lab 1](../lab1). If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-custom](../lab1/library-server-complete).
+in project [lab1/library-server-complete](../lab1/library-server-complete).
 
 To start it you may also use the `gradlew bootRun` command.
 
@@ -127,15 +128,14 @@ implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
 
 __Note: Make sure to trigger a gradle update in your Java IDE__
 
-Spring security 5 uses the 
-[OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
-to completely configure the client to use our keycloak instance.
+Spring security 5 utilizes the [OpenID Connect Discovery](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig) specification 
+to completely configure the client to work together with the Keycloak instance.
   
 __Make sure keycloak has been started as described in the [setup section](../setup/README.md).__
 
 Navigate your web browser to the url [localhost:8080/auth/realms/workshop/.well-known/openid-configuration](http://localhost:8080/auth/realms/workshop/.well-known/openid-configuration).  
 Then you should see the public discovery information that keycloak provides 
-(like the following that only shows partial information).
+(similar to the following snippet, showing only partial information).
 
 ```json
 {
@@ -162,7 +162,7 @@ at least the _issuer uri_. We want to change the default user name mapping for t
 using the user name instead of the default value 'sub'). 
 
 To perform this step, open _application.yml__ and add the issuer uri property with the additional ones.
-Please remove the existing entry for (user.password) as we don't need this any more.
+Please remove the existing entry for (user.password) as we don't need this anymore.
  
 After adding this it should look like this:
 
@@ -192,11 +192,12 @@ This can lead to unexpected errors later when you try to run all this stuff.
 
 ### Step 2: Configure web client to send bearer access token
 
-For all requests to the resource server we use the reactive web client, that was introduced by Spring 5.
+For all requests to the resource server we use the [reactive web client](https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html#webflux-client), 
+that was introduced by Spring 5.
 The next required step is to make this web client aware of transmitting the required bearer access tokens
 in the _Authorization_ header.
 
-To achieve this open the class _com.example.library.client.config.WebClientConfiguration_ and reconfigure the
+To achieve this open the class `com.example.library.client.config.WebClientConfiguration` and reconfigure the
 web client as follows:
 
 ```java
@@ -225,7 +226,7 @@ public class WebClientConfiguration {
   }
 }
 ```
-With this additions we add a filter function to the web client that automatically adds the
+With these additions we add a filter function to the web client that automatically adds the
 access token to all requests and initiates the authorization grant flow if no valid 
 access token is available.
 
@@ -310,9 +311,9 @@ With the snippet
         .userAuthoritiesMapper(userAuthoritiesMapper());
 ```
 we configure an OAuth2 client and an OIDC login client and reconfigure the _userinfo_ endpoint user mapping
-to map authorities different as the standard one. The custom mapping is done in the implementation
+to map authorities different as the standard one. The custom mapping is performed in the implementation
 of the _GrantedAuthoritiesMapper_ interface that maps entries of the _groups_ claim to spring security 
-authority roles . 
+authority roles. 
 
 <hr>
 
@@ -321,7 +322,7 @@ authority roles .
 The final required step is to change the authentication principal from _org.springframework.security.core.userdetails.User_ 
 to _org.springframework.security.oauth2.core.oidc.user.OidcUser_.
 
-We have to change this in class _com.example.library.client.web.BookResource_:
+We have to change this in class `com.example.library.client.web.BookResource`:
 
 ```
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -341,7 +342,7 @@ public boolean returnBookAllowed(OidcUser user) {
 ...  
 ```
 
-and We have to change this in class _com.example.library.client.web.BooksController_:
+and in class `com.example.library.client.web.BooksController`:
     
     ```
     import net.minidev.json.JSONArray;

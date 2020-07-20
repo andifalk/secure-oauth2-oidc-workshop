@@ -60,7 +60,7 @@ Here is how the batch job for this lab looks like:
 
 ## Folder Contents
 
-In the lab 3 folder you find 2 applications:
+In the folder for lab 3 you find 2 applications:
 
 * __library-client-credentials-initial__: This is the client application we will use as starting point for this lab
 * __library-client-credentials-complete__: This client application is the completed OAuth 2.0/OIDC client for this lab 
@@ -69,16 +69,16 @@ In the lab 3 folder you find 2 applications:
 
 Now, let's start with Lab 3. Here we will implement the required additions to get an 
 OAuth2/OIDC compliant batch job client that calls the resource server we have implemented in [lab 1](../lab1).
-But this time we will use the client credentials flow.
+This time we will use the client credentials flow.
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup keycloak as described in [Setup Keycloak](../setup).
+Please again make sure you have set up keycloak as described in [Setup Keycloak](../setup).
 
 ### Explore the initial application
 
 First start the resource server application of Lab 1. If you could not complete the previous Lab yourself
 then use and start the completed reference application 
-in project [lab1/library-server-complete-custom](../lab1/library-server-complete)
+in project [lab1/library-server-complete](../lab1/library-server-complete)
 
 Then navigate your Java IDE to the __lab3/library-client-credentials-initial__ project and at first explore this project a bit.  
 Then start the application by running the class _com.example.library.client.Lab3LibraryClientCredentialsInitialApplication_.

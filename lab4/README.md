@@ -12,7 +12,7 @@ A well-known approach is shown as part of the Test-Pyramid by Mike Cohn.
 ![Test Pyramid](images/test-pyramid.png)
 
 Most tests should be written as easy unit tests, this type of testing is quite cheap and provides fast feedback if things
-are still working as expected or something is broken.
+are still working as expected or anything has been broken.
 
 Integration tests (aka tests on the service layer) are a bit more effort, often these tests depend on a runtime environment
 like a Java EE or Spring container. Typically, these tests run significantly slower and are often causing long CI/CD waiting times.
@@ -39,7 +39,7 @@ In lab 4 you will learn how to:
 
 ## Folder Contents
 
-In the lab 2 folder you find 2 applications:
+In the folder of lab 2 you find 2 applications:
 
 * __library-server-initial__: This is the application we will use as starting point for this lab
 * __library-server-complete__: This application is the completed reference for this lab 

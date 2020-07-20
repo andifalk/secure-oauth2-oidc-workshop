@@ -14,10 +14,10 @@ starting with the first hands-on lab (especially the server side parts)__.
 * [Folder Contents](#folder-contents)
 * [Tutorial: Implement a resource server with custom user/authorities mapping](#start-the-lab)
     * [Explore the initial server application](#explore-the-initial-application)    
-    * [Step 1: Configure as resource server](#step-1-configure-as-resource-server)
+    * [Step 1: Configure as resource server](#step-1-basic-configuration)
     * [Step 2: Run and test basic resource server](#step-2-run-and-test-basic-resource-server)
-    * [Step 3: Implement a custom JWT converter](#step-3-implement-a-custom-jwt-converter)
-    * [Step 4: An additional JWT validator for 'audience' claim](#step-4-how-to-add-additional-jwt-validation-for-the-audience-claim)
+    * [Step 3: Implement a custom JWT converter](#step-3-custom-jwt-converter)
+    * [Step 4: An additional JWT validator for 'audience' claim](#step-4-jwt-validation-for-the-audience-claim)
 
 ## Learning Targets
 
@@ -31,7 +31,7 @@ Please again make sure you have set up keycloak as described in [Setup Keycloak]
 In lab 1 you will learn how to:
 
 1. Implement a basic resource server requiring bearer token authentication using JSON web tokens (JWT)
-2. Customize the resource server with __custom user & authorities mapping__
+2. Customize the resource server with __user & authorities mapping__
 3. Implement additional recommended validation of the _audience_ claim of the access token 
 
 ## Folder Contents
@@ -43,10 +43,7 @@ In the lab 1 folder you find 2 applications:
 
 ## Start the Lab
 
-Now, let's start with this lab. Here we will implement the required additions to get an 
-OAuth2/OIDC compliant resource server with customized mapping of token claims to Spring Security authorities.
-
-![Manual Role Mapping](../docs/images/manual_role_mapping.png)
+Now, let's start with this lab.
 
 ### Explore the initial application
 
@@ -147,7 +144,7 @@ This time it should work, and you should see the list of users.
 
 <hr>
 
-### Step 1: Configure as resource server
+### Step 1: Basic Configuration
 
 In the first step we will perform tha basic steps to transform the server application into 
 a basic OAuth2 & OIDC compliant resource server.
@@ -220,18 +217,19 @@ This can lead to unexpected errors later when you try to run all this stuff.**
 
 With this configuration in place we have already a working resource server
 that can handle JWT access tokens transmitted via http bearer token header. 
-Spring Security also validates by default:
+Spring Security then validates by default:
 
-* the JWT signature against the queried public key(s) from _jwks_url_
+* the JWT signature against the queried public key(s) from specified _jwks_url_
+* the _issuer_ claim of the JWT
 * that the JWT is not expired
 
-Usually this configuration would be sufficient to configure a resource server (by autoconfiguring all settings using spring boot).
+Usually this configuration would be sufficient to configure a resource server (by auto-configuring all settings using spring boot).
 As there is already a security configuration for basic authentication in place (_com.example.library.server.config.WebSecurityConfiguration_), 
 this disables the spring boot auto configuration. Starting with Spring Boot 2 you always have to configure Spring Security 
 yourself as soon as you introduce a class which extends _WebSecurityConfigurerAdapter_.
 
 So we have to change the existing security configuration to enable token based authentication instead of basic authentication.
-We also want to make sure that our resource server is working with stateless token authentication, so we have to configure stateless
+We also want to make sure, our resource server is working with stateless token authentication, so we have to configure stateless
 sessions (i.e. prevent _JSESSION_ cookies).
 
 Open the class _com.example.library.server.config.WebSecurityConfiguration_ and change the
@@ -415,10 +413,12 @@ curl -H 'Authorization: Bearer [access_token]' \
 ```
 
 You have to replace _[access_token]_ with the one you have obtained in previous request.  
-Now the user authenticates by the given token, but even with using the correct user Clark Kent you get a _'403'_ response (_Forbidden_). 
+Now the user authenticates by the given token, but even with using the correct user Clark Kent you get a _"403"_ response (_Forbidden_). 
 
 This is due to the fact that Spring Security 5 automatically maps all scopes that are part of the
 JWT token to the corresponding authorities.
+
+![Manual Role Mapping](../docs/images/manual_role_mapping.png)
 
 Navigate your web browser to [jwt.io](https://jwt.io) and paste your access token into the
 _Encoded_ text field. 
@@ -467,13 +467,13 @@ public List<User> findAll() {
 }
 ```  
 
-You can imagine what effort this would be especially for big applications using lots of authorizations. S
-o we won't add these additional authority checks, we rather want to implement our customized JWT to Spring Security authorities mapping. 
+You can imagine what effort this would be especially for big applications using lots of authorizations. 
+So we won't add these additional authority checks, we rather want to implement our customized JWT to Spring Security authorities mapping. 
 So let's continue with this in the next step. 
 
 <hr>
 
-### Step 3: Implement a custom JWT converter 
+### Step 3: Custom JWT converter 
     
 To add our custom mapping for a JWT access token Spring Security requires us to implement
 the interface _Converter<Jwt, AbstractAuthenticationToken>_.
@@ -570,6 +570,7 @@ public class LibraryUserJwtAuthenticationConverter
   }
 }
 ```
+
 This converter maps the JWT token information to a _LibraryUser_ by associating 
 these via the _email_ claim. It reads the authorities from _groups_ claim in the JWT token and maps these
 to the corresponding authorities.  
@@ -658,7 +659,7 @@ application in project _library-server-complete-custom_.
 
 <hr>
 
-### Step 4: How to add additional JWT validation for the 'audience' claim 
+### Step 4: JWT validation for the 'audience' claim 
 
 Implementing an additional token validator is quite easy, you just have to implement the 
 provided interface _OAuth2TokenValidator_.
@@ -671,14 +672,12 @@ Audience(s) that this ID Token is intended for. It MUST contain the OAuth 2.0 cl
 </blockquote>
 
 Despite the fact that the _audience_ claim is not specified or mandatory for access tokens
-specifying and validating the _audience_ claim of access tokens is strongly recommended by OAuth 2 & OIDC experts
-to avoid misusing access tokens for other resource servers.   
+specifying and validating the _audience_ claim of access tokens is strongly recommended to avoid misusing access tokens for other resource servers.   
 There is also a new [draft specification](https://tools.ietf.org/html/draft-ietf-oauth-access-token-jwt)
-on the way to provide a standardized and interoperable profile as an alternative 
-to the proprietary JWT access token layouts.
+on the way to provide a standardized and interoperable profile as an alternative to the proprietary JWT access token layouts.
 
-So we should also validate that only those requests bearing access tokens containing the 
-expected value of "library-service" in the _audience_ claim are successfully authenticated.
+So we should also validate that our resource server only successfully authenticates those requests bearing access tokens 
+containing the expected value of "library-service" in the _audience_ claim.
 
 So let's create a new class _AudienceValidator_ in package _com.example.library.server.security_
 with the following contents:
@@ -814,7 +813,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 }
 ```  
 
-As the _JwtValidators_ creator depends on the full issuer uri pointing to the OpendID Connect configuration of Keycloak
+As the _JwtValidators_ creator depends on the full issuer URI pointing to the OpendID Connect configuration of Keycloak
 we need to add the _issuer-uri_ in addition to _jwk-set-uri_ . So basically this now should look like this in the
 _application.yaml_ file:
 

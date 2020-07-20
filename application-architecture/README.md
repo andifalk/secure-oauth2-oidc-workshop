@@ -31,6 +31,15 @@ Use cases of this application are:
 * Return a borrowed book
 * Administer library users 
 
+## Tech Stack
+
+The demo client and server application both are build using the [Java](https://adoptopenjdk.net/) programming language and utilizing
+the [Spring Framework](https://spring.io).
+
+The following figure shows a typical Microservice technology stack implemented by various Spring projects.
+
+![Workshop Tech Stack](images/spring_tech_stack.png)
+
 ## Server Architecture
 
 The RESTful service for books and users is build using the Spring MVC annotation model and Spring HATEOAS.
