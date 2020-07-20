@@ -9,7 +9,6 @@ This contains both, theory parts on all important concepts, and hands-on practic
 
 __Table of Contents__
 
-* [Presentation Slides](#presentation-slides)
 * [Workshop Tutorial](https://andifalk.gitbook.io/openid-connect-workshop)
 * [Requirements and Setup](setup)
 * [Hands-On Workshop](#hands-on-workshop)    
@@ -31,11 +30,6 @@ __Table of Contents__
     * [Lab: Keycloak Testcontainers](bonus-labs/keycloak-test-containers)
 * [Feedback](#feedback)
 * [License](#license)    
-
-## Presentation Slides 
-
-The corresponding [Presentation Slides (PDF)](https://github.com/andifalk/secure-oauth2-oidc-workshop/raw/master/OAuth2_OpenIDConnect_Workshop.pdf)
-for the workshop and an introduction into OAuth 2.0 and OpenID Connect.
 
 ## Workshop Tutorial
 
