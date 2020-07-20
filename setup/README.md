@@ -83,8 +83,7 @@ To configure and run Keycloak using docker
 
 1. Open a new command line terminal window
 2. Change directory to subdirectory _setup_keycloak_ of the workshop repository
-3. Open and edit the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS) and adapt the value 
-for _WORKSHOP_HOME_ to your local workshop repository directory
+3. Open and edit the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS) and adapt the value for _WORKSHOP_HOME_ to your local workshop repository directory
 3. Save and execute the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS)
 
 Wait until the docker container has been started completely. When you see the line _Started 590 of 885 services_, 
