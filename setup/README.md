@@ -79,13 +79,16 @@ To set up Keycloak you have 2 options:
 
 If you have Docker installed then setting up Keycloak is quite easy.
 
-To install, configure and run Keycloak 
+To configure and run Keycloak using docker
 
 1. Open a new command line terminal window
 2. Change directory to subdirectory _setup_keycloak_ of the workshop repository
-3. Execute script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS)
+3. Open and edit the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS) and adapt the value 
+for _WORKSHOP_HOME_ to your local workshop repository directory
+3. Save and execute the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS)
 
-After you see the line _Started 590 of 885 services_ Keycloak is configured and running.  
+Wait until the docker container has been started completely. When you see the line _Started 590 of 885 services_, 
+then Keycloak is configured and running.  
 Now open your web browser and navigate to [localhost:8080/auth/admin](http://localhost:8080/auth/admin) and login
 using the credentials _admin_/_admin_.
 
