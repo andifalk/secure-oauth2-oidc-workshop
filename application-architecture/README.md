@@ -6,6 +6,7 @@ with a corresponding spring mvc thymeleaf web client app.
 __Table of Contents__
 
 * [Application Component View](#application-components)
+* [Technology Stack](#tech-stack)
 * [Server Architecture](#server-architecture)
   * [REST Api](#rest-api)
   * [Server Layers](#server-layers)
