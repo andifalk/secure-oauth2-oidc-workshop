@@ -47,12 +47,12 @@ __Please check out the [complete documentation](application-architecture) for th
 starting with the first hands-on lab__. 
 
 All the code currently is build using:
-* [Spring Boot 2.3.x Release](https://spring.io/blog/2020/05/15/spring-boot-2-3-0-available-now) 
-* [Spring Framework 5.2.x Release](https://spring.io/blog/2019/09/30/spring-framework-5-2-goes-ga)
-* [Spring Security 5.3.x Release](https://spring.io/blog/2020/03/05/spring-security-5-3-goes-ga)
-* [Spring Batch 4.2.x Release](https://spring.io/blog/2019/10/02/spring-batch-4-2-in-now-ga)
+* [Spring Boot 2.4.x Release](https://spring.io/blog/2020/11/12/spring-boot-2-4-0-available-now) 
+* [Spring Framework 5.3.x Release](https://spring.io/blog/2020/10/27/spring-framework-5-3-goes-ga)
+* [Spring Security 5.4.x Release](https://spring.io/blog/2020/09/10/spring-security-5-4-goes-ga)
+* [Spring Batch 4.3.x Release](https://spring.io/blog/2020/10/28/spring-batch-4-3-is-now-ga)
 
-and is verified against the currently supported long-term versions 8 and 11 of Java (The latest version 14 should work as well).
+and is verified against the currently supported long-term version 11 of Java (The latest version 14 should work as well).
 
 To check system requirements and setup for this workshop please follow the [setup guide](setup).
 

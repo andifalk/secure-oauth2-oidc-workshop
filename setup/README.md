@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Java SDK](https://adoptopenjdk.net) Version 8, 11 or 14
+* [Java SDK](https://adoptopenjdk.net) Version 11 or 14
 * A Java IDE like
   * [Eclipse](https://www.eclipse.org/downloads)
   * [Spring Toolsuite](https://spring.io/tools)
