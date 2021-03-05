@@ -4,7 +4,7 @@ micronaut:
   server:
     port: 9096
   security:
-    enabled: true
+    authentication: bearer
     token:
       roles-name: 'groups'
       jwt:

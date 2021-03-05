@@ -47,7 +47,7 @@ As this app uses the same Keycloak client configuration you can just use the sam
 | ckent    | clark.kent@example.com   | kent     | LIBRARY_ADMIN   |
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
-Please again make sure you have setup and running
+Please again make sure you have set up and running
 keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
 
 <hr>
@@ -68,8 +68,8 @@ To extend a Micronaut application into a resource server you have to make sure t
 are in the gradle build file _build.gradle_:
 
 ```groovy
-annotationProcessor "io.micronaut:micronaut-security"
-implementation "io.micronaut:micronaut-security-jwt"
+annotationProcessor("io.micronaut.security:micronaut-security-annotations")
+implementation("io.micronaut.security:micronaut-security-jwt")
 ```
 
 <hr>
@@ -82,7 +82,7 @@ This is why Micronaut requires to configure a _jwks_uri_ entry in _application.y
 ```yaml
 micronaut:
   security:
-    enabled: true
+    authentication: bearer
     token:
       roles-name: 'groups'
       jwt:
@@ -117,22 +117,19 @@ package micronaut.server.app;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.security.annotation.Secured;
-import io.micronaut.security.authentication.AuthenticationUserDetailsAdapter;
+import io.micronaut.security.authentication.Authentication;
 
-import java.security.Principal;
 import java.util.Map;
 
 @Secured("isAuthenticated()")
 @Controller("/hello")
 public class HelloController {
 
-  @Get
-  public String sayHello(Principal principal) {
-    AuthenticationUserDetailsAdapter jwtClaimsSetAdapter = (AuthenticationUserDetailsAdapter) principal;
-    Map<String, Object> claims = jwtClaimsSetAdapter.getAttributes();
-
-    return "it works for user: " + claims.get("name") + " (" + claims.get("email") + ")";
-  }
+    @Get
+    public String sayHello(Authentication authentication) {
+        Map<String, Object> claims = authentication.getAttributes();
+        return "it works for user: " + claims.get("name") + " (" + claims.get("email") + ")";
+    }
 }
 ```
 
