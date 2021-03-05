@@ -9,11 +9,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'io.quarkus:quarkus-resteasy-jackson'
-    implementation 'io.quarkus:quarkus-oidc'
     implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-oidc'
+    implementation 'io.quarkus:quarkus-resteasy-jackson'
+    implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-resteasy'
-
     testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation 'io.rest-assured:rest-assured'
 }
@@ -21,17 +21,16 @@ dependencies {
 group 'com.example'
 version '1.0.0-SNAPSHOT'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+compileTestJava {
+    options.encoding = 'UTF-8'
 }
-
-test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-}
-
