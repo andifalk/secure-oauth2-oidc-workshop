@@ -10,6 +10,6 @@ export class AppComponent {
   title = 'library-client-spa';
 
   constructor(private authService: AuthService) {
-    this.authService.runInitialLoginSequence();
+    this.authService.runInitialLoginSequence().then();
   }
 }

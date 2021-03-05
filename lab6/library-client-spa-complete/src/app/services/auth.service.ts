@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { OAuthService, OAuthErrorEvent, AuthConfig, NullValidationHandler } from 'angular-oauth2-oidc';
+import {
+  OAuthService,
+  AuthConfig,
+} from 'angular-oauth2-oidc';
 import { Observable, BehaviorSubject, ReplaySubject, combineLatest } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 const authConfig: AuthConfig = {
@@ -16,12 +19,9 @@ const authConfig: AuthConfig = {
   clientId: 'spa',
 
   responseType: 'code',
-  disableAtHashCheck: true,
-
-  // set the scope for the permissions the client should request
-  // The first three are defined by OIDC. The 4th is a usecase-specific one
-  scope: 'openid profile',
-
+  disableAtHashCheck: false,
+  scope: 'openid profile offline_access',
+  useSilentRefresh: false,
   showDebugInformation: true,
 }
 
@@ -38,7 +38,7 @@ export class AuthService {
 
   /**
    * Publishes `true` if and only if (a) all the asynchronous initial
-   * login calls have completed or errorred, and (b) the user ended up
+   * login calls have completed or errored, and (b) the user ended up
    * being authenticated.
    *
    * In essence, it combines:
@@ -46,9 +46,9 @@ export class AuthService {
    * - the latest known state of whether the user is authorized
    * - whether the ajax calls for initial log in have all been done
    */
-  public canActivateProtectedRoutes$: Observable<boolean> = combineLatest(
+  public canActivateProtectedRoutes$: Observable<boolean> = combineLatest([
     this.isAuthenticated$,
-    this.isDoneLoading$
+    this.isDoneLoading$]
   ).pipe(map(values => values.every(b => b)));
 
   constructor(
@@ -56,7 +56,6 @@ export class AuthService {
     private router: Router
   ) {
     this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new NullValidationHandler();
 
     this.oauthService.events
       .subscribe(_ => {
@@ -68,7 +67,7 @@ export class AuthService {
 
   public runInitialLoginSequence(): Promise<void> {
     return this.oauthService.loadDiscoveryDocument()
-      .then(() => this.oauthService.tryLogin())
+      .then(() => this.oauthService.tryLoginCodeFlow())
       .then(() => {
         this.isDoneLoadingSubject$.next(true);
         // remove query params
@@ -99,6 +98,5 @@ export class AuthService {
   public logout() { this.oauthService.logOut(); }
   public refresh() { this.oauthService.silentRefresh(); }
   public hasValidToken() { return this.oauthService.hasValidAccessToken(); }
-
 
 }

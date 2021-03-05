@@ -80,7 +80,7 @@ In this step you're supposed to install the library, nothing else.
 npm i angular-oauth2-oidc --save
 ```
 
-This will install the latest version of [Manfred Steyer](https://github.com/manfredsteyer)'s OIDC certified OAuth 2.0 / OpenID Connect library for the Angular framework.
+This will install the latest version of [Manfred Steyer](https://github.com/manfredsteyer)'s OIDC certified OAuth 2.0 / OpenID Connect library for the Angular framework. This library already supports the authorization code + PKCE flow. It can also either refresh access tokens by using silent refresh hidden frame workaround or use the real refresh tokens. 
 
 Next step is to import the library in your `app.module.ts` in the `imports` array.
 ```typescript
@@ -120,11 +120,10 @@ AuthConfig = {
 
     responseType: 'code',
     disableAtHashCheck: true,
-  
-    // set the scope for the permissions the client should request
-    // The first three are defined by OIDC. The 4th is a use case specific one
-    scope: 'openid profile'
-  }
+    scope: 'openid profile offline_access',
+    useSilentRefresh: false,
+    showDebugInformation: true,
+}
 ```
 `disableAtHashCheck` is currently necessary as Keycloak does not include an `at_hash` claim in its id tokens. 
 According to the [OIDC Core 1.0 3.1.3.6](https://openid.net/specs/openid-connect-core-1_0.html#CodeIDToken) this claim is optional.
@@ -158,10 +157,10 @@ Now start by adding a few subjects and observables to your class. These are need
    * - the latest known state of whether the user is authorized
    * - whether the ajax calls for initial log in have all been done
    */
-  public Observable<boolean> = combineLatest(
+  public Observable<boolean> = combineLatest([
     this.isAuthenticated$,
     this.isDoneLoading$
-  ).pipe(map(values => values.every(b => b)));
+  ]).pipe(map(values => values.every(b => b)));
 ```
 
 Kudos to [Jeroen Heijmans](https://github.com/jeroenheijmans), who published an example on this library which takes care of multiple race condition problems. Major parts of this service are taken directly from his example.
@@ -174,7 +173,6 @@ Let's get started to set up the library in your `constructor()`-function:
     private Router
   ) {
     this.oauthService.configure(authConfig);
-    this.oauthService.tokenValidationHandler = new NullValidationHandler();
 
     this.oauthService.events
       .subscribe(_ => {
@@ -201,16 +199,16 @@ Next step is to implement the method that starts the authentication process. Thi
 __NOTE:__ Currently it's not possible to keep the state when using authorization code grant with PKCE. This is a limitation by the library and will soon be fixed.
 
 ```typescript
-  public runInitialLoginSequence(): Promise<void> {
-    return this.oauthService.loadDiscoveryDocument()
-      .then(() => this.oauthService.tryLogin())
-      .then(() => {
-        this.isDoneLoadingSubject$.next(true);
-        // remove query params
-        this.router.navigate(['']);
-      })
-      .catch(() => this.isDoneLoadingSubject$.next(true));
-  }
+public runInitialLoginSequence(): Promise<void> {
+  return this.oauthService.loadDiscoveryDocument()
+          .then(() => this.oauthService.tryLoginCodeFlow())
+          .then(() => {
+            this.isDoneLoadingSubject$.next(true);
+            // remove query params
+            this.router.navigate(['']);
+          })
+          .catch(() => this.isDoneLoadingSubject$.next(true));
+}
 ```
 
 After you implemented this function, you can use it in your `AppComponent` component (`app/app.component.ts`) :
