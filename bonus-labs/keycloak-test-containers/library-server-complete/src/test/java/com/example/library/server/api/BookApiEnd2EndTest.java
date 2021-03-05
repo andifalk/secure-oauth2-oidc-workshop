@@ -8,15 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -36,7 +35,7 @@ import static io.restassured.RestAssured.when;
 class BookApiEnd2EndTest {
 
   @Container
-  private final KeycloakContainer keycloak =
+  private static final KeycloakContainer keycloak =
       new KeycloakContainer()
           .withRealmImportFile("keycloak_realm_workshop.json")
           .withEnv("DB_VENDOR", "h2");
@@ -46,12 +45,19 @@ class BookApiEnd2EndTest {
   private String authServerUrl;
 
   @BeforeEach
-  void setup(@Autowired NimbusJwtDecoder nimbusJwtDecoder) {
-    authServerUrl = keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/token";
-    nimbusJwtDecoder.setJwtValidator(
-        JwtValidators.createDefaultWithIssuer(keycloak.getAuthServerUrl() + "/realms/workshop"));
+  void setup() {
+    this.authServerUrl = keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/token";
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = port;
+  }
+
+  @SuppressWarnings("unused")
+  @DynamicPropertySource
+  static void jwtValidationProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
+            () -> keycloak.getAuthServerUrl() + "/realms/workshop");
+    registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+            () -> keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/certs");
   }
 
   @Test
@@ -71,7 +77,6 @@ class BookApiEnd2EndTest {
   @Test
   @DisplayName("get list of books fails without token")
   void verifyGetBooksFail() {
-
     when().get("/library-server/books").then().statusCode(401);
   }
 

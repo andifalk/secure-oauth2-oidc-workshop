@@ -7,13 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -35,7 +33,7 @@ class BookApiEnd2EndTest {
   private String authServerUrl;
 
   @BeforeEach
-  void setup(@Autowired NimbusJwtDecoder nimbusJwtDecoder) {
+  void setup() {
     RestAssured.baseURI = "http://localhost";
     RestAssured.port = port;
   }
@@ -57,7 +55,6 @@ class BookApiEnd2EndTest {
   @Test
   @DisplayName("get list of books fails without token")
   void verifyGetBooksFail() {
-
     when().get("/library-server/books").then().statusCode(401);
   }
 

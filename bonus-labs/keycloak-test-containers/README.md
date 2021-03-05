@@ -44,8 +44,8 @@ Please start this lab with the project located in _bonus-labs/keycloak-test-cont
 First we need to add the required dependencies
 
 ```groovy
-testImplementation('com.github.dasniko:testcontainers-keycloak:1.3.1')
-testImplementation('org.testcontainers:junit-jupiter:1.13.0')
+testImplementation('com.github.dasniko:testcontainers-keycloak:1.6.0')
+testImplementation('org.testcontainers:junit-jupiter:1.15.2')
 ```
 
 _build.gradle_
@@ -66,17 +66,16 @@ First we'll add all the required parts for [Testcontainers](https://www.testcont
 * Then we create an instance of `KeycloakContainer` that loads the same realm configuration from _keycloak_realm_workshop.json_ as used in the _real_ Keycloak instance.
 * In the `setup()` operation we retrieve the required token endpoint url by retrieving the base url via `keycloak.getAuthServerUrl()`
 
-
 ```java
 package com.example.library.server.api;
 
-...
+//...
 
 import dasniko.testcontainers.keycloak.KeycloakContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-...
+//...
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -86,7 +85,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 class BookApiEnd2EndTest {
 
   @Container
-  private final KeycloakContainer keycloak =
+  private static final KeycloakContainer keycloak =
       new KeycloakContainer()
           .withRealmImportFile("keycloak_realm_workshop.json")
           .withEnv("DB_VENDOR", "h2");
@@ -115,15 +114,14 @@ class BookApiEnd2EndTest {
         .then()
         .statusCode(200);
   }
-  ...
+  //...
 }
 ```
 
 With this code in place you should already be able to run the tests.
 You will notice that running the tests will last some time due to starting the Keycloak docker container first.
 After the container started successfully the test cases will run. Here you will recognize that the test for the happy path is still failing.
-This is caused by the wrong JWT issuer claim. As the Keycloak testcontainer runs at a different port than the Keycloak from previous labs also
-the issuer claim has changed.
+This is caused by the wrong JWT issuer claim. The Keycloak testcontainer runs at a different port than the Keycloak from previous labs. The issuer claim has changed as well.
 
 No worries, we will change this in the next section.
 
@@ -132,23 +130,34 @@ No worries, we will change this in the next section.
 Open again the same test class and change the `setup()` operation as shown here:
 
 ```java
-...
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-  ...
-  @BeforeEach
-  void setup(@Autowired NimbusJwtDecoder nimbusJwtDecoder) {
-    authServerUrl = keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/token";
-    nimbusJwtDecoder.setJwtValidator(
-        JwtValidators.createDefaultWithIssuer(keycloak.getAuthServerUrl() + "/realms/workshop"));
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = port;
+import dasniko.testcontainers.keycloak.KeycloakContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+
+@Testcontainers
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
+@DisplayName("Verify book api")
+@Tag("end2end")
+class BookApiEnd2EndTest {
+
+  //...
+  @SuppressWarnings("unused")
+  @DynamicPropertySource
+  static void jwtValidationProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
+        () -> keycloak.getAuthServerUrl() + "/realms/workshop");
+        registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+        () -> keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/certs");
   }
-  ...
+  //...
+}
 ```
 
-To change the issuer, we inject the configured _JwtDecoder_ instance, implemented by the _NimbusJwtDecoder_.
+To change the issuer and jwks uri, we dynamically override the oauth2 resource server configuration using _DynamicPropertyRegistry_ instance, and the @DynamicPropertySource spring test support.
+
 Now we can just set the issuer to the configured value of the Keycloak testcontainer.
 
 Now the testing class should be complete and look like the following one:
@@ -164,15 +173,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.JwtValidators;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -191,78 +199,84 @@ import static io.restassured.RestAssured.when;
 @Tag("end2end")
 class BookApiEnd2EndTest {
 
-  @Container
-  private final KeycloakContainer keycloak =
-      new KeycloakContainer()
-          .withRealmImportFile("keycloak_realm_workshop.json")
-          .withEnv("DB_VENDOR", "h2");
+    @Container
+    private static final KeycloakContainer keycloak =
+            new KeycloakContainer()
+                    .withRealmImportFile("keycloak_realm_workshop.json")
+                    .withEnv("DB_VENDOR", "h2");
 
-  @LocalServerPort private int port;
+    @LocalServerPort private int port;
 
-  private String authServerUrl;
+    private String authServerUrl;
 
-  @BeforeEach
-  void setup(@Autowired NimbusJwtDecoder nimbusJwtDecoder) {
-    authServerUrl = keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/token";
-    nimbusJwtDecoder.setJwtValidator(
-        JwtValidators.createDefaultWithIssuer(keycloak.getAuthServerUrl() + "/realms/workshop"));
-    RestAssured.baseURI = "http://localhost";
-    RestAssured.port = port;
-  }
-
-  @Test
-  @DisplayName("get list of books")
-  void verifyGetBooks() {
-
-    String token = getToken();
-
-    given()
-        .header("Authorization", "Bearer " + token)
-        .when()
-        .get("/library-server/books")
-        .then()
-        .statusCode(200);
-  }
-
-  @Test
-  @DisplayName("get list of books fails without token")
-  void verifyGetBooksFail() {
-
-    when().get("/library-server/books").then().statusCode(401);
-  }
-
-  private String getToken() {
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-    map.put("grant_type", Collections.singletonList("password"));
-    map.put("client_id", Collections.singletonList("library-client"));
-    map.put("client_secret", Collections.singletonList("9584640c-3804-4dcd-997b-93593cfb9ea7"));
-    map.put("username", Collections.singletonList("bwayne"));
-    map.put("password", Collections.singletonList("wayne"));
-    KeyCloakToken token =
-        restTemplate.postForObject(
-            authServerUrl, new HttpEntity<>(map, httpHeaders), KeyCloakToken.class);
-
-    assert token != null;
-    return token.getAccessToken();
-  }
-
-  private static class KeyCloakToken {
-
-    private final String accessToken;
-
-    @JsonCreator
-    KeyCloakToken(@JsonProperty("access_token") final String accessToken) {
-      this.accessToken = accessToken;
+    @BeforeEach
+    void setup() {
+        this.authServerUrl = keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/token";
+        RestAssured.baseURI = "http://localhost";
+        RestAssured.port = port;
     }
 
-    public String getAccessToken() {
-      return accessToken;
+    @SuppressWarnings("unused")
+    @DynamicPropertySource
+    static void jwtValidationProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.security.oauth2.resourceserver.jwt.issuer-uri",
+                () -> keycloak.getAuthServerUrl() + "/realms/workshop");
+        registry.add("spring.security.oauth2.resourceserver.jwt.jwk-set-uri",
+                () -> keycloak.getAuthServerUrl() + "/realms/workshop/protocol/openid-connect/certs");
     }
-  }
+
+    @Test
+    @DisplayName("get list of books")
+    void verifyGetBooks() {
+
+        String token = getToken();
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/library-server/books")
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    @DisplayName("get list of books fails without token")
+    void verifyGetBooksFail() {
+        when().get("/library-server/books").then().statusCode(401);
+    }
+
+    private String getToken() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.put("grant_type", Collections.singletonList("password"));
+        map.put("client_id", Collections.singletonList("library-client"));
+        map.put("client_secret", Collections.singletonList("9584640c-3804-4dcd-997b-93593cfb9ea7"));
+        map.put("username", Collections.singletonList("bwayne"));
+        map.put("password", Collections.singletonList("wayne"));
+        KeyCloakToken token =
+                restTemplate.postForObject(
+                        authServerUrl, new HttpEntity<>(map, httpHeaders), KeyCloakToken.class);
+
+        assert token != null;
+        return token.getAccessToken();
+    }
+
+    private static class KeyCloakToken {
+
+        private final String accessToken;
+
+        @JsonCreator
+        KeyCloakToken(@JsonProperty("access_token") final String accessToken) {
+            this.accessToken = accessToken;
+        }
+
+        public String getAccessToken() {
+            return accessToken;
+        }
+    }
 }
 ```
 
@@ -285,5 +299,4 @@ test {
 <hr>
 
 This ends this bonus lab. If you like the approach with the [Testcontainers](https://www.testcontainers.org) then you may look
-for other supported testcontainers like for example databases (this is also a great possibility to test against the real database 
-instead of simulating this using a H2 in-memory database).
+for other supported testcontainers like for example databases (this is also a great possibility to test against the real database instead of simulating this using a H2 in-memory database).
