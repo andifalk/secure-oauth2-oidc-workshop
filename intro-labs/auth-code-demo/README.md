@@ -28,7 +28,7 @@ To see all details for this grant flow see the corresponding section of the
 2. After successfully logging in a 302 HTTP redirect request with the authorization code is being sent through to the browser which redirects
    to the callback entry point provided by the client application 
 3. Now the client application send a token request to the authorization server to exchange
-   the authorization code into an access token
+   the authorization code into an access token.
    
 You can see each of these steps in the demo client application of this intro lab.
 Usually only step 1 is visible to a user of the client. Steps 2 and 3 are only visible here

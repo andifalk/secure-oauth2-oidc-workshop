@@ -24,12 +24,16 @@
     <div class="jumbotron">
 
         <ul>
-            <li th:text="'Authorization-Endpoint:' + ${authorization_endpoint}"></li>
-            <li th:text="'client_id:' + ${client_id}"></li>
-            <li th:text="'response_type:' + ${response_type}"></li>
-            <li th:text="'redirect_uri:' + ${redirect_uri}"></li>
-            <li th:text="'scope:' + ${scope}"></li>
-            <li th:text="'state:' + ${state}"></li>
+            <li th:text="'Authorization-Endpoint: ' + ${authorization_endpoint}"></li>
+            <li th:text="'client_id: ' + ${client_id}"></li>
+            <li th:text="'response_type: ' + ${response_type}"></li>
+            <li th:text="'redirect_uri: ' + ${redirect_uri}"></li>
+            <li th:text="'scope: ' + ${scope}"></li>
+            <li th:text="'state: ' + ${state}"></li>
+            <li th:text="'PKCE: ' + ${pkce}"></li>
+            <li th:text="'code_verifier: ' + ${code_verifier}"></li>
+            <li th:text="'code_challenge: ' + ${code_challenge}"></li>
+            <li th:text="'code_challenge_method: ' + ${code_challenge_method}"></li>
         </ul>
 
     </div>

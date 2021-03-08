@@ -1,0 +1,8 @@
+democlient:
+  authorization:
+    scope:
+      - openid
+      - profile
+      - offline_access
+
+

@@ -18,24 +18,23 @@
     <hr>
 
     <div class="jumbotron">
+        <h3>ID Token</h3>
+        <p style="word-break: break-all" th:text="${id_token}"></p>
+        <p><a target="_blank" th:href="'https://jwt.io?token=' + ${id_token}">Open ID token in jwt.io</a></p>
+
         <h3>Access Token</h3>
-
-        <p style="word-break: break-all" th:text="'Access Token: ' + ${access_token}"></p>
-
-        <p th:text="'Expires in: ' + ${expires_in} + ' seconds'"></p>
-
-        <p th:text="'Token Type: ' + ${token_type}"></p>
-
-        <p th:text="'Scope: ' + ${scope}"></p>
-        <h3>Access Token (decoded JWT)</h3>
-
-        <p th:text="'JWT Header: ' + ${jwt_header}"></p>
-        <p th:utext="'JWT Payload: ' + ${jwt_payload}"></p>
-        <p th:text="'JWT Signature: ' + ${jwt_signature}"></p>
+        <p style="word-break: break-all" th:text="${access_token}"></p>
+        <ul>
+            <li th:text="'Expires in: ' + ${expires_in} + ' seconds'"></li>
+            <li th:text="'Token Type: ' + ${token_type}"></li>
+            <li th:text="'Scope: ' + ${scope}"></li>
+        </ul>
+        <p><a target="_blank" th:href="'https://jwt.io?token=' + ${access_token}">Open access token in jwt.io</a></p>
 
         <h3>Refresh Token</h3>
-
         <p style="word-break: break-all" th:text="${refresh_token}"></p>
+        <p><a target="_blank" th:href="'https://jwt.io?token=' + ${refresh_token}">Open refresh token in jwt.io</a></p>
+
     </div>
     <hr>
     <div class="jumbotron">

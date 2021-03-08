@@ -7,6 +7,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class TokenResponse {
 
   private String access_token;
+  private String id_token;
   private String refresh_token;
   private int expires_in;
   private String token_type;
@@ -58,5 +59,13 @@ public class TokenResponse {
 
   public void setScope(String scope) {
     this.scope = scope;
+  }
+
+  public void setId_token(String id_token) {
+    this.id_token = id_token;
+  }
+
+  public String getId_token() {
+    return id_token;
   }
 }

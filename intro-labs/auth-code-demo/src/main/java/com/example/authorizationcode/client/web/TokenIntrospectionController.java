@@ -1,8 +1,8 @@
 package com.example.authorizationcode.client.web;
 
+import com.example.authorizationcode.client.config.AuthCodeDemoProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,38 +14,30 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 @Controller
 public class TokenIntrospectionController {
 
   private final WebClient webClient;
 
-  @Value("${democlient.introspection.endpoint}")
-  private URL tokenIntrospectionEndpointUrl;
+  private final AuthCodeDemoProperties authCodeDemoProperties;
 
-  @Value("${democlient.token.clientid}")
-  private String clientid;
-
-  @Value("${democlient.token.client-secret}")
-  private String clientSecret;
-
-  public TokenIntrospectionController(WebClient webClient) {
+  public TokenIntrospectionController(WebClient webClient, AuthCodeDemoProperties authCodeDemoProperties) {
     this.webClient = webClient;
+    this.authCodeDemoProperties = authCodeDemoProperties;
   }
 
   @GetMapping("/introspection")
   public Mono<String> tokenRequest(@RequestParam("access_token") String accessToken, Model model)
       throws URISyntaxException {
-    model.addAttribute("token_introspection_endpoint", tokenIntrospectionEndpointUrl.toString());
+    model.addAttribute("token_introspection_endpoint", authCodeDemoProperties.getIntrospection().getEndpoint().toString());
     String tokenRequestBody =
         "token="
             + accessToken
             + "&token_type_hint=access_token"
             + "&client_id="
-            + clientid
-            + "&client_secret="
-            + clientSecret;
+            + authCodeDemoProperties.getClientId()
+            + (authCodeDemoProperties.getToken().getClientSecret() != null ? "&client_secret=" + authCodeDemoProperties.getToken().getClientSecret() : "");
 
     return performTokenIntrospectionRequest(model, tokenRequestBody);
   }
@@ -54,7 +46,7 @@ public class TokenIntrospectionController {
       throws URISyntaxException {
     return webClient
         .post()
-        .uri(tokenIntrospectionEndpointUrl.toURI())
+        .uri(authCodeDemoProperties.getIntrospection().getEndpoint().toURI())
         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
         .accept(MediaType.APPLICATION_JSON)
         .body(Mono.just(tokenRequestBody), String.class)

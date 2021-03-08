@@ -20,15 +20,19 @@
     <div class="jumbotron">
 
         <ul>
-            <li th:text="'authorization-code:' + ${code}"></li>
-            <li th:text="'state:' + ${state}"></li>
+            <li th:text="'PKCE: ' + ${pkce}"></li>
+            <li th:text="'client-id: ' + ${client_id}"></li>
+            <li th:text="'client-secret: ' + ${client_secret}"></li>
+            <li th:text="'authorization-code: ' + ${code}"></li>
+            <li th:text="'state: ' + ${state}"></li>
+            <li th:text="'code_verifier: ' + ${code_verifier}"></li>
         </ul>
     </div>
     <hr>
     <div class="jumbotron">
         <h2>Token Request</h2>
 
-        <p th:utext="${token_request}"></p>
+        <p th:utext="${gen_token_request}"></p>
 
         <a class="btn btn-primary" role="button" th:href="@{'/tokenrequest?code=' + ${code} + '&state=' + ${state}}"
            href="#">Request Token</a>
