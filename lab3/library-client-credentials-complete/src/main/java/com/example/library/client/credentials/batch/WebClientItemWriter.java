@@ -3,6 +3,7 @@ package com.example.library.client.credentials.batch;
 import com.example.library.client.credentials.web.BookResource;
 import org.springframework.batch.item.support.AbstractItemStreamItemWriter;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -27,6 +28,9 @@ public class WebClientItemWriter<T> extends AbstractItemStreamItemWriter<T> {
                     .onStatus(
                             s -> s.value() == HttpStatus.UNAUTHORIZED.value(),
                             cr -> Mono.error(new BadCredentialsException("Not authenticated")))
+                    .onStatus(
+                            s -> s.value() == HttpStatus.FORBIDDEN.value(),
+                            cr -> Mono.error(new AccessDeniedException("Forbidden")))
                     .onStatus(
                             s -> s.value() == HttpStatus.BAD_REQUEST.value(),
                             cr -> Mono.error(new IllegalArgumentException(cr.statusCode().getReasonPhrase())))
