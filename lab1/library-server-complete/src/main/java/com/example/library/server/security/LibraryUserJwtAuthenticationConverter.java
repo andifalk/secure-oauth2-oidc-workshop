@@ -39,14 +39,14 @@ public class LibraryUserJwtAuthenticationConverter
   }
 
   private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-    return this.getGroups(jwt).stream()
+    return this.getScopes(jwt).stream()
         .map(authority -> ROLE_PREFIX + authority.toUpperCase())
         .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
-  private Collection<String> getGroups(Jwt jwt) {
+  private Collection<String> getScopes(Jwt jwt) {
     Object scopes = jwt.getClaims().get(SCOPE_CLAIM);
     if (scopes instanceof String) {
       if (StringUtils.hasText((String) scopes)) {

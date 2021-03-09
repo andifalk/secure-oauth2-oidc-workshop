@@ -7,7 +7,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class LibraryUserJwtAuthenticationConverter
     implements Converter<Jwt, AbstractAuthenticationToken> {
-  private static final String GROUPS_CLAIM = "groups";
+  private static final String SCOPE_CLAIM = "scope";
   private static final String ROLE_PREFIX = "ROLE_";
 
   private final LibraryUserDetailsService libraryUserDetailsService;
@@ -37,19 +39,24 @@ public class LibraryUserJwtAuthenticationConverter
   }
 
   private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-    return this.getGroups(jwt).stream()
+    return this.getScopes(jwt).stream()
         .map(authority -> ROLE_PREFIX + authority.toUpperCase())
         .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
   }
 
   @SuppressWarnings("unchecked")
-  private Collection<String> getGroups(Jwt jwt) {
-    Object groups = jwt.getClaims().get(GROUPS_CLAIM);
-    if (groups instanceof Collection) {
-      return (Collection<String>) groups;
+  private Collection<String> getScopes(Jwt jwt) {
+    Object scopes = jwt.getClaims().get(SCOPE_CLAIM);
+    if (scopes instanceof String) {
+      if (StringUtils.hasText((String) scopes)) {
+        return Arrays.asList(((String) scopes).split(" "));
+      }
+      return Collections.emptyList();
     }
-
+    if (scopes instanceof Collection) {
+      return (Collection<String>) scopes;
+    }
     return Collections.emptyList();
   }
 }

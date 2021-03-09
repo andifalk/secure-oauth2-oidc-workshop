@@ -451,9 +451,12 @@ If you have a look inside the _com.example.library.server.business.UserService_ 
 you will notice that the corresponding method has the following authorization check:
 
 ```java
-@PreAuthorize("hasRole('LIBRARY_ADMIN')")
-public List<User> findAll() {
-  return userRepository.findAll();
+public class UserService {
+  //...  
+  @PreAuthorize("hasRole('LIBRARY_ADMIN')")
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
 }
 ``` 
 
@@ -461,9 +464,12 @@ The required authority _ROLE_LIBRARY_ADMIN_ does not match the mapped authority 
 To solve this we would have to add the _SCOPE_xxx_ authorities to the existing ones like this:
 
 ```java
-@PreAuthorize("hasRole('LIBRARY_ADMIN') || hasAuthority('SCOPE_library_admin')")
-public List<User> findAll() {
-  return userRepository.findAll();
+public class UserService {
+  //...
+  @PreAuthorize("hasRole('LIBRARY_ADMIN') || hasAuthority('SCOPE_library_admin')")
+  public List<User> findAll() {
+    return userRepository.findAll();
+  }
 }
 ```  
 
@@ -506,7 +512,7 @@ In general, you have two choices here:
 
 In this workshop we will use the first approach and...
  
- * ...read the authorization data from the _groups_ claim inside the JWT token
+ * ...read the authorization data from the _scope_ claim inside the JWT token
  * ...map to our local _LibraryUser_ by reusing the _LibraryUserDetailsService_ to search
    for a user having the same email as the _email_ claim inside the JWT token
 
@@ -533,7 +539,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unused")
 public class LibraryUserJwtAuthenticationConverter
     implements Converter<Jwt, AbstractAuthenticationToken> {
-  private static final String GROUPS_CLAIM = "groups";
+  private static final String SCOPE_CLAIM = "scope";
   private static final String ROLE_PREFIX = "ROLE_";
 
   private final LibraryUserDetailsService libraryUserDetailsService;
@@ -560,12 +566,17 @@ public class LibraryUserJwtAuthenticationConverter
   }
 
   @SuppressWarnings("unchecked")
-  private Collection<String> getGroups(Jwt jwt) {
-    Object groups = jwt.getClaims().get(GROUPS_CLAIM);
-    if (groups instanceof Collection) {
-      return (Collection<String>) groups;
+  private Collection<String> getScopes(Jwt jwt) {
+    Object scopes = jwt.getClaims().get(SCOPE_CLAIM);
+    if (scopes instanceof String) {
+      if (StringUtils.hasText((String) scopes)) {
+        return Arrays.asList(((String) scopes).split(" "));
+      }
+      return Collections.emptyList();
     }
-
+    if (scopes instanceof Collection) {
+      return (Collection<String>) scopes;
+    }
     return Collections.emptyList();
   }
 }
@@ -672,7 +683,7 @@ Audience(s) that this ID Token is intended for. It MUST contain the OAuth 2.0 cl
 </blockquote>
 
 Despite the fact that the _audience_ claim is not specified or mandatory for access tokens
-specifying and validating the _audience_ claim of access tokens is strongly recommended to avoid misusing access tokens for other resource servers.   
+specifying and validating the _audience_ claim of access tokens is strongly recommended avoiding misusing access tokens for other resource servers.   
 There is also a new [draft specification](https://tools.ietf.org/html/draft-ietf-oauth-access-token-jwt)
 on the way to provide a standardized and interoperable profile as an alternative to the proprietary JWT access token layouts.
 

@@ -82,7 +82,7 @@ If you have Docker installed then setting up Keycloak is quite easy.
 To configure and run Keycloak using docker
 
 1. Open a new command line terminal window
-2. Change directory to subdirectory _setup_keycloak_ of the workshop repository
+2. Change directory to subdirectory _setup_ of the workshop repository
 3. Open and edit the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS) and adapt the value for _WORKSHOP_HOME_ to your local workshop repository directory
 3. Save and execute the script _run_keycloak_docker.sh_ or _run_keycloak_docker.bat_ (depending on your OS)
 
@@ -91,23 +91,25 @@ then Keycloak is configured and running.
 Now open your web browser and navigate to [localhost:8080/auth/admin](http://localhost:8080/auth/admin) and login
 using the credentials _admin_/_admin_.
 
+If you see errors importing the workshop configuration then please re-check the value of the _WORKSHOP_HOME_ environment variable (step 2 above) so that the script can find the _keycloak_realm_workshop.json_ file to import.
+
 ### Local Installation
 
 To set up [Keycloak](https://keycloak.org): 
 
-1. Download the [Standard Server Distribution of Keycloak (Version 10.0.x)](https://www.keycloak.org/downloads-archive.html).
+1. Download the [Standard Server Distribution of Keycloak (Version 12.0.4 or later)](https://www.keycloak.org/downloads-archive.html).
 2. Extract the downloaded zip/tar file __keycloak-x.x.x.zip__/__keycloak-x.x.x.tar-gz__ into a new local directory of your choice 
 (this directory will be referenced as __<KEYCLOAK_INSTALL_DIR>__ in next steps)
 
 This workshop requires a pre-defined configuration for Keycloak (i.e. some OAuth2/OpenID Connect clients, and user accounts).
 
 To configure Keycloak you need to have checked out the GIT repository for this workshop.
-All you need to configure Keycloak is located in the subdirectory _setup_keycloak_ of the repository.
+All you need to configure Keycloak is located in the subdirectory _setup_ of the repository.
 
-1. Change into the subdirectory _setup_keycloak_ of the workshop git repository
-2. Open the file __import_keycloak_realm.sh__ or __import_keycloak_realm.bat__ (depending on your OS) in the _setup_keycloak_ subdirectory 
+1. Change into the subdirectory _setup_ of the workshop git repository
+2. Open the file __import_keycloak_realm.sh__ or __import_keycloak_realm.bat__ (depending on your OS) in the _setup_ subdirectory 
    and change the value of the environment variable _KEYCLOAK_HOME_ to your __<KEYCLOAK_INSTALL_DIR>__ of step 2 and save the file
-3. Now open a new command-line terminal window, change into the subdirectory _setup_keycloak_ again and execute the provided script
+3. Now open a new command-line terminal window, change into the subdirectory _setup_ again and execute the provided script
    __import_keycloak_realm.sh__ or __import_keycloak_realm.bat__ (depending on your OS). 
    This starts a standalone Keycloak instance and automatically imports the required configuration.
 4. Wait until the import has finished (look for a line like _Started 590 of 885 services_) then 
@@ -122,13 +124,13 @@ If all worked successfully you should see the settings page of the _Workshop_ re
 
 #### Startup Keycloak
 
-You only have to do the initial setup section for local install once.
+Please note: You have to do the initial setup section for local install variant only once.
 If you have stopped Keycloak and want to start it again then follow the next lines in this section.
 
 To startup [Keycloak](https://keycloak.org):
 
-1. Open a terminal and change directory to sub directory __<KEYCLOAK_INSTALL_DIR>/bin__ and start Keycloak using 
-the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
+1. Open a terminal and change directory to subdirectory __<KEYCLOAK_INSTALL_DIR>/bin__ and start Keycloak using 
+the __standalone.sh__(Linux or macOS) or __standalone.bat__ (Windows) scripts
 2. Wait until keycloak has been started completely - you should see something like this `...(WildFly Core ...) started in 6902ms - Started 580 of 842 services`
 
 #### Remap default port of Keycloak
@@ -136,7 +138,7 @@ the __standalone.sh__(Linux or Mac OS) or __standalone.bat__ (Windows) scripts
 In case port _8080_ does not work on your local machine (i.e. is used by another process) then you may have to change Keycloak to use another port.
 This can be done like this (e.g. for remapping port to 8090 instead of 8080):
 
-On Linux/MAC:
+On Linux/macOS:
 ```
 ./standalone.sh -Djboss.socket.binding.port-offset=10
 ```

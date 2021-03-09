@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -13,6 +14,7 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -32,6 +34,7 @@ class LibraryUserJwtAuthenticationConverterTest {
             .header("typ", "JWT")
             .claim("sub", "userid")
             .claim("groups", Collections.singletonList("library_user"))
+            .claim("scope", "library_user openid profile")
             .build();
 
     given(libraryUserDetailsService.loadUserByUsername(any()))
@@ -42,7 +45,8 @@ class LibraryUserJwtAuthenticationConverterTest {
     assertThat(authenticationToken).isNotNull();
     assertThat(authenticationToken.getAuthorities()).isNotEmpty();
     assertThat(authenticationToken.getAuthorities()
-            .iterator().next().getAuthority()).isEqualTo("ROLE_LIBRARY_USER");
+            .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()))
+            .containsAnyOf("ROLE_LIBRARY_USER");
   }
 
   @Test
@@ -51,6 +55,7 @@ class LibraryUserJwtAuthenticationConverterTest {
             .header("typ", "JWT")
             .claim("sub", "userid")
             .claim("groups", Collections.singletonList("library_user"))
+            .claim("scope", "library_user openid profile")
             .build();
 
     given(libraryUserDetailsService.loadUserByUsername(any()))

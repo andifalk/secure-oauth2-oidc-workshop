@@ -48,7 +48,7 @@ As this app uses the same Keycloak client configuration you can just use the sam
 
 We will use [Keycloak](https://keycloak.org) as identity provider.  
 Please again make sure you have set up and running
-keycloak as described in [Setup Keycloak](../setup_keycloak/README.md)
+keycloak as described in [Setup Keycloak](../setup/README.md)
 
 <hr>
 
