@@ -559,7 +559,7 @@ public class LibraryUserJwtAuthenticationConverter
   }
 
   private Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-    return this.getGroups(jwt).stream()
+    return this.getScopes(jwt).stream()
         .map(authority -> ROLE_PREFIX + authority.toUpperCase())
         .map(SimpleGrantedAuthority::new)
         .collect(Collectors.toList());
