@@ -23,7 +23,7 @@ const authConfig: AuthConfig = {
   scope: 'openid profile offline_access',
   useSilentRefresh: false,
   showDebugInformation: true,
-}
+};
 
 @Injectable({
   providedIn: 'root'
