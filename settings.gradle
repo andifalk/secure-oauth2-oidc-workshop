@@ -17,4 +17,5 @@ include 'bonus-labs:quarkus-server-app'
 include 'bonus-labs:multi-tenant-server-app'
 include 'bonus-labs:keycloak-test-containers:library-server-initial'
 include 'bonus-labs:keycloak-test-containers:library-server-complete'
+include 'spring-authorization-server'
 
