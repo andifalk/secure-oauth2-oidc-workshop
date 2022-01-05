@@ -1,0 +1,19 @@
+democlient:
+  client-id: demo-client-pkce
+  redirect-uri: http://127.0.0.1:9095/client/callback
+  pkce: true
+  authorization:
+    endpoint: http://auth-server:9000/oauth2/authorize
+    response-type: code
+    scope:
+    - openid
+    - profile
+    - offline_access
+  token:
+    endpoint: http://auth-server:9000/oauth2/token
+  introspection:
+    endpoint: http://auth-server:9000/oauth2/introspect
+  userinfo:
+    endpoint: http://auth-server:9000/userinfo
+
+

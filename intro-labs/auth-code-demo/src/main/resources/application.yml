@@ -27,5 +27,7 @@ democlient:
     client-secret: b3ec9d3f-d1ee-4a18-b4ba-05d832c15293
   introspection:
     endpoint: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/token/introspect
+  userinfo:
+    endpoint: http://localhost:8080/auth/realms/workshop/protocol/openid-connect/userinfo
 
 

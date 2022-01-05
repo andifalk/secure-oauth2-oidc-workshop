@@ -43,6 +43,8 @@
            href="#">Refresh Access Token</a>
         <a class="btn btn-primary" role="button" th:href="@{'/introspection?access_token=' + ${access_token}}"
            href="#">Token Introspection</a>
+        <a class="btn btn-primary" role="button" th:href="@{'/userinfo?access_token=' + ${access_token}}"
+           href="#">User Information</a>
     </div>
 
 </div>

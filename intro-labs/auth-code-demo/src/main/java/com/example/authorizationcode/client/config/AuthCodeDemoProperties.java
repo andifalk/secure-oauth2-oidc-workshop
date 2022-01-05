@@ -47,6 +47,9 @@ public class AuthCodeDemoProperties {
     @Valid
     private Introspection introspection;
 
+    @Valid
+    private UserInfo userInfo;
+
     public String getClientId() {
         return clientId;
     }
@@ -95,6 +98,14 @@ public class AuthCodeDemoProperties {
         this.introspection = introspection;
     }
 
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
     @Override
     public String toString() {
         return "AuthCodeDemoProperties{" +
@@ -104,7 +115,28 @@ public class AuthCodeDemoProperties {
                 ", authorization=" + authorization +
                 ", token=" + token +
                 ", introspection=" + introspection +
+                ", userinfo=" + userInfo +
                 '}';
+    }
+
+    public static class UserInfo {
+        @NotNull
+        private URL endpoint;
+
+        public URL getEndpoint() {
+            return endpoint;
+        }
+
+        public void setEndpoint(URL endpoint) {
+            this.endpoint = endpoint;
+        }
+
+        @Override
+        public String toString() {
+            return "UserInfo{" +
+                    "endpoint=" + endpoint +
+                    '}';
+        }
     }
 
     public static class Authorization {
