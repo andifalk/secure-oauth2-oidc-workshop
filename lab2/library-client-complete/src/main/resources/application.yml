@@ -20,7 +20,7 @@ spring:
             scope: openid
         provider:
           keycloak:
-            issuerUri: http://localhost:8080/auth/realms/workshop
+            issuerUri: http://localhost:8080/auth/realms/workshop/
             user-name-attribute: name
 
 logging:
