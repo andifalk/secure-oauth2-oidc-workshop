@@ -3,6 +3,6 @@
 setlocal
 
 rem replace this with your own installation directory of keycloak
-set KEYCLOAK_HOME=C:\keycloak-12.0.4
+set KEYCLOAK_HOME=C:\keycloak-20.0.1
 
-%KEYCLOAK_HOME%\bin\standalone.bat -Dkeycloak.profile=preview
+%KEYCLOAK_HOME%\bin\kc.bat start-dev --features=preview
